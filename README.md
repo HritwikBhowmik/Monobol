@@ -108,4 +108,4 @@ The Postman collection for Monobol provides a structured set of requests essenti
 * **Testing:** **Test Scripts** are included to validate API responses and ensure correct functionality.
 
 ###  HLD
-![](https://github.com/HritwikBhowmik/Monobol/raw/master/assets/HLD.jpeg)
+![alt text](https://github.com/HritwikBhowmik/Monobol/raw/master/assets/HLD.jpeg)
