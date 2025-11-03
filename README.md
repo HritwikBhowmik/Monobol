@@ -1,6 +1,6 @@
 # মনোবল (Monobol)
 
-Welcome to **মনোবল (Monobol)**, a full-stack web application dedicated to improving physical and mental health, with a primary focus on mental well-being.
+Welcome to **মনোবল (Monobol)**, a full-stack web application dedicated to improving physical and **Monobol**, with a primary focus on mental well-being.
 
 ---
 
@@ -37,25 +37,36 @@ This project uses a 4-tier, full-stack architecture, ensuring a clean separation
 
 ---
 
-## 🏗️ High-Level Design
+## 🏗️ Web Application Architecture with Gemini LLM
 
 The diagram below illustrates the flow of information between the different components of the application.
 
 ```mermaid
 graph TD
-    subgraph User
-        A[Frontend (React/Vue/Svelte)]
-    end
-    
-    subgraph Server
-        B(Flask App - Backend)
-    end
-    
-    subgraph Data & AI
-        C[SQLite3 Database]
-        D[LLM Engine (OpenAI/Gemini)]
+    %% Define Nodes
+    subgraph "Clients"
+        A[fa:fa-users Frontend <br> (React/Vue/Svelte)]
     end
 
-    A -- "REST API Calls (/api/...)" --> B
-    B -- "Reads/Writes (/api/db)" --> C
-    B -- "AI Prompts (/api/llm)" --> D
+    subgraph "Infrastructure"
+        B[fa:fa-network-wired Application Load Balancer]
+    end
+
+    subgraph "Application Layer (Backend)"
+        C(fa:fa-server Python Flask)
+        subgraph C [Python Flask]
+            C1[fa:fa-database Database API <br> (/api/db)]
+            C2[fa:f-fa-comment-dots Chatbot API <br> (/api/llm)]
+        end
+    end
+
+    subgraph "Data & AI"
+        D[fa:fa-database SQLite3 Database]
+        E[fa:fa-robot LLM Engine <br> (Gemini/OpenAI)]
+    end
+
+    %% Define Links
+    A --> B
+    B --> C
+    C1 --> D
+    C2 --> E
