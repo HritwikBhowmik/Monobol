@@ -84,7 +84,7 @@ The Flask application communicates with the selected API (e.g., OpenAI or Gemini
 ## Design & Specification
 
 ### High-Level Design (HDL) Diagram
-
+![alt text](https://github.com/HritwikBhowmik/Monobol/raw/master/assets/HLD.jpeg)
 
 
 ### OpenAPI Specification (Swagger API)
