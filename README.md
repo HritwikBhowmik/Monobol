@@ -106,3 +106,6 @@ The Postman collection for Monobol provides a structured set of requests essenti
 * **Requests:** Individual requests for each endpoint (e.g., `POST /api/db/mood`, `GET /api/llm/generate-response`).
 * **Configuration:** Includes **Environment Variables** for managing base URLs and tokens, and **Pre-request Scripts** for dynamic tasks like authentication.
 * **Testing:** **Test Scripts** are included to validate API responses and ensure correct functionality.
+
+###  HLD
+[alt text](https://github.com/HritwikBhowmik/Monobol/blob/master/HLD.jpeg?raw=true)
