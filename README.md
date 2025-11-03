@@ -84,7 +84,7 @@ The Flask application communicates with the selected API (e.g., OpenAI or Gemini
 ## Design & Specification
 
 ### High-Level Design (HDL) Diagram
-
+![alt text](https://github.com/HritwikBhowmik/Monobol/raw/master/assets/HLD.jpeg)
 
 
 ### OpenAPI Specification (Swagger API)
@@ -107,5 +107,3 @@ The Postman collection for Monobol provides a structured set of requests essenti
 * **Configuration:** Includes **Environment Variables** for managing base URLs and tokens, and **Pre-request Scripts** for dynamic tasks like authentication.
 * **Testing:** **Test Scripts** are included to validate API responses and ensure correct functionality.
 
-###  HLD
-![alt text](https://github.com/HritwikBhowmik/Monobol/raw/master/assets/HLD.jpeg)
