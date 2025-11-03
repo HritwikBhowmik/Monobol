@@ -1,16 +1,16 @@
-# 🌟 মনোবল (Monobol)
+# মনোবল (Monobol)
 
 **Monobol** is a complete platform dedicated to our **mental health** and **community well-being**. It brings together **mood tracking**, **community support**, and **mental health services** in one place that helps us stay balanced, connected, and cared for.
 
 ---
 
-## 💻 Team
+## Team
 
 **ShunnoLogic**
 
 ---
 
-## 🛠️ Full-Stack Documentation
+## Full-Stack Documentation
 
 This document provides a comprehensive overview of Monobol's full-stack architecture, detailing the interactions between the frontend, Flask application (backend), database, and LLM engine.
 
@@ -81,13 +81,13 @@ The Flask application communicates with the selected API (e.g., OpenAI or Gemini
 
 ---
 
-## 📐 Design & Specification
+## Design & Specification
 
 ### High-Level Design (HDL) Diagram
 
 
 
-### 📄 OpenAPI Specification (Swagger API)
+### OpenAPI Specification (Swagger API)
 
 The **OpenAPI Specification** will formally describe the Monobol RESTful API, providing a machine-readable and human-readable contract for its services. This specification will detail:
 
@@ -98,7 +98,7 @@ The **OpenAPI Specification** will formally describe the Monobol RESTful API, pr
 
 This allows for the generation of interactive documentation (e.g., using **Swagger UI**), client SDKs, and server stubs.
 
-### 🧪 Postman Collection Overview
+### Postman Collection Overview
 
 The Postman collection for Monobol provides a structured set of requests essential for development and testing:
 
@@ -106,3 +106,6 @@ The Postman collection for Monobol provides a structured set of requests essenti
 * **Requests:** Individual requests for each endpoint (e.g., `POST /api/db/mood`, `GET /api/llm/generate-response`).
 * **Configuration:** Includes **Environment Variables** for managing base URLs and tokens, and **Pre-request Scripts** for dynamic tasks like authentication.
 * **Testing:** **Test Scripts** are included to validate API responses and ensure correct functionality.
+
+###  HLD
+![alt text](https://github.com/HritwikBhowmik/Monobol/raw/master/assets/HLD.jpeg)
