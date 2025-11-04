@@ -4,18 +4,30 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>MonoBol - Seasonal Health Tips</title>
+    
     <script src="https://cdn.tailwindcss.com"></script>
+    
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Hind+Siliguri:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        /* Apply font stack (Inter for English, Hind Siliguri for Bangla) */
+        body {
+            font-family: 'Inter', 'Hind Siliguri', sans-serif;
+        }
+    </style>
     
     <script>
         // Custom Tailwind configuration
         tailwind.config = {
+            // 1. ENABLE DARK MODE USING THE 'class' STRATEGY
+            darkMode: 'class', 
             theme: {
                 extend: {
+                    // 2. ADD BANGLA FONT TO THE 'sans' FONT FAMILY
                     fontFamily: {
-                        sans: ['Inter', 'sans-serif'],
+                        sans: ['Inter', 'Hind Siliguri', 'sans-serif'],
                     },
                     colors: {
                         'brand-blue': {
@@ -30,34 +42,59 @@
             }
         }
     </script>
-</head>
-<body class="bg-white text-gray-800">
 
-    <header class="w-full border-b border-gray-200">
+    <script>
+        if (localStorage.getItem('theme') === 'dark' || 
+           (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+          document.documentElement.classList.add('dark');
+        } else {
+          document.documentElement.classList.remove('dark');
+        }
+    </script>
+</head>
+
+<body class="bg-gray-50 text-gray-800 dark:bg-gray-900 dark:text-gray-200">
+
+    <header class="w-full border-b border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 sticky top-0 z-50">
         <nav class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-5">
             <div class="flex justify-between items-center">
                 <div class="flex-shrink-0">
-                    <a href="../index.html" class="text-2xl font-bold text-gray-900">MonoBol</a>
+                    <a href="../index.html" class="text-2xl font-bold text-gray-900 dark:text-white" data-i18n-key="logo">MonoBol</a>
                 </div>
 
                 <div class="hidden md:flex flex-1 justify-center space-x-8">
-                    <a href="#" class="text-gray-600 hover:text-gray-900 font-medium">Mood Tracker</a>
-                    <a href="#" class="text-gray-600 hover:text-gray-900 font-medium">Nearby Healthcare</a>
-                    <a href="#" class="text-gray-600 hover:text-gray-900 font-medium">Get Help</a>
-                    <a href="Seasonal_Health_Tips.html" class="text-cyan-700 font-semibold border-b-2 border-cyan-700">Health Tips</a>
-                    <a href="Symptoms.html" class="text-gray-600 hover:text-gray-900 font-medium">Symptoms</a>
-                    <a href="Health_event.html" class="text-gray-600 hover:text-gray-900 font-medium">Health Events</a>
+                    <a href="Mood_Tracker.html" class="text-gray-600 hover:text-gray-900 dark:text-gray-300 dark:hover:text-white font-medium" data-i18n-key="navMood">Mood Tracker</a>
+                    <a href="get_help.html" class="text-gray-600 hover:text-gray-900 dark:text-gray-300 dark:hover:text-white font-medium" data-i18n-key="navGetHelp">Get Help</a>
+                    <a href="Seasonal_Health_Tips.html" class="text-brand-cyan-hover font-semibold border-b-2 border-brand-cyan-hover" data-i18n-key="navHealthTips">Health Tips</a>
+                    <a href="Symptoms.html" class="text-gray-600 hover:text-gray-900 dark:text-gray-300 dark:hover:text-white font-medium" data-i18n-key="navSymptoms">Symptoms</a>
+                    <a href="Health_event.html" class="text-gray-600 hover:text-gray-900 dark:text-gray-300 dark:hover:text-white font-medium" data-i18n-key="navEvents">Health Events</a>
                 </div>
 
                 <div class="hidden md:flex items-center space-x-4">
-                    <a href="#" class="text-gray-600 hover:text-gray-900 font-medium">Log In</a>
-                    <a href="#" class="bg-brand-cyan hover:bg-brand-cyan-hover text-white font-medium py-2 px-5 rounded-lg transition duration-200">
+                    <button id="lang-toggle-btn" type="button" class="text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white font-medium w-10 h-10 flex items-center justify-center rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700">
+                        বাংলা
+                    </button>
+
+                    <button id="theme-toggle-btn" type="button" class="text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white w-10 h-10 flex items-center justify-center rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700">
+                        <svg id="theme-icon-sun" class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"></path></svg>
+                        <svg id="theme-icon-moon" class="h-5 w-5 hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"></path></svg>
+                    </button>
+
+                    <a href="#" class="text-gray-600 hover:text-gray-900 dark:text-gray-300 dark:hover:text-white font-medium" data-i18n-key="navLogin">Log In</a>
+                    <a href="#" class="bg-brand-cyan hover:bg-brand-cyan-hover text-white font-medium py-2 px-5 rounded-lg transition duration-200" data-i18n-key="navGetStarted">
                         Get started
                     </a>
                 </div>
-
-                <div class="md:hidden">
-                    <button type="button" id="mobile-menu-button" class="text-gray-600 hover:text-gray-900 focus:outline-none">
+                
+                <div class="md:hidden flex items-center space-x-2">
+                    <button id="lang-toggle-btn-mobile" type="button" class="text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white font-medium w-10 h-10 flex items-center justify-center rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700">
+                        বাংলা
+                    </button>
+                    <button id="theme-toggle-btn-mobile" type="button" class="text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white w-10 h-10 flex items-center justify-center rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700">
+                        <svg id="theme-icon-sun-mobile" class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"></path></svg>
+                        <svg id="theme-icon-moon-mobile" class="h-5 w-5 hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"></path></svg>
+                    </button>
+                    <button type="button" id="mobile-menu-button" class="text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white focus:outline-none w-10 h-10 flex items-center justify-center rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700">
                         <svg class="h-6 w-6" stroke="currentColor" fill="none" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path>
                         </svg>
@@ -68,262 +105,257 @@
         
         <div id="mobile-menu-panel" class="hidden md:hidden">
             <div class="px-2 pt-2 pb-3 space-y-1 sm:px-3">
-                <a href="#" class="text-gray-600 hover:bg-gray-100 block px-3 py-2 rounded-md font-medium">Mood Tracker</a>
-                <a href="#" class="text-gray-600 hover:bg-gray-100 block px-3 py-2 rounded-md font-medium">Nearby Healthcare</a>
-                <a href="#" class="text-gray-600 hover:bg-gray-100 block px-3 py-2 rounded-md font-medium">Get Help</a>
-                <a href="Seasonal_Health_Tips.html" class="text-cyan-700 bg-cyan-50 block px-3 py-2 rounded-md font-semibold">Health Tips</a>
-                <a href="Symptoms.html" class="text-gray-600 hover:bg-gray-100 block px-3 py-2 rounded-md font-medium">Symptoms</a>
-                <a href="Health_event.html" class="text-gray-600 hover:bg-gray-100 block px-3 py-2 rounded-md font-medium">Health Events</a>
+                <a href="Mood_Tracker.html" class="text-gray-600 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-700 block px-3 py-2 rounded-md font-medium" data-i18n-key="navMood">Mood Tracker</a>
+                <a href="get_help.html" class="text-gray-600 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-700 block px-3 py-2 rounded-md font-medium" data-i18n-key="navGetHelp">Get Help</a>
+                <a href="Seasonal_Health_Tips.html" class="text-brand-cyan-hover bg-cyan-50 dark:text-cyan-300 dark:bg-cyan-900/50 block px-3 py-2 rounded-md font-semibold" data-i18n-key="navHealthTips">Health Tips</a>
+                <a href="Symptoms.html" class="text-gray-600 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-700 block px-3 py-2 rounded-md font-medium" data-i18n-key="navSymptoms">Symptoms</a>
+                <a href="Health_event.html" class="text-gray-600 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-700 block px-3 py-2 rounded-md font-medium" data-i18n-key="navEvents">Health Events</a>
             </div>
-            <div class="border-t border-gray-200 pt-4 pb-3 px-2">
-                 <a href="#" class="block w-full text-left bg-brand-cyan hover:bg-brand-cyan-hover text-white font-medium py-2 px-3 rounded-lg transition duration-200">
-                    Get started
+            <div class="border-t border-gray-200 dark:border-gray-700 pt-4 pb-3 px-2">
+                 <a href="#" class="block w-full text-center bg-brand-cyan hover:bg-brand-cyan-hover text-white font-medium py-2 px-3 rounded-lg transition duration-200" data-i18n-key="navGetStarted">
+                   Get started
                 </a>
-                <a href="#" class="mt-2 block w-full text-left text-gray-600 hover:bg-gray-100 font-medium py-2 px-3 rounded-lg">Log In</a>
+                <a href="#" class="mt-2 block w-full text-center text-gray-600 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-700 font-medium py-2 px-3 rounded-lg" data-i18n-key="navLogin">
+                   Log In
+                </a>
             </div>
         </div>
     </header>
 
     <div class="bg-gradient-to-r from-cyan-700 to-cyan-500 py-16 text-white rounded-xl max-w-7xl mx-auto mt-8">
         <div class="max-w-7xl mx-auto px-6 text-center">
-            <h1 class="text-4xl font-bold mb-3">Seasonal Health Tips</h1>
-            <p class="text-lg text-white/90">
+            <h1 class="text-4xl font-bold mb-3" data-i18n-key="headerTitle">Seasonal Health Tips</h1>
+            <p class="text-lg text-white/90" data-i18n-key="headerSubtitle">
                 Stay healthy throughout the year with verified health information
             </p>
         </div>
     </div>
 
 
-    <div class="flex justify-center gap-4 my-8"> <button id="summerBtn" class="px-4 py-1 border rounded-full text-sm font-medium transition-all duration-200">Summer (Mar-May)</button>
-        <button id="monsoonBtn" class="px-4 py-1 border rounded-full text-sm font-medium transition-all duration-200">Monsoon (Jun-Sep)</button>
-        <button id="winterBtn" class="px-4 py-1 border rounded-full text-sm font-medium transition-all duration-200">Winter (Dec-Feb)</button>
+    <div class="flex justify-center gap-4 my-8">
+        <button id="summerBtn" class="px-4 py-1 border rounded-full text-sm font-medium transition-all duration-200" data-i18n-key="btnSummer">Summer (Mar-May)</button>
+        <button id="monsoonBtn" class="px-4 py-1 border rounded-full text-sm font-medium transition-all duration-200" data-i18n-key="btnMonsoon">Monsoon (Jun-Sep)</button>
+        <button id="winterBtn" class="px-4 py-1 border rounded-full text-sm font-medium transition-all duration-200" data-i18n-key="btnWinter">Winter (Dec-Feb)</button>
     </div>
 
     
     <div id="summerSection" class="max-w-5xl mx-auto text-center py-12 px-4">
-        <h2 class="text-2xl font-semibold text-cyan-700 flex items-center justify-center gap-2">
-            <span>☀️ Summer (Mar–May)</span>
+        <h2 class="text-2xl font-semibold text-cyan-700 dark:text-cyan-400 flex items-center justify-center gap-2">
+            <span data-i18n-key="summerTitle">☀️ Summer (Mar–May)</span>
         </h2>
-        <p class="text-gray-500 mb-8">Common diseases and prevention tips</p>
+        <p class="text-gray-500 dark:text-gray-400 mb-8" data-i18n-key="seasonSubtext">Common diseases and prevention tips</p>
         <div class="grid md:grid-cols-2 gap-6">
-            <div class="border rounded-xl shadow-sm p-5 text-left hover:shadow-lg transition-all duration-300 hover:-translate-y-1">
-                <h3 class="text-lg font-semibold text-gray-800 mb-2">Heat Stroke</h3>
-                <p class="text-sm mb-3 text-gray-600"> Keep drinking water, avoid direct sunlight</p>
-                <p class="font-semibold text-sm text-gray-700 mb-1.5">Symptoms:</p>
-                <ul class="text-sm list-disc ml-6 mb-3 text-gray-600">
-                    <li>High body temperature</li>
-                    <li>Confusion</li>
-                    <li>Rapid pulse</li>
-                    <li>Headache</li>
+            <div class="bg-white dark:bg-gray-800 border dark:border-gray-700 rounded-xl shadow-sm p-5 text-left hover:shadow-lg transition-all duration-300 hover:-translate-y-1">
+                <h3 class="text-lg font-semibold text-gray-800 dark:text-white mb-2" data-i18n-key="s_d1_title">Heat Stroke</h3>
+                <p class="text-sm mb-3 text-gray-600 dark:text-gray-300" data-i18n-key="s_d1_desc"> Keep drinking water, avoid direct sunlight</p>
+                <p class="font-semibold text-sm text-gray-700 dark:text-gray-200 mb-1.5" data-i18n-key="symptomsLabel">Symptoms:</p>
+                <ul class="text-sm list-disc ml-6 mb-3 text-gray-600 dark:text-gray-300">
+                    <li data-i18n-key="s_d1_s1">High body temperature</li>
+                    <li data-i18n-key="s_d1_s2">Confusion</li>
+                    <li data-i18n-key="s_d1_s3">Rapid pulse</li>
+                    <li data-i18n-key="s_d1_s4">Headache</li>
                 </ul>
-                <p class="font-semibold text-sm text-gray-700 mb-1.5">Prevention Tips:</p>
-                <ul class="text-sm list-disc ml-6 text-gray-600">
-                    <li>Stay hydrated – drink 8–10 glasses of water daily</li>
-                    <li>Avoid outdoor activities during 11am–3pm</li>
-                    <li>Wear light-colored, loose cotton clothes</li>
-                    <li>Use ORS (Oral Rehydration Solution) to prevent dehydration</li>
+                <p class="font-semibold text-sm text-gray-700 dark:text-gray-200 mb-1.5" data-i18n-key="preventionLabel">Prevention Tips:</p>
+                <ul class="text-sm list-disc ml-6 text-gray-600 dark:text-gray-300">
+                    <li data-i18n-key="s_d1_p1">Stay hydrated – drink 8–10 glasses of water daily</li>
+                    <li data-i18n-key="s_d1_p2">Avoid outdoor activities during 11am–3pm</li>
+                    <li data-i18n-key="s_d1_p3">Wear light-colored, loose cotton clothes</li>
+                    <li data-i18n-key="s_d1_p4">Use ORS (Oral Rehydration Solution) to prevent dehydration</li>
                 </ul>
             </div>
-            <div class="border rounded-xl shadow-sm p-5 text-left hover:shadow-lg transition-all duration-300 hover:-translate-y-1">
-                <h3 class="text-lg font-semibold text-gray-800 mb-2">Dengue Fever</h3>
-                <p class="text-sm mb-3 text-gray-600"> Prevent mosquito breeding, use mosquito repellent</p>
-                <p class="font-semibold text-sm text-gray-700 mb-1.5">Symptoms:</p>
-                <ul class="text-sm list-disc ml-6 mb-3 text-gray-600">
-                    <li>High fever</li>
-                    <li>Severe headache</li>
-                    <li>Pain behind eyes</li>
-                    <li>Joint/muscle pain</li>
+            <div class="bg-white dark:bg-gray-800 border dark:border-gray-700 rounded-xl shadow-sm p-5 text-left hover:shadow-lg transition-all duration-300 hover:-translate-y-1">
+                <h3 class="text-lg font-semibold text-gray-800 dark:text-white mb-2" data-i18n-key="s_d2_title">Dengue Fever</h3>
+                <p class="text-sm mb-3 text-gray-600 dark:text-gray-300" data-i18n-key="s_d2_desc"> Prevent mosquito breeding, use mosquito repellent</p>
+                <p class="font-semibold text-sm text-gray-700 dark:text-gray-200 mb-1.5" data-i18n-key="symptomsLabel">Symptoms:</p>
+                <ul class="text-sm list-disc ml-6 mb-3 text-gray-600 dark:text-gray-300">
+                    <li data-i18n-key="s_d2_s1">High fever</li>
+                    <li data-i18n-key="s_d2_s2">Severe headache</li>
+                    <li data-i18n-key="s_d2_s3">Pain behind eyes</li>
+                    <li data-i18n-key="s_d2_s4">Joint/muscle pain</li>
                 </ul>
-                <p class="font-semibold text-sm text-gray-700 mb-1.5">Prevention Tips:</p>
-                <ul class="text-sm list-disc ml-6 text-gray-600">
-                    <li>Use mosquito nets while sleeping</li>
-                    <li>Clean stagnant water around house</li>
-                    <li>Wear full-sleeve clothes</li>
-                    <li>Seek immediate medical help if fever persists</li>
+                <p class="font-semibold text-sm text-gray-700 dark:text-gray-200 mb-1.5" data-i18n-key="preventionLabel">Prevention Tips:</p>
+                <ul class="text-sm list-disc ml-6 text-gray-600 dark:text-gray-300">
+                    <li data-i18n-key="s_d2_p1">Use mosquito nets while sleeping</li>
+                    <li data-i18n-key="s_d2_p2">Clean stagnant water around house</li>
+                    <li data-i18n-key="s_d2_p3">Wear full-sleeve clothes</li>
+                    <li data-i18n-key="s_d2_p4">Seek immediate medical help if fever persists</li>
                 </ul>
             </div>
         </div>
     </div>
 
     <div id="monsoonSection" class="max-w-5xl mx-auto text-center py-12 px-4 hidden">
-        <h2 class="text-2xl font-semibold text-cyan-700 flex items-center justify-center gap-2">
-            <span>🌧️ Monsoon (Jun–Sep)</span>
+        <h2 class="text-2xl font-semibold text-cyan-700 dark:text-cyan-400 flex items-center justify-center gap-2">
+            <span data-i18n-key="monsoonTitle">🌧️ Monsoon (Jun–Sep)</span>
         </h2>
-        <p class="text-gray-500 mb-8">Common diseases and prevention tips</p>
+        <p class="text-gray-500 dark:text-gray-400 mb-8" data-i18n-key="seasonSubtext">Common diseases and prevention tips</p>
         <div class="grid md:grid-cols-3 gap-6">
-            <div class="border rounded-xl shadow-sm p-5 text-left hover:shadow-lg transition-all duration-300 hover:-translate-y-1">
-                <h3 class="text-lg font-semibold text-gray-800 mb-2">Diarrhea</h3>
-                <p class="text-sm mb-3 text-gray-600"> Maintain hygiene, drink safe water</p>
-                <p class="font-semibold text-sm text-gray-700 mb-1.5">Symptoms:</p>
-                <ul class="text-sm list-disc ml-6 mb-3 text-gray-600">
-                    <li>Loose stools</li>
-                    <li>Stomach pain</li>
-                    <li>Dehydration</li>
-                    <li>Weakness</li>
+            <div class="bg-white dark:bg-gray-800 border dark:border-gray-700 rounded-xl shadow-sm p-5 text-left hover:shadow-lg transition-all duration-300 hover:-translate-y-1">
+                <h3 class="text-lg font-semibold text-gray-800 dark:text-white mb-2" data-i18n-key="m_d1_title">Diarrhea</h3>
+                <p class="text-sm mb-3 text-gray-600 dark:text-gray-300" data-i18n-key="m_d1_desc"> Maintain hygiene, drink safe water</p>
+                <p class="font-semibold text-sm text-gray-700 dark:text-gray-200 mb-1.5" data-i18n-key="symptomsLabel">Symptoms:</p>
+                <ul class="text-sm list-disc ml-6 mb-3 text-gray-600 dark:text-gray-300">
+                    <li data-i18n-key="m_d1_s1">Loose stools</li>
+                    <li data-i18n-key="m_d1_s2">Stomach pain</li>
+                    <li data-i18n-key="m_d1_s3">Dehydration</li>
+                    <li data-i18n-key="m_d1_s4">Weakness</li>
                 </ul>
-                <p class="font-semibold text-sm text-gray-700 mb-1.5">Prevention Tips:</p>
-                <ul class="text-sm list-disc ml-6 text-gray-600">
-                    <li>Drink only boiled or filtered water</li>
-                    <li>Wash hands with soap before eating</li>
-                    <li>Avoid street food and raw vegetables</li>
-                    <li>Take homemade ORS (salt-sugar solution)</li>
-                </ul>
-            </div>
-            <div class="border rounded-xl shadow-sm p-5 text-left hover:shadow-lg transition-all duration-300 hover:-translate-y-1">
-                <h3 class="text-lg font-semibold text-gray-800 mb-2">Cholera</h3>
-                <p class="text-sm mb-3 text-gray-600"> Safe drinking water, proper sanitation</p>
-                <p class="font-semibold text-sm text-gray-700 mb-1.5">Symptoms:</p>
-                <ul class="text-sm list-disc ml-6 mb-3 text-gray-600">
-                    <li>Severe dehydration</li>
-                    <li>Watery diarrhea</li>
-                    <li>Muscle cramps</li>
-                </ul>
-                <p class="font-semibold text-sm text-gray-700 mb-1.5">Prevention Tips:</p>
-                <ul class="text-sm list-disc ml-6 text-gray-600">
-                    <li>Drink properly boiled water</li>
-                    <li>Boil drinking water for 10 minutes</li>
-                    <li>Eat thoroughly cooked food</li>
-                    <li>Visit health center if symptoms worsen</li>
+                <p class="font-semibold text-sm text-gray-700 dark:text-gray-200 mb-1.5" data-i18n-key="preventionLabel">Prevention Tips:</p>
+                <ul class="text-sm list-disc ml-6 text-gray-600 dark:text-gray-300">
+                    <li data-i18n-key="m_d1_p1">Drink only boiled or filtered water</li>
+                    <li data-i18n-key="m_d1_p2">Wash hands with soap before eating</li>
+                    <li data-i18n-key="m_d1_p3">Avoid street food and raw vegetables</li>
+                    <li data-i18n-key="m_d1_p4">Take homemade ORS (salt-sugar solution)</li>
                 </ul>
             </div>
-            <div class="border rounded-xl shadow-sm p-5 text-left hover:shadow-lg transition-all duration-300 hover:-translate-y-1">
-                <h3 class="text-lg font-semibold text-gray-800 mb-2">Typhoid</h3>
-                <p class="text-sm mb-3 text-gray-600"> Vaccination, safe food and water</p>
-                <p class="font-semibold text-sm text-gray-700 mb-1.5">Symptoms:</p>
-                <ul class="text-sm list-disc ml-6 mb-3 text-gray-600">
-                    <li>Prolonged fever</li>
-                    <li>Weakness</li>
-                    <li>Stomach pain</li>
-                    <li>Loss of appetite</li>
+            <div class="bg-white dark:bg-gray-800 border dark:border-gray-700 rounded-xl shadow-sm p-5 text-left hover:shadow-lg transition-all duration-300 hover:-translate-y-1">
+                <h3 class="text-lg font-semibold text-gray-800 dark:text-white mb-2" data-i18n-key="m_d2_title">Cholera</h3>
+                <p class="text-sm mb-3 text-gray-600 dark:text-gray-300" data-i18n-key="m_d2_desc"> Safe drinking water, proper sanitation</p>
+                <p class="font-semibold text-sm text-gray-700 dark:text-gray-200 mb-1.5" data-i18n-key="symptomsLabel">Symptoms:</p>
+                <ul class="text-sm list-disc ml-6 mb-3 text-gray-600 dark:text-gray-300">
+                    <li data-i18n-key="m_d2_s1">Severe dehydration</li>
+                    <li data-i18n-key="m_d2_s2">Watery diarrhea</li>
+                    <li data-i18n-key="m_d2_s3">Muscle cramps</li>
                 </ul>
-                <p class="font-semibold text-sm text-gray-700 mb-1.5">Prevention Tips:</p>
-                <ul class="text-sm list-disc ml-6 text-gray-600">
-                    <li>Complete full course of antibiotics</li>
-                    <li>Eat light, easily digestible food</li>
-                    <li>Rest adequately</li>
-                    <li>Drink boiled water only</li>
+                <p class="font-semibold text-sm text-gray-700 dark:text-gray-200 mb-1.5" data-i18n-key="preventionLabel">Prevention Tips:</p>
+                <ul class="text-sm list-disc ml-6 text-gray-600 dark:text-gray-300">
+                    <li data-i18n-key="m_d2_p1">Drink properly boiled water</li>
+                    <li data-i18n-key="m_d2_p2">Boil drinking water for 10 minutes</li>
+                    <li data-i18n-key="m_d2_p3">Eat thoroughly cooked food</li>
+                    <li data-i18n-key="m_d2_p4">Visit health center if symptoms worsen</li>
+                </ul>
+            </div>
+            <div class="bg-white dark:bg-gray-800 border dark:border-gray-700 rounded-xl shadow-sm p-5 text-left hover:shadow-lg transition-all duration-300 hover:-translate-y-1">
+                <h3 class="text-lg font-semibold text-gray-800 dark:text-white mb-2" data-i18n-key="m_d3_title">Typhoid</h3>
+                <p class="text-sm mb-3 text-gray-600 dark:text-gray-300" data-i18n-key="m_d3_desc"> Vaccination, safe food and water</p>
+                <p class="font-semibold text-sm text-gray-700 dark:text-gray-200 mb-1.5" data-i18n-key="symptomsLabel">Symptoms:</p>
+                <ul class="text-sm list-disc ml-6 mb-3 text-gray-600 dark:text-gray-300">
+                    <li data-i18n-key="m_d3_s1">Prolonged fever</li>
+                    <li data-i18n-key="m_d3_s2">Weakness</li>
+                    <li data-i18n-key="m_d3_s3">Stomach pain</li>
+                    <li data-i18n-key="m_d3_s4">Loss of appetite</li>
+                </ul>
+                <p class="font-semibold text-sm text-gray-700 dark:text-gray-200 mb-1.5" data-i18n-key="preventionLabel">Prevention Tips:</p>
+                <ul class="text-sm list-disc ml-6 text-gray-600 dark:text-gray-300">
+                    <li data-i18n-key="m_d3_p1">Complete full course of antibiotics</li>
+                    <li data-i18n-key="m_d3_p2">Eat light, easily digestible food</li>
+                    <li data-i18n-key="m_d3_p3">Rest adequately</li>
+                    <li data-i18n-key="m_d3_p4">Drink boiled water only</li>
                 </ul>
             </div>
         </div>
     </div>
 
     <div id="winterSection" class="max-w-5xl mx-auto text-center py-12 px-4 hidden">
-        <h2 class="text-2xl font-semibold text-cyan-700 flex items-center justify-center gap-2">
-            <span>❄️ Winter (Dec–Feb)</span>
+        <h2 class="text-2xl font-semibold text-cyan-700 dark:text-cyan-400 flex items-center justify-center gap-2">
+            <span data-i18n-key="winterTitle">❄️ Winter (Dec–Feb)</span>
         </h2>
-        <p class="text-gray-500 mb-8">Common diseases and prevention tips</p>
+        <p class="text-gray-500 dark:text-gray-400 mb-8" data-i18n-key="seasonSubtext">Common diseases and prevention tips</p>
         <div class="grid md:grid-cols-2 gap-6">
-            <div class="border rounded-xl shadow-sm p-5 text-left hover:shadow-lg transition-all duration-300 hover:-translate-y-1">
-                <h3 class="text-lg font-semibold text-gray-800 mb-2">Pneumonia</h3>
-                <p class="text-sm mb-3 text-gray-600"> Keep warm, get vaccinated</p>
-                <p class="font-semibold text-sm text-gray-700 mb-1.5">Symptoms:</p>
-                <ul class="text-sm list-disc ml-6 mb-3 text-gray-600">
-                    <li>Cough with mucus</li>
-                    <li>Chest pain</li>
-                    <li>Fever</li>
-                    <li>Difficulty breathing</li>
+            <div class="bg-white dark:bg-gray-800 border dark:border-gray-700 rounded-xl shadow-sm p-5 text-left hover:shadow-lg transition-all duration-300 hover:-translate-y-1">
+                <h3 class="text-lg font-semibold text-gray-800 dark:text-white mb-2" data-i18n-key="w_d1_title">Pneumonia</h3>
+                <p class="text-sm mb-3 text-gray-600 dark:text-gray-300" data-i18n-key="w_d1_desc"> Keep warm, get vaccinated</p>
+                <p class="font-semibold text-sm text-gray-700 dark:text-gray-200 mb-1.5" data-i18n-key="symptomsLabel">Symptoms:</p>
+                <ul class="text-sm list-disc ml-6 mb-3 text-gray-600 dark:text-gray-300">
+                    <li data-i18n-key="w_d1_s1">Cough with mucus</li>
+                    <li data-i18n-key="w_d1_s2">Chest pain</li>
+                    <li data-i18n-key="w_d1_s3">Fever</li>
+                    <li data-i18n-key="w_d1_s4">Difficulty breathing</li>
                 </ul>
-                <p class="font-semibold text-sm text-gray-700 mb-1.5">Prevention Tips:</p>
-                <ul class="text-sm list-disc ml-6 text-gray-600">
-                    <li>Keep children and elderly warm</li>
-                    <li>Get pneumonia vaccination</li>
-                    <li>Avoid cold water baths</li>
-                    <li>Seek medical help if breathing difficulty occurs</li>
+                <p class="font-semibold text-sm text-gray-700 dark:text-gray-200 mb-1.5" data-i18n-key="preventionLabel">Prevention Tips:</p>
+                <ul class="text-sm list-disc ml-6 text-gray-600 dark:text-gray-300">
+                    <li data-i18n-key="w_d1_p1">Keep children and elderly warm</li>
+                    <li data-i18n-key="w_d1_p2">Get pneumonia vaccination</li>
+                    <li data-i18n-key="w_d1_p3">Avoid cold water baths</li>
+                    <li data-i18n-key="w_d1_p4">Seek medical help if breathing difficulty occurs</li>
                 </ul>
             </div>
-            <div class="border rounded-xl shadow-sm p-5 text-left hover:shadow-lg transition-all duration-300 hover:-translate-y-1">
-                <h3 class="text-lg font-semibold text-gray-800 mb-2">Cold/Flu</h3>
-                <p class="text-sm mb-3 text-gray-600"> Maintain hygiene, avoid close contact</p>
-                <p class="font-semibold text-sm text-gray-700 mb-1.5">Symptoms:</p>
-                <ul class="text-sm list-disc ml-6 mb-3 text-gray-600">
-                    <li>Runny nose</li>
-                    <li>Cough</li>
-                    <li>Sore throat</li>
-                    <li>Body ache</li>
+            <div class="bg-white dark:bg-gray-800 border dark:border-gray-700 rounded-xl shadow-sm p-5 text-left hover:shadow-lg transition-all duration-300 hover:-translate-y-1">
+                <h3 class="text-lg font-semibold text-gray-800 dark:text-white mb-2" data-i18n-key="w_d2_title">Cold/Flu</h3>
+                <p class="text-sm mb-3 text-gray-600 dark:text-gray-300" data-i18n-key="w_d2_desc"> Maintain hygiene, avoid close contact</p>
+                <p class="font-semibold text-sm text-gray-700 dark:text-gray-200 mb-1.5" data-i18n-key="symptomsLabel">Symptoms:</p>
+                <ul class="text-sm list-disc ml-6 mb-3 text-gray-600 dark:text-gray-300">
+                    <li data-i18n-key="w_d2_s1">Runny nose</li>
+                    <li data-i18n-key="w_d2_s2">Cough</li>
+                    <li data-i18n-key="w_d2_s3">Sore throat</li>
+                    <li data-i18n-key="w_d2_s4">Body ache</li>
                 </ul>
-                <p class="font-semibold text-sm text-gray-700 mb-1.5">Prevention Tips:</p>
-                <ul class="text-sm list-disc ml-6 text-gray-600">
-                    <li>Drink warm water and herbal tea</li>
-                    <li>Gargle with salt water</li>
-                    <li>Rest adequately</li>
-                    <li>Cover mouth while coughing/sneezing</li>
+                <p class="font-semibold text-sm text-gray-700 dark:text-gray-200 mb-1.5" data-i18n-key="preventionLabel">Prevention Tips:</p>
+                <ul class="text-sm list-disc ml-6 text-gray-600 dark:text-gray-300">
+                    <li data-i18n-key="w_d2_p1">Drink warm water and herbal tea</li>
+                    <li data-i18n-key="w_d2_p2">Gargle with salt water</li>
+                    <li data-i18n-key="w_d2_p3">Rest adequately</li>
+                    <li data-i18n-key="w_d2_p4">Cover mouth while coughing/sneezing</li>
                 </ul>
             </div>
         </div>
     </div>
 
     <div class="max-w-4xl mx-auto py-16 px-4">
-        <h2 class="text-2xl font-semibold text-center text-cyan-700 mb-8">Year-Round Health Tips</h2>
+        <h2 class="text-2xl font-semibold text-center text-cyan-700 dark:text-cyan-400 mb-8" data-i18n-key="yr_title">Year-Round Health Tips</h2>
         <div class="grid md:grid-cols-3 gap-6 text-center">
-            <div class="border rounded-xl shadow-sm p-5 hover:shadow-lg transition-all duration-300 hover:-translate-y-1">
-                <h3 class="font-semibold text-gray-800 mb-2">Stay Hydrated</h3>
-                <p class="text-sm text-gray-600">Drink 6–8 glasses of water daily. Drink safe filtered water before eating.</p>
+            <div class="bg-white dark:bg-gray-800 border dark:border-gray-700 rounded-xl shadow-sm p-5 hover:shadow-lg transition-all duration-300 hover:-translate-y-1">
+                <h3 class="font-semibold text-gray-800 dark:text-white mb-2" data-i18n-key="yr_1_title">Stay Hydrated</h3>
+                <p class="text-sm text-gray-600 dark:text-gray-300" data-i18n-key="yr_1_text">Drink 6–8 glasses of water daily. Drink safe filtered water before eating.</p>
             </div>
-            <div class="border rounded-xl shadow-sm p-5 hover:shadow-lg transition-all duration-300 hover:-translate-y-1">
-                <h3 class="font-semibold text-gray-800 mb-2">Hygiene First</h3>
-                <p class="text-sm text-gray-600">Wash hands with soap regularly. Keep surroundings clean to prevent diseases.</p>
+            <div class="bg-white dark:bg-gray-800 border dark:border-gray-700 rounded-xl shadow-sm p-5 hover:shadow-lg transition-all duration-300 hover:-translate-y-1">
+                <h3 class="font-semibold text-gray-800 dark:text-white mb-2" data-i18n-key="yr_2_title">Hygiene First</h3>
+                <p class="text-sm text-gray-600 dark:text-gray-300" data-i18n-key="yr_2_text">Wash hands with soap regularly. Keep surroundings clean to prevent diseases.</p>
             </div>
-            <div class="border rounded-xl shadow-sm p-5 hover:shadow-lg transition-all duration-300 hover:-translate-y-1">
-                <h3 class="font-semibold text-gray-800 mb-2">Seek Help Early</h3>
-                <p class="text-sm text-gray-600">Visit nearby health center if symptoms persist to prevent serious complications.</p>
+            <div class="bg-white dark:bg-gray-800 border dark:border-gray-700 rounded-xl shadow-sm p-5 hover:shadow-lg transition-all duration-300 hover:-translate-y-1">
+                <h3 class="font-semibold text-gray-800 dark:text-white mb-2" data-i18n-key="yr_3_title">Seek Help Early</h3>
+                <p class="text-sm text-gray-600 dark:text-gray-300" data-i18n-key="yr_3_text">Visit nearby health center if symptoms persist to prevent serious complications.</p>
             </div>
         </div>
     </div>
 
-<!-- footer  -->
 <footer class="bg-gray-800 text-gray-300">
     <div class="max-w-7xl mx-auto py-16 px-6 lg:px-8">
         <div class="grid grid-cols-1 md:grid-cols-4 gap-12">
             
             <div class="md:col-span-1">
-                <a href="../index.html" class="text-2xl font-bold text-white">MonoBol</a>
-                <p class="text-gray-400 text-sm mt-3">
+                <a href="../index.html" class="text-2xl font-bold text-white" data-i18n-key="logo">MonoBol</a>
+                <p class="text-gray-400 text-sm mt-3" data-i18n-key="footerSlogan">
                     Delivering safe and compassionate care for community well-being.
                 </p>
                 <div class="flex space-x-5 mt-6">
                     <a href="#" class="text-gray-400 hover:text-brand-cyan transition-colors" aria-label="Facebook">
-                        <svg class="h-6 w-6" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-                            <path fill-rule="evenodd" d="M22 12c0-5.523-4.477-10-10-10S2 6.477 2 12c0 4.991 3.657 9.128 8.438 9.878v-6.987h-2.54V12h2.54V9.797c0-2.506 1.492-3.89 3.777-3.89 1.094 0 2.238.195 2.238.195v2.46h-1.26c-1.243 0-1.63.772-1.63 1.562V12h2.773l-.443 2.89h-2.33v6.988C18.343 21.128 22 16.991 22 12z" clip-rule="evenodd" />
-                        </svg>
+                        <svg class="h-6 w-6" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path fill-rule="evenodd" d="M22 12c0-5.523-4.477-10-10-10S2 6.477 2 12c0 4.991 3.657 9.128 8.438 9.878v-6.987h-2.54V12h2.54V9.797c0-2.506 1.492-3.89 3.777-3.89 1.094 0 2.238.195 2.238.195v2.46h-1.26c-1.243 0-1.63.772-1.63 1.562V12h2.773l-.443 2.89h-2.33v6.988C18.343 21.128 22 16.991 22 12z" clip-rule="evenodd" /></svg>
                     </a>
                     <a href="#" class="text-gray-400 hover:text-brand-cyan transition-colors" aria-label="Twitter">
-                        <svg class="h-6 w-6" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-                            <path d="M8.29 20.251c7.547 0 11.675-6.253 11.675-11.675 0-.178 0-.355-.012-.53A8.348 8.348 0 0022 5.92a8.19 8.19 0 01-2.357.646 4.118 4.118 0 001.804-2.27 8.224 8.224 0 01-2.605.996 4.107 4.107 0 00-6.993 3.743 11.65 11.65 0 01-8.457-4.287 4.106 4.106 0 001.27 5.477A4.072 4.072 0 012.8 9.713v.052a4.105 4.105 0 003.292 4.022 4.095 4.095 0 01-1.853.07 4.108 4.108 0 003.834 2.85A8.233 8.233 0 012 18.407a11.616 11.616 0 006.29 1.84" />
-                        </svg>
+                        <svg class="h-6 w-6" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path d="M8.29 20.251c7.547 0 11.675-6.253 11.675-11.675 0-.178 0-.355-.012-.53A8.348 8.348 0 0022 5.92a8.19 8.19 0 01-2.357.646 4.118 4.118 0 001.804-2.27 8.224 8.224 0 01-2.605.996 4.107 4.107 0 00-6.993 3.743 11.65 11.65 0 01-8.457-4.287 4.106 4.106 0 001.27 5.477A4.072 4.072 0 012.8 9.713v.052a4.105 4.105 0 003.292 4.022 4.095 4.095 0 01-1.853.07 4.108 4.108 0 003.834 2.85A8.233 8.233 0 012 18.407a11.616 11.616 0 006.29 1.84" /></svg>
                     </a>
                     <a href="#" class="text-gray-400 hover:text-brand-cyan transition-colors" aria-label="LinkedIn">
-                        <svg class="h-6 w-6" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-                            <path fill-rule="evenodd" d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z" clip-rule="evenodd" />
-                        </svg>
+                        <svg class="h-6 w-6" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path fill-rule="evenodd" d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z" clip-rule="evenodd" /></svg>
                     </a>
                 </div>
             </div>
 
             <div>
-                <h3 class="text-sm font-semibold text-gray-400 uppercase tracking-wider">Features</h3>
+                <h3 class="text-sm font-semibold text-gray-400 uppercase tracking-wider" data-i18n-key="footerFeatures">Features</h3>
                 <ul class="mt-4 space-y-3">
-                    <li><a href="#" class="text-base hover:text-white transition-colors">Mood Tracker</a></li>
-                    <li><a href="#" class="text-base hover:text-white transition-colors">Nearby Healthcare</a></li>
-                    <li><a href="#" class="text-base hover:text-white transition-colors">Get Help</a></li>
+                    <li><a href="#" class="text-base hover:text-white transition-colors" data-i18n-key="navMood">Mood Tracker</a></li>
+                    <li><a href="#" class="text-base hover:text-white transition-colors" data-i18n-key="footerNearby">Nearby Healthcare</a></li>
+                    <li><a href="#" class="text-base hover:text-white transition-colors" data-i18n-key="navGetHelp">Get Help</a></li>
                 </ul>
             </div>
 
             <div>
-                <h3 class="text-sm font-semibold text-gray-400 uppercase tracking-wider">Resources</h3>
+                <h3 class="text-sm font-semibold text-gray-400 uppercase tracking-wider" data-i18n-key="footerResources">Resources</h3>
                 <ul class="mt-4 space-y-3">
-                    <li><a href="Seasonal_Health_Tips.html" class="text-base hover:text-white transition-colors">Health Tips</a></li>
-                    <li><a href="Health_event.html" class="text-base hover:text-white transition-colors">Health Events</a></li>
-                    <li><a href="#" class="text-base hover:text-white transition-colors">Symptoms</a></li>
+                    <li><a href="Seasonal_Health_Tips.html" class="text-base hover:text-white transition-colors" data-i18n-key="navHealthTips">Health Tips</a></li>
+                    <li><a href="Health_event.html" class="text-base hover:text-white transition-colors" data-i18n-key="navEvents">Health Events</a></li>
+                    <li><a href="#" class="text-base hover:text-white transition-colors" data-i18n-key="navSymptoms">Symptoms</a></li>
                 </ul>
             </div>
 
             <div>
-                <h3 class="text-sm font-semibold text-gray-400 uppercase tracking-wider">Company</h3>
+                <h3 class="text-sm font-semibold text-gray-400 uppercase tracking-wider" data-i18n-key="footerCompany">Company</h3>
                 <ul class="mt-4 space-y-3">
-                    <li><a href="#" class="text-base hover:text-white transition-colors">About Us</a></li>
-                    <li><a href="#" class="text-base hover:text-white transition-colors">Contact</a></li>
-                    <li><a href="#" class="text-base hover:text-white transition-colors">Privacy Policy</a></li>
-                    <li><a href="#" class="text-base hover:text-white transition-colors">Terms of Service</a></li>
+                    <li><a href="#" class="text-base hover:text-white transition-colors" data-i18n-key="footerAbout">About Us</a></li>
+                    <li><a href="#" class="text-base hover:text-white transition-colors" data-i18n-key="footerContact">Contact</a></li>
+                    <li><a href="#" class="text-base hover:text-white transition-colors" data-i18n-key="footerPrivacy">Privacy Policy</a></li>
+                    <li><a href="#" class="text-base hover:text-white transition-colors" data-i18n-key="footerTerms">Terms of Service</a></li>
                 </ul>
             </div>
 
@@ -331,67 +363,373 @@
 
         <div class="mt-12 border-t border-gray-700 pt-8">
             <p class="text-sm text-gray-500 text-center mb-4">
-                <strong>Medical Disclaimer:</strong> The information on this site is not a substitute for professional medical advice, diagnosis, or treatment. Always seek the advice of your physician or other qualified health provider.
+                <strong data-i18n-key="footerDisclaimerTitle">Medical Disclaimer:</strong> <span data-i18n-key="footerDisclaimerText">The information on this site is not a substitute for professional medical advice, diagnosis, or treatment. Always seek the advice of your physician or other qualified health provider.</span>
             </p>
-            <p class="text-base text-gray-500 text-center">
+            <p class="text-base text-gray-500 text-center" data-i18n-key="footerCopyright">
                 &copy; 2025 MonoBol & ShunnoLogic. All rights reserved.
             </p>
         </div>
     </div>
 </footer>
 
-<script>
-    // --- Tab Switching Logic ---
-    const summerBtn = document.getElementById('summerBtn');
-    const monsoonBtn = document.getElementById('monsoonBtn');
-    const winterBtn = document.getElementById('winterBtn');
+    <script>
+    document.addEventListener('DOMContentLoaded', () => {
 
-    const summerSection = document.getElementById('summerSection');
-    const monsoonSection = document.getElementById('monsoonSection');
-    const winterSection = document.getElementById('winterSection');
+        // --- 1. TRANSLATION (i18n) LOGIC & DICTIONARY ---
 
-    // *** IMPROVEMENT: Added hover state for inactive buttons and fixed active hover ***
-    const activeClasses = ['bg-cyan-600', 'text-white', 'border-cyan-600', 'hover:bg-cyan-600'];
-    const inactiveClasses = ['text-gray-800', 'border-gray-300', 'hover:bg-gray-100'];
+        const translations = {
+            'en': {
+                // General
+                'logo': 'MonoBol',
+                'langToggle': 'বাংলা',
+                'symptomsLabel': 'Symptoms:',
+                'preventionLabel': 'Prevention Tips:',
+                // Nav
+                'navMood': 'Mood Tracker',
+                'navGetHelp': 'Get Help',
+                'navHealthTips': 'Health Tips',
+                'navSymptoms': 'Symptoms',
+                'navEvents': 'Health Events',
+                'navLogin': 'Log In',
+                'navGetStarted': 'Get started',
+                // Page Header
+                'headerTitle': 'Seasonal Health Tips',
+                'headerSubtitle': 'Stay healthy throughout the year with verified health information',
+                // Seasonal Buttons
+                'btnSummer': 'Summer (Mar-May)',
+                'btnMonsoon': 'Monsoon (Jun-Sep)',
+                'btnWinter': 'Winter (Dec-Feb)',
+                'seasonSubtext': 'Common diseases and prevention tips',
+                // Summer
+                'summerTitle': '☀️ Summer (Mar–May)',
+                's_d1_title': 'Heat Stroke',
+                's_d1_desc': 'Keep drinking water, avoid direct sunlight',
+                's_d1_s1': 'High body temperature',
+                's_d1_s2': 'Confusion',
+                's_d1_s3': 'Rapid pulse',
+                's_d1_s4': 'Headache',
+                's_d1_p1': 'Stay hydrated – drink 8–10 glasses of water daily',
+                's_d1_p2': 'Avoid outdoor activities during 11am–3pm',
+                's_d1_p3': 'Wear light-colored, loose cotton clothes',
+                's_d1_p4': 'Use ORS (Oral Rehydration Solution) to prevent dehydration',
+                's_d2_title': 'Dengue Fever',
+                's_d2_desc': 'Prevent mosquito breeding, use mosquito repellent',
+                's_d2_s1': 'High fever',
+                's_d2_s2': 'Severe headache',
+                's_d2_s3': 'Pain behind eyes',
+                's_d2_s4': 'Joint/muscle pain',
+                's_d2_p1': 'Use mosquito nets while sleeping',
+                's_d2_p2': 'Clean stagnant water around house',
+                's_d2_p3': 'Wear full-sleeve clothes',
+                's_d2_p4': 'Seek immediate medical help if fever persists',
+                // Monsoon
+                'monsoonTitle': '🌧️ Monsoon (Jun–Sep)',
+                'm_d1_title': 'Diarrhea',
+                'm_d1_desc': 'Maintain hygiene, drink safe water',
+                'm_d1_s1': 'Loose stools', 'm_d1_s2': 'Stomach pain', 'm_d1_s3': 'Dehydration', 'm_d1_s4': 'Weakness',
+                'm_d1_p1': 'Drink only boiled or filtered water',
+                'm_d1_p2': 'Wash hands with soap before eating',
+                'm_d1_p3': 'Avoid street food and raw vegetables',
+                'm_d1_p4': 'Take homemade ORS (salt-sugar solution)',
+                'm_d2_title': 'Cholera',
+                'm_d2_desc': 'Safe drinking water, proper sanitation',
+                'm_d2_s1': 'Severe dehydration', 'm_d2_s2': 'Watery diarrhea', 'm_d2_s3': 'Muscle cramps',
+                'm_d2_p1': 'Drink properly boiled water',
+                'm_d2_p2': 'Boil drinking water for 10 minutes',
+                'm_d2_p3': 'Eat thoroughly cooked food',
+                'm_d2_p4': 'Visit health center if symptoms worsen',
+                'm_d3_title': 'Typhoid',
+                'm_d3_desc': 'Vaccination, safe food and water',
+                'm_d3_s1': 'Prolonged fever', 'm_d3_s2': 'Weakness', 'm_d3_s3': 'Stomach pain', 'm_d3_s4': 'Loss of appetite',
+                'm_d3_p1': 'Complete full course of antibiotics',
+                'm_d3_p2': 'Eat light, easily digestible food',
+                'm_d3_p3': 'Rest adequately',
+                'm_d3_p4': 'Drink boiled water only',
+                // Winter
+                'winterTitle': '❄️ Winter (Dec–Feb)',
+                'w_d1_title': 'Pneumonia',
+                'w_d1_desc': 'Keep warm, get vaccinated',
+                'w_d1_s1': 'Cough with mucus', 'w_d1_s2': 'Chest pain', 'w_d1_s3': 'Fever', 'w_d1_s4': 'Difficulty breathing',
+                'w_d1_p1': 'Keep children and elderly warm',
+                'w_d1_p2': 'Get pneumonia vaccination',
+                'w_d1_p3': 'Avoid cold water baths',
+                'w_d1_p4': 'Seek medical help if breathing difficulty occurs',
+                'w_d2_title': 'Cold/Flu',
+                'w_d2_desc': 'Maintain hygiene, avoid close contact',
+                'w_d2_s1': 'Runny nose', 'w_d2_s2': 'Cough', 'w_d2_s3': 'Sore throat', 'w_d2_s4': 'Body ache',
+                'w_d2_p1': 'Drink warm water and herbal tea',
+                'w_d2_p2': 'Gargle with salt water',
+                'w_d2_p3': 'Rest adequately',
+                'w_d2_p4': 'Cover mouth while coughing/sneezing',
+                // Year-Round
+                'yr_title': 'Year-Round Health Tips',
+                'yr_1_title': 'Stay Hydrated',
+                'yr_1_text': 'Drink 6–8 glasses of water daily. Drink safe filtered water before eating.',
+                'yr_2_title': 'Hygiene First',
+                'yr_2_text': 'Wash hands with soap regularly. Keep surroundings clean to prevent diseases.',
+                'yr_3_title': 'Seek Help Early',
+                'yr_3_text': 'Visit nearby health center if symptoms persist to prevent serious complications.',
+                // Footer
+                'footerSlogan': 'Delivering safe and compassionate care for community well-being.',
+                'footerFeatures': 'Features',
+                'footerNearby': 'Nearby Healthcare',
+                'footerResources': 'Resources',
+                'footerCompany': 'Company',
+                'footerAbout': 'About Us',
+                'footerContact': 'Contact',
+                'footerPrivacy': 'Privacy Policy',
+                'footerTerms': 'Terms of Service',
+                'footerDisclaimerTitle': 'Medical Disclaimer:',
+                'footerDisclaimerText': 'The information on this site is not a substitute for professional medical advice, diagnosis, or treatment. Always seek the advice of your physician or other qualified health provider.',
+                'footerCopyright': '© 2025 MonoBol & ShunnoLogic. All rights reserved.'
+            },
+            'বাংলা': {
+                // General
+                'logo': 'মনবল',
+                'langToggle': 'EN',
+                'symptomsLabel': 'লক্ষণ:',
+                'preventionLabel': 'প্রতিরোধ টিপস:',
+                // Nav
+                'navMood': 'মুড ট্র্যাকার',
+                'navGetHelp': 'সাহায্য নিন',
+                'navHealthTips': 'স্বাস্থ্য টিপস',
+                'navSymptoms': 'লক্ষণ',
+                'navEvents': 'স্বাস্থ্য ইভেন্ট',
+                'navLogin': 'লগ ইন',
+                'navGetStarted': 'শুরু করুন',
+                // Page Header
+                'headerTitle': 'ঋতুভিত্তিক স্বাস্থ্য টিপস',
+                'headerSubtitle': 'যাচাইকৃত স্বাস্থ্য তথ্য দিয়ে সারা বছর সুস্থ থাকুন',
+                // Seasonal Buttons
+                'btnSummer': 'গ্রীষ্ম (মার্চ-মে)',
+                'btnMonsoon': 'বর্ষা (জুন-সেপ্টেম্বর)',
+                'btnWinter': 'শীত (ডিসেম্বর-ফেব্রুয়ারি)',
+                'seasonSubtext': 'সাধারণ রোগ এবং প্রতিরোধের টিপস',
+                // Summer
+                'summerTitle': '☀️ গ্রীষ্ম (মার্চ-মে)',
+                's_d1_title': 'হিট স্ট্রোক',
+                's_d1_desc': 'পানি পান করুন, সরাসরি রোদ এড়িয়ে চলুন',
+                's_d1_s1': 'উচ্চ শরীরের তাপমাত্রা',
+                's_d1_s2': 'বিভ্রান্তি',
+                's_d1_s3': 'দ্রুত পালস',
+                's_d1_s4': 'মাথাব্যথা',
+                's_d1_p1': 'হাইড্রেটেড থাকুন – প্রতিদিন ৮-১০ গ্লাস পানি পান করুন',
+                's_d1_p2': 'সকাল ১১টা থেকে বিকাল ৩টা পর্যন্ত বাইরের কার্যক্রম এড়িয়ে চলুন',
+                's_d1_p3': 'হালকা রঙের, ঢিলেঢালা সুতির পোশাক পরুন',
+                's_d1_p4': 'ডিহাইড্রেশন রোধে ওআরএস (ওরাল রিহাইড্রেশন সলিউশন) ব্যবহার করুন',
+                's_d2_title': 'ডেঙ্গু জ্বর',
+                's_d2_desc': 'মশার প্রজনন রোধ করুন, মশা তাড়ানোর ক্রিম ব্যবহার করুন',
+                's_d2_s1': 'উচ্চ জ্বর',
+                's_d2_s2': 'তীব্র মাথাব্যথা',
+                's_d2_s3': 'চোখের পিছনে ব্যথা',
+                's_d2_s4': 'জয়েন্ট/পেশীতে ব্যথা',
+                's_d2_p1': 'ঘুমানোর সময় মশারি ব্যবহার করুন',
+                's_d2_p2': 'বাড়ির চারপাশে জমে থাকা পানি পরিষ্কার করুন',
+                's_d2_p3': 'ফুল-হাতা পোশাক পরুন',
+                's_d2_p4': 'জ্বর না কমলে অবিলম্বে ডাক্তারের পরামর্শ নিন',
+                // Monsoon
+                'monsoonTitle': '🌧️ বর্ষা (জুন-সেপ্টেম্বর)',
+                'm_d1_title': 'ডায়রিয়া',
+                'm_d1_desc': 'পরিষ্কার-পরিচ্ছন্নতা বজায় রাখুন, নিরাপদ পানি পান করুন',
+                'm_d1_s1': 'পাতলা পায়খানা', 'm_d1_s2': 'পেট ব্যথা', 'm_d1_s3': 'ডিহাইড্রেশন', 'm_d1_s4': 'দুর্বলতা',
+                'm_d1_p1': 'শুধুমাত্র সিদ্ধ বা ফিল্টার করা পানি পান করুন',
+                'm_d1_p2': 'খাওয়ার আগে সাবান দিয়ে হাত ধুয়ে নিন',
+                'm_d1_p3': 'রাস্তার খাবার এবং কাঁচা শাকসবজি এড়িয়ে চলুন',
+                'm_d1_p4': 'ঘরে তৈরি ওআরএস (লবণ-চিনির দ্রবণ) গ্রহণ করুন',
+                'm_d2_title': 'কলেরা',
+                'm_d2_desc': 'নিরাপদ পানীয় জল, সঠিক স্যানিটেশন',
+                'm_d2_s1': 'তীব্র ডিহাইড্রেশন', 'm_d2_s2': 'চাল ধোয়া পানির মতো পায়খানা', 'm_d2_s3': 'পেশী ખેંચুনী',
+                'm_d2_p1': 'সঠিকভাবে সিদ্ধ করা পানি পান করুন',
+                'm_d2_p2': 'পানীয় জল ১০ মিনিট ধরে ফোটান',
+                'm_d2_p3': 'সম্পূর্ণরূপে রান্না করা খাবার খান',
+                'm_d2_p4': 'লক্ষণ বাড়লে স্বাস্থ্য কেন্দ্রে যান',
+                'm_d3_title': 'টাইফয়েড',
+                'm_d3_desc': 'টিকা, নিরাপদ খাদ্য এবং পানি',
+                'm_d3_s1': 'দীর্ঘস্থায়ী জ্বর', 'm_d3_s2': 'দুর্বলতা', 'm_d3_s3': 'পেট ব্যথা', 'm_d3_s4': 'ক্ষুধামন্দা',
+                'm_d3_p1': 'অ্যান্টিবায়োটিকের সম্পূর্ণ কোর্স শেষ করুন',
+                'm_d3_p2': 'হালকা, সহজে হজমযোগ্য খাবার খান',
+                'm_d3_p3': 'পর্যাপ্ত বিশ্রাম নিন',
+                'm_d3_p4': 'শুধুমাত্র সিদ্ধ পানি পান করুন',
+                // Winter
+                'winterTitle': '❄️ শীত (ডিসেম্বর-ফেব্রুয়ারি)',
+                'w_d1_title': 'নিউমোনিয়া',
+                'w_d1_desc': 'গরম থাকুন, টিকা নিন',
+                'w_d1_s1': 'কফের সাথে কাশি', 'w_d1_s2': 'বুকে ব্যথা', 'w_d1_s3': 'জ্বর', 'w_d1_s4': 'শ্বাস নিতে অসুবিধা',
+                'w_d1_p1': 'শিশু এবং বয়স্কদের গরম রাখুন',
+                'w_d1_p2': 'নিউমোনিয়ার টিকা নিন',
+                'w_d1_p3': 'ঠান্ডা পানিতে গোসল এড়িয়ে চলুন',
+                'w_d1_p4': 'শ্বাসকষ্ট হলে ডাক্তারের সাহায্য নিন',
+                'w_d2_title': 'সর্দি/ফ্লু',
+                'w_d2_desc': 'পরিষ্কার-পরিচ্ছন্নতা বজায় রাখুন, ঘনিষ্ঠ যোগাযোগ এড়িয়ে চলুন',
+                'w_d2_s1': 'নাক দিয়ে পানি পড়া', 'w_d2_s2': 'কাশি', 'w_d2_s3': 'গলা ব্যথা', 'w_d2_s4': 'শরীর ব্যথা',
+                'w_d2_p1': 'গরম পানি এবং ভেষজ চা পান করুন',
+                'w_d2_p2': 'লবণ পানি দিয়ে গার্গল করুন',
+                'w_d2_p3': 'পর্যাপ্ত বিশ্রাম নিন',
+                'w_d2_p4': 'কাশি/হাঁচির সময় মুখ ঢেকে রাখুন',
+                // Year-Round
+                'yr_title': 'সারা বছরের স্বাস্থ্য টিপস',
+                'yr_1_title': 'হাইড্রেটেড থাকুন',
+                'yr_1_text': 'প্রতিদিন ৬-৮ গ্লাস পানি পান করুন। খাওয়ার আগে নিরাপদ ফিল্টার করা পানি পান করুন।',
+                'yr_2_title': 'পরিচ্ছন্নতা প্রথম',
+                'yr_2_text': 'নিয়মিত সাবান দিয়ে হাত ধুয়ে নিন। রোগ প্রতিরোধে চারপাশ পরিষ্কার রাখুন।',
+                'yr_3_title': 'তাড়াতাড়ি সাহায্য নিন',
+                'yr_3_text': 'গুরুতর জটিলতা এড়াতে লক্ষণগুলি অব্যাহত থাকলে কাছের স্বাস্থ্য কেন্দ্রে যান।',
+                // Footer
+                'footerSlogan': 'সম্প্রদায়ের মঙ্গলের জন্য নিরাপদ এবং সহানুভূতিশীল যত্ন প্রদান করা।',
+                'footerFeatures': 'বৈশিষ্ট্য',
+                'footerNearby': 'কাছাকাছি স্বাস্থ্যসেবা',
+                'footerResources': 'সম্পদ',
+                'footerCompany': 'প্রতিষ্ঠান',
+                'footerAbout': 'আমাদের সম্পর্কে',
+                'footerContact': 'যোগাযোগ',
+                'footerPrivacy': 'গোপনীয়তা নীতি',
+                'footerTerms': 'পরিষেবার শর্তাবলী',
+                'footerDisclaimerTitle': 'মেডিকেল ডিসক্লেইমার:',
+                'footerDisclaimerText': 'এই সাইটের তথ্য পেশাদার চিকিৎসা পরামর্শ, রোগ নির্ণয় বা চিকিৎসার বিকল্প নয়। সর্বদা আপনার চিকিত্সক বা অন্যান্য যোগ্য স্বাস্থ্য প্রদানকারীর পরামর্শ নিন।',
+                'footerCopyright': '© ২০২৫ মনবল ও শূন্যলজিক। সর্বস্বত্ব সংরক্ষিত।'
+            }
+        };
 
-    function updateTabs(activeButton, activeSection) {
-        // Hide all sections
-        summerSection.classList.add('hidden');
-        monsoonSection.classList.add('hidden');
-        winterSection.classList.add('hidden');
+        const langToggleBtn = document.getElementById('lang-toggle-btn');
+        const langToggleBtnMobile = document.getElementById('lang-toggle-btn-mobile');
+
+        function setLanguage(lang) {
+            document.documentElement.lang = lang;
+            localStorage.setItem('language', lang);
+
+            const toggleText = translations[lang]['langToggle'] || (lang === 'en' ? 'বাংলা' : 'EN');
+            langToggleBtn.textContent = toggleText;
+            langToggleBtnMobile.textContent = toggleText;
+
+            document.querySelectorAll('[data-i18n-key]').forEach(element => {
+                const key = element.getAttribute('data-i18n-key');
+                const translation = translations[lang][key];
+                
+                if (translation) {
+                    if (element.hasAttribute('placeholder')) {
+                        element.placeholder = translation;
+                    } else if (element.hasAttribute('alt')) {
+                        element.alt = translation;
+                    } else {
+                        element.innerText = translation;
+                    }
+                }
+            });
+        }
+
+        function toggleLanguage() {
+            const currentLang = localStorage.getItem('language') || 'en';
+            const newLang = currentLang === 'en' ? 'বাংলা' : 'en';
+            setLanguage(newLang);
+        }
+
+        langToggleBtn.addEventListener('click', toggleLanguage);
+        langToggleBtnMobile.addEventListener('click', toggleLanguage);
+
+        // --- 2. THEME (Dark/Light Mode) LOGIC ---
+
+        const themeToggleBtn = document.getElementById('theme-toggle-btn');
+        const themeToggleBtnMobile = document.getElementById('theme-toggle-btn-mobile');
+        const sunIcons = [document.getElementById('theme-icon-sun'), document.getElementById('theme-icon-sun-mobile')];
+        const moonIcons = [document.getElementById('theme-icon-moon'), document.getElementById('theme-icon-moon-mobile')];
+
+        function updateIcons(theme) {
+            if (theme === 'dark') {
+                sunIcons.forEach(icon => icon.classList.add('hidden'));
+                moonIcons.forEach(icon => icon.classList.remove('hidden'));
+            } else {
+                sunIcons.forEach(icon => icon.classList.remove('hidden'));
+                moonIcons.forEach(icon => icon.classList.add('hidden'));
+            }
+        }
+
+        function toggleTheme() {
+            const currentTheme = document.documentElement.classList.contains('dark') ? 'dark' : 'light';
+            const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+
+            if (newTheme === 'dark') {
+                document.documentElement.classList.add('dark');
+            } else {
+                document.documentElement.classList.remove('dark');
+            }
+            localStorage.setItem('theme', newTheme);
+            updateIcons(newTheme);
+        }
+
+        themeToggleBtn.addEventListener('click', toggleTheme);
+        themeToggleBtnMobile.addEventListener('click', toggleTheme);
+
+        // --- 3. MOBILE MENU LOGIC (from your original script) ---
+
+        const mobileMenuButton = document.getElementById('mobile-menu-button');
+        const mobileMenuPanel = document.getElementById('mobile-menu-panel');
+
+        if (mobileMenuButton) {
+            mobileMenuButton.addEventListener('click', () => {
+                mobileMenuPanel.classList.toggle('hidden');
+            });
+        }
+
+        // --- 4. TAB SWITCHING LOGIC (from your original script, now theme-aware) ---
+
+        const summerBtn = document.getElementById('summerBtn');
+        const monsoonBtn = document.getElementById('monsoonBtn');
+        const winterBtn = document.getElementById('winterBtn');
+
+        const summerSection = document.getElementById('summerSection');
+        const monsoonSection = document.getElementById('monsoonSection');
+        const winterSection = document.getElementById('winterSection');
+
+        // *** UPDATED: Classes are now theme-aware ***
+        const activeClasses = [
+            'bg-cyan-600', 'text-white', 'border-cyan-600', 'hover:bg-cyan-600', 
+            'dark:bg-cyan-500', 'dark:border-cyan-500', 'dark:hover:bg-cyan-500', 'dark:text-white'
+        ];
+        const inactiveClasses = [
+            'text-gray-800', 'border-gray-300', 'hover:bg-gray-100',
+            'dark:text-gray-300', 'dark:border-gray-600', 'dark:hover:bg-gray-800'
+        ];
+
+        function updateTabs(activeButton, activeSection) {
+            // Hide all sections
+            summerSection.classList.add('hidden');
+            monsoonSection.classList.add('hidden');
+            winterSection.classList.add('hidden');
+            
+            // Deactivate all buttons
+            [summerBtn, monsoonBtn, winterBtn].forEach(btn => {
+                btn.classList.remove(...activeClasses);
+                btn.classList.add(...inactiveClasses);
+            });
+            
+            // Show the active section
+            activeSection.classList.remove('hidden');
+            
+            // Activate the clicked button
+            activeButton.classList.add(...activeClasses);
+            activeButton.classList.remove(...inactiveClasses);
+        }
+
+        // Add event listeners
+        summerBtn.addEventListener('click', () => updateTabs(summerBtn, summerSection));
+        monsoonBtn.addEventListener('click', () => updateTabs(monsoonBtn, monsoonSection));
+        winterBtn.addEventListener('click', () => updateTabs(winterBtn, winterSection));
+
+
+        // --- 5. INITIAL PAGE LOAD ---
+
+        // Set initial theme icons
+        const initialTheme = localStorage.getItem('theme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+        updateIcons(initialTheme);
+
+        // Set initial language
+        const initialLang = localStorage.getItem('language') || 'en';
+        setLanguage(initialLang);
+
+        // Set initial active tab (must run *after* initial theme is set for styles to apply)
+        updateTabs(summerBtn, summerSection);
         
-        // Deactivate all buttons
-        [summerBtn, monsoonBtn, winterBtn].forEach(btn => {
-            btn.classList.remove(...activeClasses);
-            btn.classList.add(...inactiveClasses);
-        });
-        
-        // Show the active section
-        activeSection.classList.remove('hidden');
-        
-        // Activate the clicked button
-        activeButton.classList.add(...activeClasses);
-        activeButton.classList.remove(...inactiveClasses);
-    }
-
-    // Set initial state (Summer is active by default)
-    updateTabs(summerBtn, summerSection);
-
-    // Add event listeners
-    summerBtn.addEventListener('click', () => updateTabs(summerBtn, summerSection));
-    monsoonBtn.addEventListener('click', () => updateTabs(monsoonBtn, monsoonSection));
-    winterBtn.addEventListener('click', () => updateTabs(winterBtn, winterSection));
-
-
-    // --- Mobile Menu Toggle Logic ---
-    const mobileMenuButton = document.getElementById('mobile-menu-button');
-    const mobileMenuPanel = document.getElementById('mobile-menu-panel');
-
-    mobileMenuButton.addEventListener('click', () => {
-        // Toggle the 'hidden' class on the panel
-        mobileMenuPanel.classList.toggle('hidden');
     });
-
-</script>
+    </script>
 </body>
 </html>

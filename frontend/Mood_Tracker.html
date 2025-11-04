@@ -1,0 +1,611 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MonoBol - Mood Tracker</title>
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Hind+Siliguri:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        /* Apply font stack (Inter for English, Hind Siliguri for Bangla) */
+        body {
+            font-family: 'Inter', 'Hind Siliguri', sans-serif;
+        }
+
+        /* Custom style for selected quiz answers */
+        input[type="radio"]:checked + label {
+            border-color: #06b6d4; /* brand-cyan */
+            background-color: #ecfeff; /* cyan-50 */
+            color: #0e7490; /* cyan-700 */
+            font-weight: 600;
+        }
+        /* Dark mode for selected radio */
+        .dark input[type="radio"]:checked + label {
+            border-color: #06b6d4; /* brand-cyan */
+            background-color: #164e63; /* cyan-900 */
+            color: #ecfeff; /* cyan-50 */
+        }
+    </style>
+    
+    <script>
+        // Custom Tailwind configuration
+        tailwind.config = {
+            darkMode: 'class', 
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'Hind Siliguri', 'sans-serif'],
+                    },
+                    colors: {
+                        'brand-blue': {
+                            'light': '#00BFFF',
+                            'DEFAULT': '#00A2E8',
+                            'dark': '#0077B6'
+                        },
+                        'brand-cyan': '#06b6d4',
+                        'brand-cyan-hover': '#0891b2'
+                    }
+                }
+            }
+        }
+    </script>
+
+    <script>
+        // Theme initialization script (to prevent flash of unstyled content)
+        if (localStorage.getItem('theme') === 'dark' || 
+            (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+          document.documentElement.classList.add('dark');
+        } else {
+          document.documentElement.classList.remove('dark');
+        }
+    </script>
+</head>
+
+<body class="bg-gray-50 text-gray-800 dark:bg-gray-900 dark:text-gray-200">
+
+    <header class="w-full border-b border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 sticky top-0 z-50">
+        <nav class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-5">
+            <div class="flex justify-between items-center">
+                <div class="flex-shrink-0">
+                    <a href="../index.html" class="text-2xl font-bold text-gray-900 dark:text-white" data-i18n-key="logo">MonoBol</a>
+                </div>
+
+                <div class="hidden md:flex flex-1 justify-center space-x-8">
+                    <a href="Mood_Tracker.html" class="text-brand-cyan-hover font-semibold border-b-2 border-brand-cyan-hover" data-i18n-key="navMood">Mood Tracker</a>
+                    <a href="get_help.html" class="text-gray-600 hover:text-gray-900 dark:text-gray-300 dark:hover:text-white font-medium" data-i18n-key="navGetHelp">Get Help</a>
+                    <a href="Seasonal_Health_Tips.html" class="text-gray-600 hover:text-gray-900 dark:text-gray-300 dark:hover:text-white font-medium" data-i18n-key="navHealthTips">Health Tips</a>
+                    <a href="Symptoms.html" class="text-gray-600 hover:text-gray-900 dark:text-gray-300 dark:hover:text-white font-medium" data-i18n-key="navSymptoms">Symptoms</a>
+                    <a href="Health_event.html" class="text-gray-600 hover:text-gray-900 dark:text-gray-300 dark:hover:text-white font-medium" data-i18n-key="navEvents">Health Events</a>
+                </div>
+
+                <div class="hidden md:flex items-center space-x-4">
+                    <button id="lang-toggle-btn" type="button" class="text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white font-medium w-10 h-10 flex items-center justify-center rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700">
+                        বাংলা </button>
+
+                    <button id="theme-toggle-btn" type="button" class="text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white w-10 h-10 flex items-center justify-center rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700">
+                        <svg id="theme-icon-sun" class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"></path></svg>
+                        <svg id="theme-icon-moon" class="h-5 w-5 hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"></path></svg>
+                    </button>
+
+                    <a href="#" class="text-gray-600 hover:text-gray-900 dark:text-gray-300 dark:hover:text-white font-medium" data-i18n-key="navLogin">Log In</a>
+                    <a href="#" class="bg-brand-cyan hover:bg-brand-cyan-hover text-white font-medium py-2 px-5 rounded-lg transition duration-200" data-i18n-key="navGetStarted">
+                        Get started
+                    </a>
+                </div>
+                
+                <div class="md:hidden flex items-center space-x-2">
+                    <button id="lang-toggle-btn-mobile" type="button" class="text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white font-medium w-10 h-10 flex items-center justify-center rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700">
+                        বাংলা </button>
+                    <button id="theme-toggle-btn-mobile" type="button" class="text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white w-10 h-10 flex items-center justify-center rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700">
+                        <svg id="theme-icon-sun-mobile" class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"></path></svg>
+                        <svg id="theme-icon-moon-mobile" class="h-5 w-5 hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"></path></svg>
+                    </button>
+                    <button type="button" id="mobile-menu-button" class="text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white focus:outline-none w-10 h-10 flex items-center justify-center rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700">
+                        <svg class="h-6 w-6" stroke="currentColor" fill="none" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </nav>
+        
+        <div id="mobile-menu-panel" class="hidden md:hidden">
+            <div class="px-2 pt-2 pb-3 space-y-1 sm:px-3">
+                <a href="Mood_Tracker.html" class="text-brand-cyan-hover bg-cyan-50 dark:text-cyan-300 dark:bg-cyan-900/50 block px-3 py-2 rounded-md font-semibold" data-i18n-key="navMood">Mood Tracker</a>
+                <a href="get_help.html" class="text-gray-600 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-700 block px-3 py-2 rounded-md font-medium" data-i18n-key="navGetHelp">Get Help</a>
+                <a href="Seasonal_Health_Tips.html" class="text-gray-600 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-700 block px-3 py-2 rounded-md font-medium" data-i18n-key="navHealthTips">Health Tips</a>
+                <a href="Symptoms.html" class="text-gray-600 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-700 block px-3 py-2 rounded-md font-medium" data-i18n-key="navSymptoms">Symptoms</a>
+                <a href="Health_event.html" class="text-gray-600 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-700 block px-3 py-2 rounded-md font-medium" data-i18n-key="navEvents">Health Events</a>
+            </div>
+            <div class="border-t border-gray-200 dark:border-gray-700 pt-4 pb-3 px-2">
+                   <a href="#" class="block w-full text-center bg-brand-cyan hover:bg-brand-cyan-hover text-white font-medium py-2 px-3 rounded-lg transition duration-200" data-i18n-key="navGetStarted">
+                      Get started
+                </a>
+                <a href="#" class="mt-2 block w-full text-center text-gray-600 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-700 font-medium py-2 px-3 rounded-lg" data-i18n-key="navLogin">
+                      Log In
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <main class="py-16 sm:py-24 px-4">
+        <div class="bg-white dark:bg-gray-800 p-6 sm:p-10 rounded-2xl shadow-xl w-full max-w-lg mx-auto">
+
+            <div id="quiz-section">
+                <div class="mb-6">
+                    <div class="flex justify-between items-center mb-1">
+                        <span id="progress-text" class="text-sm font-medium text-gray-600 dark:text-gray-300">Question 1 of 5</span>
+                        <span id="progress-percent" class="text-sm font-semibold text-brand-cyan">20%</span>
+                    </div>
+                    <div class="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2">
+                        <div id="progress-bar" class="bg-brand-cyan h-2 rounded-full" style="width: 20%"></div>
+                    </div>
+                </div>
+
+                <h2 id="question-text" class="text-xl font-semibold text-gray-800 dark:text-white mb-6"></h2>
+
+                <div id="answers-container" class="space-y-3">
+                    </div>
+
+                <p id="error-message" class="text-red-500 text-sm mt-4 text-center hidden" data-i18n-key="errorMsg">Please select an answer to continue.</p>
+
+                <div class="flex justify-between items-center mt-8">
+                    <button id="back-btn" class="text-gray-600 dark:text-gray-300 font-medium hover:text-gray-900 dark:hover:text-white transition-colors" data-i18n-key="backBtn">
+                        Back
+                    </button>
+                    <button id="next-btn" class="bg-brand-cyan text-white font-semibold py-2 px-8 rounded-lg hover:bg-brand-cyan-hover transition-colors" data-i18n-key="nextBtn">
+                        Next
+                    </button>
+                </div>
+            </div>
+
+            <div id="results-section" class="hidden">
+                <h2 class="text-2xl font-bold text-gray-800 dark:text-white text-center mb-4" data-i18n-key="resultsHeader">Your Results</h2>
+                <p id="results-title" class="text-xl font-semibold text-center text-brand-cyan mb-6">Moderately Frustrated</p>
+                
+                <p class="text-gray-600 dark:text-gray-300 text-center mb-6" data-i18n-key="resultsSubtext">
+                    This meter estimates your current frustration level based on your answers.
+                </p>
+
+                <div class="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-8 mb-2 overflow-hidden">
+                    <div id="meter-bar" class="h-8 rounded-full transition-all duration-500 text-right pr-2 text-white font-bold" style="width: 0%;">
+                        <span id="meter-percent" class="flex items-center justify-end h-full">0%</span>
+                    </div>
+                </div>
+
+                <p id="results-text" class="text-sm text-gray-600 dark:text-gray-300 text-center mb-8">
+                    Your answers suggest you're feeling a bit on edge. It might be helpful to take a short walk or a few deep breaths.
+                </p>
+
+                <button id="retake-btn" class="w-full bg-brand-cyan text-white font-semibold py-3 rounded-lg hover:bg-brand-cyan-hover transition-colors" data-i18n-key="retakeBtn">
+                    Take the Quiz Again
+                </button>
+            </div>
+        </div>
+    </main>
+    
+    <footer class="bg-gray-800 text-gray-300">
+        <div class="max-w-7xl mx-auto py-16 px-6 lg:px-8">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-12">
+                
+                <div class="md:col-span-1">
+                    <a href="../index.html" class="text-2xl font-bold text-white" data-i18n-key="logo">MonoBol</a>
+                    <p class="text-gray-400 text-sm mt-3" data-i18n-key="footerSlogan">
+                        Delivering safe and compassionate care for community well-being.
+                    </p>
+                    <div class="flex space-x-5 mt-6">
+                        <a href="#" class="text-gray-400 hover:text-brand-cyan transition-colors" aria-label="Facebook">
+                            <svg class="h-6 w-6" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path fill-rule="evenodd" d="M22 12c0-5.523-4.477-10-10-10S2 6.477 2 12c0 4.991 3.657 9.128 8.438 9.878v-6.987h-2.54V12h2.54V9.797c0-2.506 1.492-3.89 3.777-3.89 1.094 0 2.238.195 2.238.195v2.46h-1.26c-1.243 0-1.63.772-1.63 1.562V12h2.773l-.443 2.89h-2.33v6.988C18.343 21.128 22 16.991 22 12z" clip-rule="evenodd" /></svg>
+                        </a>
+                        <a href="#" class="text-gray-400 hover:text-brand-cyan transition-colors" aria-label="Twitter">
+                            <svg class="h-6 w-6" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path d="M8.29 20.251c7.547 0 11.675-6.253 11.675-11.675 0-.178 0-.355-.012-.53A8.348 8.348 0 0022 5.92a8.19 8.19 0 01-2.357.646 4.118 4.118 0 001.804-2.27 8.224 8.224 0 01-2.605.996 4.107 4.107 0 00-6.993 3.743 11.65 11.65 0 01-8.457-4.287 4.106 4.106 0 001.27 5.477A4.072 4.072 0 012.8 9.713v.052a4.105 4.105 0 003.292 4.022 4.095 4.095 0 01-1.853.07 4.108 4.108 0 003.834 2.85A8.233 8.233 0 012 18.407a11.616 11.616 0 006.29 1.84" /></svg>
+                        </a>
+                        <a href="#" class="text-gray-400 hover:text-brand-cyan transition-colors" aria-label="LinkedIn">
+                            <svg class="h-6 w-6" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path fill-rule="evenodd" d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z" clip-rule="evenodd" /></svg>
+                        </a>
+                    </div>
+                </div>
+
+                <div>
+                    <h3 class="text-sm font-semibold text-gray-400 uppercase tracking-wider" data-i18n-key="footerFeatures">Features</h3>
+                    <ul class="mt-4 space-y-3">
+                        <li><a href="#" class="text-base hover:text-white transition-colors" data-i18n-key="navMood">Mood Tracker</a></li>
+                        <li><a href="#" class="text-base hover:text-white transition-colors" data-i18n-key="footerNearby">Nearby Healthcare</a></li>
+                        <li><a href="#" class="text-base hover:text-white transition-colors" data-i18n-key="navGetHelp">Get Help</a></li>
+                    </ul>
+                </div>
+
+                <div>
+                    <h3 class="text-sm font-semibold text-gray-400 uppercase tracking-wider" data-i18n-key="footerResources">Resources</h3>
+                    <ul class="mt-4 space-y-3">
+                        <li><a href="Seasonal_Health_Tips.html" class="text-base hover:text-white transition-colors" data-i18n-key="navHealthTips">Health Tips</a></li>
+                        <li><a href="Health_event.html" class="text-base hover:text-white transition-colors" data-i18n-key="navEvents">Health Events</a></li>
+                        <li><a href="Symptoms.html" class="text-base hover:text-white transition-colors" data-i18n-key="navSymptoms">Symptoms</a></li>
+                    </ul>
+                </div>
+
+                <div>
+                    <h3 class="text-sm font-semibold text-gray-400 uppercase tracking-wider" data-i18n-key="footerCompany">Company</h3>
+                    <ul class="mt-4 space-y-3">
+                        <li><a href="#" class="text-base hover:text-white transition-colors" data-i18n-key="footerAbout">About Us</a></li>
+                        <li><a href="#" class="text-base hover:text-white transition-colors" data-i18n-key="footerContact">Contact</a></li>
+                        <li><a href="#" class="text-base hover:text-white transition-colors" data-i18n-key="footerPrivacy">Privacy Policy</a></li>
+                        <li><a href="#" class="text-base hover:text-white transition-colors" data-i18n-key="footerTerms">Terms of Service</a></li>
+                    </ul>
+                </div>
+
+            </div>
+
+            <div class="mt-12 border-t border-gray-700 pt-8">
+                <p class="text-sm text-gray-500 text-center mb-4">
+                    <strong data-i18n-key="footerDisclaimerTitle">Medical Disclaimer:</strong> <span data-i18n-key="footerDisclaimerText">The information on this site is not a substitute for professional medical advice, diagnosis, or treatment. Always seek the advice of your physician or other qualified health provider.</span>
+                </p>
+                <p class="text-base text-gray-500 text-center" data-i18n-key="footerCopyright">
+                    &copy; 2025 MonoBol & ShunnoLogic. All rights reserved.
+                </p>
+            </div>
+        </div>
+    </footer>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+
+            // --- 1. ALL DOM ELEMENT SELECTIONS ---
+            const langToggleBtn = document.getElementById('lang-toggle-btn');
+            const langToggleBtnMobile = document.getElementById('lang-toggle-btn-mobile');
+            const themeToggleBtn = document.getElementById('theme-toggle-btn');
+            const themeToggleBtnMobile = document.getElementById('theme-toggle-btn-mobile');
+            const sunIcons = [document.getElementById('theme-icon-sun'), document.getElementById('theme-icon-sun-mobile')];
+            const moonIcons = [document.getElementById('theme-icon-moon'), document.getElementById('theme-icon-moon-mobile')];
+            const mobileMenuButton = document.getElementById('mobile-menu-button');
+            const mobileMenuPanel = document.getElementById('mobile-menu-panel');
+
+            const quizSection = document.getElementById('quiz-section');
+            const resultsSection = document.getElementById('results-section');
+            const progressText = document.getElementById('progress-text');
+            const progressPercent = document.getElementById('progress-percent');
+            const progressBar = document.getElementById('progress-bar');
+            const questionText = document.getElementById('question-text');
+            const answersContainer = document.getElementById('answers-container');
+            const errorMessage = document.getElementById('error-message');
+            const nextBtn = document.getElementById('next-btn');
+            const backBtn = document.getElementById('back-btn');
+            
+            const resultsTitle = document.getElementById('results-title');
+            const meterBar = document.getElementById('meter-bar');
+            const meterPercent = document.getElementById('meter-percent');
+            const resultsText = document.getElementById('results-text');
+            const retakeBtn = document.getElementById('retake-btn');
+
+
+            // --- 2. TRANSLATION (i18n) LOGIC & DICTIONARY ---
+
+            const translations = {
+                'en': {
+                    'logo': 'MonoBol',
+                    'langToggle': 'বাংলা', 
+                    'navMood': 'Mood Tracker',
+                    'navGetHelp': 'Get Help',
+                    'navHealthTips': 'Health Tips',
+                    'navSymptoms': 'Symptoms',
+                    'navEvents': 'Health Events',
+                    'navLogin': 'Log In',
+                    'navGetStarted': 'Get started',
+                    'progressText': 'Question {current} of {total}',
+                    'errorMsg': 'Please select an answer to continue.',
+                    'backBtn': 'Back',
+                    'nextBtn': 'Next',
+                    'resultsBtn': 'Show Results',
+                    'q0_question': "Over the last few hours, how easily have you felt annoyed or irritated?",
+                    'q0_a0': "Very easily", 'q0_a1': "Easily", 'q0_a2': "Somewhat", 'q0_a3': "Not really", 'q0_a4': "Not at all",
+                    'q1_question': "How much control do you feel you have over your current tasks or situation?",
+                    'q1_a0': "Very little control", 'q1_a1': "Some control", 'q1_a2': "Neutral", 'q1_a3': "A good amount of control", 'q1_a4': "Complete control",
+                    'q2_question': "How often have you felt impatient or 'on edge' today?",
+                    'q2_a0': "Constantly", 'q2_a1': "Frequently", 'q2_a2': "Sometimes", 'q2_a3': "Rarely", 'q2_a4': "Never",
+                    'q3_question': "How would you describe your ability to focus right now?",
+                    'q3_a0': "Impossible to focus", 'q3_a1': "Very difficult", 'q3_a2': "A bit difficult", 'q3_a3': "Fairly focused", 'q3_a4': "Very focused",
+                    'q4_question': "How physically tense or restless do you feel?",
+                    'q4_a0': "Very tense and restless", 'q4_a1': "Quite tense", 'q4_a2': "A little tense", 'q4_a3': "A little relaxed", 'q4_a4': "Very relaxed and calm",
+                    'resultsHeader': "Your Results",
+                    'resultsSubtext': "This meter estimates your current frustration level based on your answers.",
+                    'retakeBtn': "Take the Quiz Again",
+                    'results_low_title': "Low Frustration",
+                    'results_low_text': "Your answers suggest you're feeling relatively calm and in control. That's great!",
+                    'results_med_title': "Moderate Frustration",
+                    'results_med_text': "Your answers suggest you're feeling a bit on edge. It might be helpful to take a short walk or a few deep breaths.",
+                    'results_high_title': "High Frustration",
+                    'results_high_text': "Your answers suggest you're feeling significantly stressed or frustrated. Please be kind to yourself and consider taking a longer break or talking to someone.",
+                    'footerSlogan': 'Delivering safe and compassionate care for community well-being.',
+                    'footerFeatures': 'Features',
+                    'footerNearby': 'Nearby Healthcare',
+                    'footerResources': 'Resources',
+                    'footerCompany': 'Company',
+                    'footerAbout': 'About Us',
+                    'footerContact': 'Contact',
+                    'footerPrivacy': 'Privacy Policy',
+                    'footerTerms': 'Terms of Service',
+                    'footerDisclaimerTitle': 'Medical Disclaimer:',
+                    'footerDisclaimerText': 'The information on this site is not a substitute for professional medical advice, diagnosis, or treatment. Always seek the advice of your physician or other qualified health provider.',
+                    'footerCopyright': '© 2025 MonoBol & ShunnoLogic. All rights reserved.'
+                },
+                'bn': {
+                    'logo': 'মনবল',
+                    'langToggle': 'EN', 
+                    'navMood': 'মুড ট্র্যাকার',
+                    'navGetHelp': 'সাহায্য নিন',
+                    'navHealthTips': 'স্বাস্থ্য টিপস',
+                    'navSymptoms': 'লক্ষণ',
+                    'navEvents': 'স্বাস্থ্য ইভেন্ট',
+                    'navLogin': 'লগ ইন',
+                    'navGetStarted': 'শুরু করুন',
+                    'progressText': 'প্রশ্ন {current} / {total}',
+                    'errorMsg': 'অনুগ্রহ করে চালিয়ে যেতে একটি উত্তর নির্বাচন করুন।',
+                    'backBtn': 'পেছনে',
+                    'nextBtn': 'পরবর্তী',
+                    'resultsBtn': 'ফলাফল দেখুন',
+                    'q0_question': "গত কয়েক ঘন্টায়, আপনি কত সহজে বিরক্ত বা খিটখিটে বোধ করেছেন?",
+                    'q0_a0': "খুব সহজে", 'q0_a1': "সহজে", 'q0_a2': "মাঝামাঝি", 'q0_a3': "তেমন না", 'q0_a4': "মোটেও না",
+                    'q1_question': "আপনার বর্তমান কাজ বা পরিস্থিতির উপর আপনার কতটা নিয়ন্ত্রণ আছে বলে মনে করেন?",
+                    'q1_a0': "খুব কম নিয়ন্ত্রণ", 'q1_a1': "কিছুটা নিয়ন্ত্রণ", 'q1_a2': "নিরপেক্ষ", 'q1_a3': "বেশ ভালো নিয়ন্ত্রণ", 'q1_a4': "সম্পূর্ণ নিয়ন্ত্রণ",
+                    'q2_question': "আজ আপনি কতবার অধৈর্য বা 'অন এজ' বোধ করেছেন?",
+                    'q2_a0': "ক্রমাগত", 'q2_a1': "ঘন ঘন", 'q2_a2': "মাঝে মাঝে", 'q2_a3': "কদাচিৎ", 'q2_a4': "কখনই না",
+                    'q3_question': "আপনি এখন ফোকাস করার ক্ষমতাকে কীভাবে বর্ণনা করবেন?",
+                    'q3_a0': "ফোকাস করা অসম্ভব", 'q3_a1': "খুব কঠিন", 'q3_a2': "একটু কঠিন", 'q3_a3': "মোটামুটি ফোকাসড", 'q3_a4': "খুব ফোকাসড",
+                    'q4_question': "আপনি শারীরিকভাবে কতটা টেনস বা অস্থির বোধ করছেন?",
+                    'q4_a0': "খুব টেনস এবং অস্থির", 'q4_a1': "বেশ টেনস", 'q4_a2': "সামান্য টেনস", 'q4_a3': "সামান্য রিল্যাক্সড", 'q4_a4': "খুব রিল্যাক্সড এবং শান্ত",
+                    'resultsHeader': "আপনার ফলাফল",
+                    'resultsSubtext': "এই মিটারটি আপনার উত্তরের উপর ভিত্তি করে আপনার বর্তমান হতাশার স্তর অনুমান করে।",
+                    'retakeBtn': "আবার কুইজ দিন",
+                    'results_low_title': "কম হতাশা",
+                    'results_low_text': "আপনার উত্তরগুলি ইঙ্গিত দেয় যে আপনি তুলনামূলকভাবে শান্ত এবং নিয়ন্ত্রণে বোধ করছেন। এটা খুবই ভালো!",
+                    'results_med_title': "মাঝারি হতাশা",
+                    'results_med_text': "আপনার উত্তরগুলি ইঙ্গিত দেয় যে আপনি কিছুটা অস্থির বোধ করছেন। কিছুক্ষণ হাঁটা বা কয়েকটা গভীর শ্বাস নেওয়া সহায়ক হতে পারে।",
+                    'results_high_title': "উচ্চ হতাশা",
+                    'results_high_text': "আপনার উত্তরগুলি ইঙ্গিত দেয় যে আপনি উল্লেখযোগ্যভাবে মানসিক চাপ বা হতাশ বোধ করছেন। অনুগ্রহ করে নিজের প্রতি সদয় হন এবং একটি দীর্ঘ বিরতি নেওয়ার বা কারো সাথে কথা বলার কথা বিবেচনা করুন।",
+                    'footerSlogan': 'সম্প্রদায়ের মঙ্গলের জন্য নিরাপদ এবং সহানুভূতিশীল যত্ন প্রদান করা।',
+                    'footerFeatures': 'বৈশিষ্ট্য',
+                    'footerNearby': 'কাছাকাছি স্বাস্থ্যসেবা',
+                    'footerResources': 'সম্পদ',
+                    'footerCompany': 'প্রতিষ্ঠান',
+                    'footerAbout': 'আমাদের সম্পর্কে',
+                    'footerContact': 'যোগাযোগ',
+                    'footerPrivacy': 'গোপনীয়তা নীতি',
+                    'footerTerms': 'পরিষেবার শর্তাবলী',
+                    'footerDisclaimerTitle': 'মেডিকেল ডিসক্লেইমার:',
+                    'footerDisclaimerText': 'এই সাইটের তথ্য পেশাদার চিকিৎসা পরামর্শ, রোগ নির্ণয় বা চিকিৎসার বিকল্প নয়। সর্বদা আপনার চিকিত্সক বা অন্যান্য যোগ্য স্বাস্থ্য প্রদানকারীর পরামর্শ নিন।',
+                    'footerCopyright': '© ২০২৫ মনবল ও শূন্যলজিক। সর্বস্বত্ব সংরক্ষিত।'
+                }
+            };
+
+            function setLanguage(lang) {
+                document.documentElement.lang = lang;
+                localStorage.setItem('language', lang);
+
+                const toggleText = translations[lang]['langToggle'];
+                if (langToggleBtn) langToggleBtn.textContent = toggleText;
+                if (langToggleBtnMobile) langToggleBtnMobile.textContent = toggleText;
+
+                document.querySelectorAll('[data-i18n-key]').forEach(element => {
+                    const key = element.getAttribute('data-i18n-key');
+                    const translation = translations[lang][key];
+                    
+                    if (translation) {
+                        if (key === 'progressText') {
+                           // Skip, handled by renderQuestion
+                        } else if (element.hasAttribute('placeholder')) {
+                            element.placeholder = translation;
+                        } else if (element.hasAttribute('alt')) {
+                            element.alt = translation;
+                        } else {
+                            element.innerText = translation;
+                        }
+                    }
+                });
+
+                if (quizSection && !quizSection.classList.contains('hidden')) {
+                    renderQuestion();
+                } else if (resultsSection && !resultsSection.classList.contains('hidden')) {
+                    showResults();
+                }
+            }
+
+            function toggleLanguage() {
+                const currentLang = localStorage.getItem('language') || 'en';
+                const newLang = currentLang === 'en' ? 'bn' : 'en';
+                setLanguage(newLang);
+            }
+
+            // --- 3. THEME (Dark/Light Mode) LOGIC ---
+
+            function updateIcons(theme) {
+                if (theme === 'dark') {
+                    sunIcons.forEach(icon => icon && icon.classList.add('hidden'));
+                    moonIcons.forEach(icon => icon && icon.classList.remove('hidden'));
+                } else {
+                    sunIcons.forEach(icon => icon && icon.classList.remove('hidden'));
+                    moonIcons.forEach(icon => icon && icon.classList.add('hidden'));
+                }
+            }
+
+            function toggleTheme() {
+                const currentTheme = document.documentElement.classList.contains('dark') ? 'dark' : 'light';
+                const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+
+                if (newTheme === 'dark') {
+                    document.documentElement.classList.add('dark');
+                } else {
+                    document.documentElement.classList.remove('dark');
+                }
+                localStorage.setItem('theme', newTheme);
+                updateIcons(newTheme);
+            }
+
+            // --- 4. MOBILE MENU LOGIC ---
+            if (mobileMenuButton) {
+                mobileMenuButton.addEventListener('click', () => {
+                    if (mobileMenuPanel) mobileMenuPanel.classList.toggle('hidden');
+                });
+            }
+
+            // --- 5. QUIZ LOGIC ---
+
+            const questions = [
+                { answers: [ { value: 5 }, { value: 4 }, { value: 3 }, { value: 2 }, { value: 1 } ] },
+                { answers: [ { value: 5 }, { value: 4 }, { value: 3 }, { value: 2 }, { value: 1 } ] },
+                { answers: [ { value: 5 }, { value: 4 }, { value: 3 }, { value: 2 }, { value: 1 } ] },
+                { answers: [ { value: 5 }, { value: 4 }, { value: 3 }, { value: 2 }, { value: 1 } ] },
+                { answers: [ { value: 5 }, { value: 4 }, { value: 3 }, { value: 2 }, { value: 1 } ] }
+            ];
+
+            let currentQuestionIndex = 0;
+            let userAnswers = [0, 0, 0, 0, 0]; 
+
+            function renderQuestion() {
+                if (!quizSection) return; 
+                
+                const currentLang = localStorage.getItem('language') || 'en';
+                const question = questions[currentQuestionIndex];
+                const totalQuestions = questions.length;
+                const questionNumber = currentQuestionIndex + 1;
+                const percent = Math.round((questionNumber / totalQuestions) * 100);
+                
+                const locale = currentLang === 'bn' ? 'bn-BD' : 'en-US';
+
+                progressText.textContent = (translations[currentLang]['progressText'] || "Question {current} of {total}")
+                                         .replace('{current}', questionNumber.toLocaleString(locale))
+                                         .replace('{total}', totalQuestions.toLocaleString(locale));
+                progressPercent.textContent = `${percent.toLocaleString(locale)}%`;
+                progressBar.style.width = `${percent}%`;
+                questionText.textContent = translations[currentLang][`q${currentQuestionIndex}_question`];
+
+                answersContainer.innerHTML = '';
+                question.answers.forEach((answer, index) => {
+                    const answerId = `q${currentQuestionIndex}_a${index}`;
+                    const isChecked = answer.value === userAnswers[currentQuestionIndex];
+                    const answerText = translations[currentLang][`q${currentQuestionIndex}_a${index}`];
+                    
+                    answersContainer.innerHTML += `
+                        <div class="relative">
+                            <input type="radio" name="answer" id="${answerId}" value="${answer.value}" class="opacity-0 absolute" ${isChecked ? 'checked' : ''}>
+                            <label for="${answerId}" class="flex items-center w-full p-4 border-2 border-gray-200 dark:border-gray-600 rounded-lg cursor-pointer transition-all duration-200 text-gray-700 dark:text-gray-300 font-medium">
+                                <svg class="w-5 h-5 mr-4 text-gray-300 dark:text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                                ${answerText}
+                            </label>
+                        </div>
+                    `;
+                });
+
+                errorMessage.classList.add('hidden');
+                backBtn.style.visibility = currentQuestionIndex === 0 ? 'hidden' : 'visible';
+                backBtn.textContent = translations[currentLang]['backBtn'];
+                nextBtn.textContent = currentQuestionIndex === totalQuestions - 1 
+                                            ? translations[currentLang]['resultsBtn'] 
+                                            : translations[currentLang]['nextBtn'];
+            }
+
+            function showResults() {
+                if (!resultsSection) return; 
+
+                const currentLang = localStorage.getItem('language') || 'en';
+                const totalScore = userAnswers.reduce((sum, val) => sum + val, 0);
+                const minScore = questions.length * 1; 
+                const maxScore = questions.length * 5; 
+                const percent = Math.round(((totalScore - minScore) / (maxScore - minScore)) * 100);
+
+                meterBar.style.width = `0%`; 
+                meterPercent.textContent = `0%`;
+
+                let titleKey, textKey, color;
+                if (percent <= 33) {
+                    titleKey = 'results_low_title';
+                    textKey = 'results_low_text';
+                    color = 'bg-green-500';
+                } else if (percent <= 66) {
+                    titleKey = 'results_med_title';
+                    textKey = 'results_med_text';
+                    color = 'bg-yellow-500';
+                } else {
+                    titleKey = 'results_high_title';
+                    textKey = 'results_high_text';
+                    color = 'bg-red-500';
+                }
+
+                resultsTitle.textContent = translations[currentLang][titleKey];
+                resultsText.textContent = translations[currentLang][textKey];
+                
+                meterBar.className = meterBar.className.replace(/bg-(green|yellow|red)-500/g, ''); 
+                meterBar.classList.add(color); 
+
+                setTimeout(() => {
+                    meterBar.style.width = `${percent}%`;
+                    const locale = currentLang === 'bn' ? 'bn-BD' : 'en-US';
+                    meterPercent.textContent = `${percent.toLocaleString(locale)}%`;
+                }, 100);
+
+                quizSection.classList.add('hidden');
+                resultsSection.classList.remove('hidden');
+            }
+
+            function handleNextClick() {
+                const selectedRadio = document.querySelector('input[name="answer"]:checked');
+                
+                if (!selectedRadio) {
+                    if (errorMessage) errorMessage.classList.remove('hidden');
+                    return;
+                }
+
+                userAnswers[currentQuestionIndex] = parseInt(selectedRadio.value);
+                
+                if (currentQuestionIndex < questions.length - 1) {
+                    currentQuestionIndex++;
+                    renderQuestion();
+                } else {
+                    showResults();
+                }
+            }
+
+            function handleBackClick() {
+                if (currentQuestionIndex > 0) {
+                    currentQuestionIndex--;
+                    renderQuestion();
+                }
+            }
+
+            function resetQuiz() {
+                currentQuestionIndex = 0;
+                userAnswers = [0, 0, 0, 0, 0];
+                if (resultsSection) resultsSection.classList.add('hidden');
+                if (quizSection) quizSection.classList.remove('hidden');
+                renderQuestion();
+            }
+
+            // --- 6. INITIALIZATION & EVENT LISTENERS ---
+            
+            // Attach listeners with null guards
+            if (langToggleBtn) langToggleBtn.addEventListener('click', toggleLanguage);
+            if (langToggleBtnMobile) langToggleBtnMobile.addEventListener('click', toggleLanguage);
+            
+            if (themeToggleBtn) themeToggleBtn.addEventListener('click', toggleTheme);
+            if (themeToggleBtnMobile) themeToggleBtnMobile.addEventListener('click', toggleTheme);
+
+            if (nextBtn) nextBtn.addEventListener('click', handleNextClick);
+            if (backBtn) backBtn.addEventListener('click', handleBackClick);
+            if (retakeBtn) retakeBtn.addEventListener('click', resetQuiz);
+
+            // Set initial theme icons
+            const initialTheme = localStorage.getItem('theme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+            updateIcons(initialTheme);
+
+            // Set initial language (triggers first renderQuestion if quiz is visible)
+            const initialLang = localStorage.getItem('language') || 'en';
+            setLanguage(initialLang);
+
+        });
+    </script>
+</body>
+</html>

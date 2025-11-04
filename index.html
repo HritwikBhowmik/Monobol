@@ -4,376 +4,654 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>MonoBol - Mental Health Platform</title>
-    <!-- Include Tailwind CSS CDN -->
+    
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Include Inter font from Google Fonts -->
+    
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Hind+Siliguri:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
     <style>
-        /* Apply Inter font as the default sans-serif font */
+        /* Apply font stack (Inter for English, Hind Siliguri for Bangla) */
         body {
-            font-family: 'Inter', sans-serif;
+            font-family: 'Inter', 'Hind Siliguri', sans-serif;
         }
     </style>
+    
     <script>
-        // Custom Tailwind configuration (optional, but good for custom colors)
+        // Custom Tailwind configuration
         tailwind.config = {
+            // 1. ENABLE DARK MODE USING THE 'class' STRATEGY
+            darkMode: 'class', 
             theme: {
                 extend: {
+                    // 2. ADD BANGLA FONT TO THE 'sans' FONT FAMILY
+                    fontFamily: {
+                        sans: ['Inter', 'Hind Siliguri', 'sans-serif'],
+                    },
                     colors: {
-                        // A blue color similar to the one in the image
                         'brand-blue': {
-                            'light': '#00BFFF', // Lighter shade for buttons
-                            'DEFAULT': '#00A2E8', // Main button color
-                            'dark': '#0077B6'  // Hover state
+                            'light': '#00BFFF',
+                            'DEFAULT': '#00A2E8',
+                            'dark': '#0077B6'
                         },
-                        // A cyan color from the buttons
-                        'brand-cyan': '#06b6d4', // 'Get started' button
-                        'brand-cyan-hover': '#0891b2' // Hover for 'Get started'
+                        'brand-cyan': '#06b6d4',
+                        'brand-cyan-hover': '#0891b2'
                     }
                 }
             }
         }
     </script>
-</head>
-<body class="bg-white text-gray-800">
 
-    <!-- Header / Navigation Bar -->
-    <header class="w-full">
+    <script>
+        if (localStorage.getItem('theme') === 'dark' || 
+           (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+          document.documentElement.classList.add('dark');
+        } else {
+          document.documentElement.classList.remove('dark');
+        }
+    </script>
+</head>
+
+<body class="bg-white text-gray-800 dark:bg-gray-900 dark:text-gray-200">
+
+    <header class="w-full bg-white dark:bg-gray-900 border-b border-gray-200 dark:border-gray-700 sticky top-0 z-50">
         <nav class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-5">
             <div class="flex justify-between items-center">
-                <!-- Logo -->
                 <div class="flex-shrink-0">
-                    <a href="#" class="text-2xl font-bold text-gray-900">MonoBol</a>
+                    <a href="#" class="text-2xl font-bold text-gray-900 dark:text-white" data-i18n-key="logo">MonoBol</a>
                 </div>
 
-                <!-- Desktop Navigation Links (Centered) -->
                 <div class="hidden md:flex flex-1 justify-center space-x-8">
-                    <a href="#" class="text-gray-600 hover:text-gray-900 font-medium">Mood Tracker</a>
-                    <a href="#" class="text-gray-600 hover:text-gray-900 font-medium">Nearby Healthcare</a>
-                    <a href="#" class="text-gray-600 hover:text-gray-900 font-medium">Get Help</a>
-                    <a href="frontend/Seasonal_Health_Tips.html" class="text-gray-600 hover:text-gray-900 font-medium">Health Tips</a>
-                    <a href="frontend/Symptoms.html" class="text-gray-600 hover:text-gray-900 font-medium">Symptoms</a>
-                    <a href="frontend/Health_event.html" class="text-gray-600 hover:text-gray-900 font-medium">Health Events</a>
+                    <a href="frontend/Mood_Tracker.html" class="text-gray-600 hover:text-gray-900 dark:text-gray-300 dark:hover:text-white font-medium" data-i18n-key="navMood">Mood Tracker</a>
+                    <a href="frontend/get_help.html" class="text-gray-600 hover:text-gray-900 dark:text-gray-300 dark:hover:text-white font-medium" data-i18n-key="navGetHelp">Get Help</a>
+                    <a href="frontend/Seasonal_Health_Tips.html" class="text-gray-600 hover:text-gray-900 dark:text-gray-300 dark:hover:text-white font-medium" data-i18n-key="navHealthTips">Health Tips</a>
+                    <a href="frontend/Symptoms.html" class="text-gray-600 hover:text-gray-900 dark:text-gray-300 dark:hover:text-white font-medium" data-i18n-key="navSymptoms">Symptoms</a>
+                    <a href="frontend/Health_event.html" class="text-gray-600 hover:text-gray-900 dark:text-gray-300 dark:hover:text-white font-medium" data-i18n-key="navEvents">Health Events</a>
                 </div>
 
-                <!-- Auth Buttons (Right) -->
                 <div class="hidden md:flex items-center space-x-4">
-                    <a href="#" class="text-gray-600 hover:text-gray-900 font-medium">Log In</a>
-                    <a href="#" class="bg-brand-cyan hover:bg-brand-cyan-hover text-white font-medium py-2 px-5 rounded-lg transition duration-200">
+                    <button id="lang-toggle-btn" type="button" class="text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white font-medium w-10 h-10 flex items-center justify-center rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700">
+                        বাংলা
+                    </button>
+
+                    <button id="theme-toggle-btn" type="button" class="text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white w-10 h-10 flex items-center justify-center rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700">
+                        <svg id="theme-icon-sun" class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"></path></svg>
+                        <svg id="theme-icon-moon" class="h-5 w-5 hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"></path></svg>
+                    </button>
+
+                    <a href="#" class="text-gray-600 hover:text-gray-900 dark:text-gray-300 dark:hover:text-white font-medium" data-i18n-key="navLogin">Log In</a>
+                    <a href="#" class="bg-brand-cyan hover:bg-brand-cyan-hover text-white font-medium py-2 px-5 rounded-lg transition duration-200" data-i18n-key="navGetStarted">
                         Get started
                     </a>
                 </div>
 
-                <!-- Mobile Menu Button (Hamburger) -->
-                <div class="md:hidden">
-                    <button type="button" class="text-gray-600 hover:text-gray-900 focus:outline-none">
+                <div class="md:hidden flex items-center space-x-2">
+                    <button id="lang-toggle-btn-mobile" type="button" class="text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white font-medium w-10 h-10 flex items-center justify-center rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700">
+                        বাংলা
+                    </button>
+                    <button id="theme-toggle-btn-mobile" type="button" class="text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white w-10 h-10 flex items-center justify-center rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700">
+                        <svg id="theme-icon-sun-mobile" class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"></path></svg>
+                        <svg id="theme-icon-moon-mobile" class="h-5 w-5 hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"></path></svg>
+                    </button>
+                    <button id="mobile-menu-button" type="button" class="text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white focus:outline-none w-10 h-10 flex items-center justify-center rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700">
                         <svg class="h-6 w-6" stroke="currentColor" fill="none" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path>
                         </svg>
                     </button>
                 </div>
             </div>
+
+            <div id="mobile-menu-panel" class="hidden md:hidden pt-4">
+                <div class="flex flex-col space-y-2">
+                    <a href="frontend/Mood_Tracker.html" class="px-3 py-2 rounded-lg text-gray-600 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-700 font-medium" data-i18n-key="navMood">Mood Tracker</a>
+                    <a href="frontend/get_help.html" class="px-3 py-2 rounded-lg text-gray-600 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-700 font-medium" data-i18n-key="navGetHelp">Get Help</a>
+                    <a href="frontend/Seasonal_Health_Tips.html" class="px-3 py-2 rounded-lg text-gray-600 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-700 font-medium" data-i18n-key="navHealthTips">Health Tips</a>
+                    <a href="frontend/Symptoms.html" class="px-3 py-2 rounded-lg text-gray-600 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-700 font-medium" data-i18n-key="navSymptoms">Symptoms</a>
+                    <a href="frontend/Health_event.html" class="px-3 py-2 rounded-lg text-gray-600 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-700 font-medium" data-i18n-key="navEvents">Health Events</a>
+                    
+                    <div class="border-t border-gray-200 dark:border-gray-700 pt-3 mt-2 space-y-2">
+                        <a href="#" class="block w-full text-center bg-brand-cyan hover:bg-brand-cyan-hover text-white font-medium py-2 px-5 rounded-lg transition duration-200" data-i18n-key="navGetStarted">
+                            Get started
+                        </a>
+                        <a href="#" class="block w-full text-center text-gray-600 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-700 font-medium py-2 px-5 rounded-lg" data-i18n-key="navLogin">
+                            Log In
+                        </a>
+                    </div>
+                </div>
+            </div>
+
         </nav>
     </header>
 
-    <!-- Main Hero Section -->
     <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-16 pb-24">
         <div class="flex flex-col md:flex-row items-center">
             
-            <!-- Left Column (Text Content) -->
             <div class="w-full md:w-1/2 text-center md:text-left">
-                <h1 class="text-4xl sm:text-4xl lg:text-4xl font-extrabold text-gray-900 leading-tight">
+                <h1 class="text-4xl sm:text-4xl lg:text-4xl font-extrabold text-gray-900 dark:text-white leading-tight" data-i18n-key="heroTitle">
                     A complete platform <br>
                     dedicated to our mental health <br>
                     and community well-being.
                 </h1>
-                <p class="mt-6 text-[17px] text-gray-600 max-w-xl mx-auto md:mx-0">
+                <p class="mt-6 text-[17px] text-gray-600 dark:text-gray-300 max-w-xl mx-auto md:mx-0" data-i18n-key="heroSubtitle">
                     we focus on improving mental health and community well-being through
                     innovation and technology. Our platform connects people with the right
                     support, guidance, and resources, empowering individuals to stay balanced,
                     informed, and cared for in every aspect of life.
                 </p>
-                <div class="mt-10">
-                    <a href="#" class="bg-brand-cyan hover:bg-brand-cyan-hover text-white font-light  py-3 px-6 rounded-lg transition duration-200">
-                        Tool Tips(How to use)
-                    </a>
-                </div>
             </div>
 
-            <!-- Right Column (Image) -->
             <div class="w-full md:w-1/2 mt-12 md:mt-0 md:pl-12">
-                <!-- Using a placeholder image that respects the original's aspect ratio and theme -->
-                <img src="src/image/image.png" 
+                <img src="src/image/image.png"  
                      alt="Illustration of a person thinking about mental health, with a silhouette showing a complex mind." 
+                     data-i18n-key="heroImageAlt"
                      class="w-full h-auto rounded-lg"
                      onerror="this.src='https://placehold.co/600x450?text=Image+Not+Found'">
             </div>
 
         </div>
 
-       
-<div>
-<div class="w-full bg-gray-50 py-16 px-6 rounded-3xl mt-8  my-4">
-  <div class="max-w-4xl mx-auto">
-    
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
-
-      <div class="w-full bg-white p-8 rounded-xl shadow-lg">
         
-        <h2 class="text-3xl font-bold text-center text-gray-800 mb-6">
-          How are you feeling today?
-        </h2>
+        <div>
+            <div class="w-full bg-gray-50 dark:bg-gray-800 py-16 px-6 rounded-3xl mt-8 my-4">
+                <div class="max-w-4xl mx-auto">
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
 
-        <div id="notification-area" class="hidden p-4 rounded-lg border mb-6">
-          <p id="notification-text" class="font-medium"></p>
-        </div>
+                        <div class="w-full bg-white dark:bg-gray-900 p-8 rounded-xl shadow-lg">
+                            
+                            <h2 class="text-3xl font-bold text-center text-gray-800 dark:text-gray-100 mb-6" data-i18n-key="moodTitle">
+                                How are you feeling today?
+                            </h2>
 
-        <div class="grid grid-cols-3 gap-4">
+                            <div id="notification-area" class="hidden p-4 rounded-lg border mb-6">
+                                <p id="notification-text" class="font-medium"></p>
+                            </div>
 
-          <button 
-            type="button"
-            onclick="showNotification('happy')"
-            class="flex flex-col items-center p-6 bg-yellow-50 rounded-lg border border-yellow-200 shadow-sm hover:shadow-md hover:bg-yellow-100 transition-all cursor-pointer focus:outline-none focus:ring-2 focus:ring-yellow-500"
-          >
-            <span class="text-5xl" role="img" aria-label="Happy face">😊</span>
-            <span class="mt-3 font-semibold text-gray-700">Happy</span>
-          </button>
+                            <div class="grid grid-cols-3 gap-4">
+                                <button  
+                                    id="mood-happy"
+                                    type="button"
+                                    class="flex flex-col items-center p-6 bg-yellow-50 dark:bg-yellow-900/50 rounded-lg border border-yellow-200 dark:border-yellow-700 shadow-sm hover:shadow-md dark:hover:bg-yellow-800/60 hover:bg-yellow-100 transition-all cursor-pointer focus:outline-none focus:ring-2 focus:ring-yellow-500"
+                                >
+                                    <span class="text-5xl" role="img" aria-label="Happy face">😊</span>
+                                    <span class="mt-3 font-semibold text-gray-700 dark:text-gray-200" data-i18n-key="moodHappy">Happy</span>
+                                </button>
 
-          <button 
-            type="button"
-            onclick="showNotification('okay')"
-            class="flex flex-col items-center p-6 bg-blue-50 rounded-lg border border-blue-200 shadow-sm hover:shadow-md hover:bg-blue-100 transition-all cursor-pointer focus:outline-none focus:ring-2 focus:ring-blue-500"
-          >
-            <span class="text-5xl" role="img" aria-label="Neutral face">😐</span>
-            <span class="mt-3 font-semibold text-gray-700">Okay</span>
-          </button>
+                                <button  
+                                    id="mood-okay"
+                                    type="button"
+                                    class="flex flex-col items-center p-6 bg-blue-50 dark:bg-blue-900/50 rounded-lg border border-blue-200 dark:border-blue-700 shadow-sm hover:shadow-md dark:hover:bg-blue-800/60 hover:bg-blue-100 transition-all cursor-pointer focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                >
+                                    <span class="text-5xl" role="img" aria-label="Neutral face">😐</span>
+                                    <span class="mt-3 font-semibold text-gray-700 dark:text-gray-200" data-i18n-key="moodOkay">Okay</span>
+                                </button>
 
-          <a 
-            href="mood.html" 
-            class="flex flex-col items-center p-6 bg-red-50 rounded-lg border border-red-200 shadow-sm hover:shadow-md hover:bg-red-100 transition-all cursor-pointer"
-          >
-            <span class="text-5xl" role="img" aria-label="Sad face">😔</span>
-            <span class="mt-3 font-semibold text-gray-700">Sad</span>
-          </a>
-        </div>
-      </div>
+                                <a  
+                                    href="frontend/Mood_Tracker.html"  
+                                    class="flex flex-col items-center p-6 bg-red-50 dark:bg-red-900/50 rounded-lg border border-red-200 dark:border-red-700 shadow-sm hover:shadow-md dark:hover:bg-red-800/60 hover:bg-red-100 transition-all cursor-pointer"
+                                >
+                                    <span class="text-5xl" role="img" aria-label="Sad face">😔</span>
+                                    <span class="mt-3 font-semibold text-gray-700 dark:text-gray-200" data-i18n-key="moodSad">Sad</span>
+                                </a>
+                            </div>
+                        </div>
 
-      <div class="text-gray-700">
-        <h3 class="text-3xl font-bold text-gray-900 mb-4">
-          Track Your Well-being
-        </h3>
-        <p class="text-lg text-gray-600 mb-4">
-          Logging your mood is a simple yet powerful way to understand your emotional patterns.
-        </p>
-        <p class="mb-4">
-          By taking a moment to check in with yourself, you can build self-awareness, identify triggers, and celebrate the good days.
-        </p>
-        <ul class="list-disc list-inside space-y-2 text-gray-600">
-          <li>See your mood patterns over time.</li>
-          <li>Understand your emotional triggers.</li>
-          <li>Practice daily mindfulness.</li>
-        </ul>
-      </div>
+                        <div class="text-gray-700 dark:text-gray-300">
+                            <h3 class="text-3xl font-bold text-gray-900 dark:text-white mb-4" data-i18n-key="moodInfoTitle">
+                                Track Your Well-being
+                            </h3>
+                            <p class="text-lg text-gray-600 dark:text-gray-300 mb-4" data-i18n-key="moodInfoSubtitle">
+                                Logging your mood is a simple yet powerful way to understand your emotional patterns.
+                            </p>
+                            <p class="mb-4" data-i18n-key="moodInfoP1">
+                                By taking a moment to check in with yourself, you can build self-awareness, identify triggers, and celebrate the good days.
+                            </p>
+                            <ul class="list-disc list-inside space-y-2 text-gray-600 dark:text-gray-300">
+                                <li data-i18n-key="moodInfoL1">See your mood patterns over time.</li>
+                                <li data-i18n-key="moodInfoL2">Understand your emotional triggers.</li>
+                                <li data-i18n-key="moodInfoL3">Practice daily mindfulness.</li>
+                            </ul>
+                        </div>
 
-    </div>
-  </div>
-</div>
+                    </div>
+                </div>
+            </div>
 
-<script>
-  function showNotification(mood) {
-    // Get the hidden notification elements from the HTML
-    const notificationBox = document.getElementById('notification-area');
-    const notificationText = document.getElementById('notification-text');
-
-    let message = '';
-    let colorClasses = '';
-
-    if (mood === 'happy') {
-      message = "That's great to hear! Keep shining and spread the positivity.";
-      // Tailwind classes for a yellow 'happy' notification
-      colorClasses = 'bg-yellow-100 border-yellow-400 text-yellow-800';
-    
-    } else if (mood === 'okay') {
-      message = "Feeling 'okay' is a calm state. Suggestion: Take a 5-minute walk outside to refresh your mind.";
-      // Tailwind classes for a blue 'okay' notification
-      colorClasses = 'bg-blue-100 border-blue-400 text-blue-800';
-    }
-
-    // Set the message
-    notificationText.innerText = message;
-    
-    // Set the colors by replacing all old color classes
-    // This resets the box if you click 'happy' then 'okay'
-    notificationBox.className = 'p-4 rounded-lg border mb-6 ' + colorClasses;
-    
-    // Make the notification box visible
-    notificationBox.classList.remove('hidden');
-  }
-</script>
-</div>
+            </div>
 
 
         <div >
-            <div class="w-full bg-[#4f7faf] py-20 px-6 text-center p-20 rounded-3xl">
-  <div class="max-w-3xl mx-auto">
-    
-    <div class="flex items-center justify-center gap-3">
-      <svg
-        xmlns="http://www.w3.org/2000/svg"
-        viewBox="0 0 24 24"
-        fill="currentColor"
-        class="w-8 h-8 text-white"
-      >
-        <path
-          fill-rule="evenodd"
-          d="M11.54 22.351l.07.04.028.016a.76.76 0 00.723 0l.028-.015.071-.041a16.975 16.975 0 004.6-3.17C19.165 16.602 20 14.152 20 12c0-4.418-3.582-8-8-8S4 7.582 4 12c0 2.152.835 4.602 2.76 7.178A16.975 16.975 0 0011.459 22.35l.071.04zM12 8.25a3.75 3.75 0 100 7.5 3.75 3.75 0 000-7.5z"
-          clip-rule="evenodd"
-        />
-      </svg>
-      <h1 class="text-3xl md:text-4xl font-bold text-white">
-        Nearby Health Care
-      </h1>
-    </div>
+            <div class="w-full bg-[#4f7faf] dark:bg-[#3E648A] py-20 px-6 text-center p-20 rounded-3xl">
+                <div class="max-w-3xl mx-auto">
+                    
+                    <div class="flex items-center justify-center gap-3">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-8 h-8 text-white">
+                            <path fill-rule="evenodd" d="M11.54 22.351l.07.04.028.016a.76.76 0 00.723 0l.028-.015.071-.041a16.975 16.975 0 004.6-3.17C19.165 16.602 20 14.152 20 12c0-4.418-3.582-8-8-8S4 7.582 4 12c0 2.152.835 4.602 2.76 7.178A16.975 16.975 0 0011.459 22.35l.071.04zM12 8.25a3.75 3.75 0 100 7.5 3.75 3.75 0 000-7.5z" clip-rule="evenodd" />
+                        </svg>
+                        <h1 class="text-3xl md:text-4xl font-bold text-white" data-i18n-key="nearbyTitle">
+                            Nearby Health Care
+                        </h1>
+                    </div>
 
-    <p class="text-lg md:text-l text-cyan-100 mt-3">
-      Find nearby hospitals and clinics in your area
-    </p>
+                    <p class="text-lg md:text-l text-cyan-100 mt-3" data-i18n-key="nearbySubtitle">
+                        Find nearby hospitals and clinics in your area
+                    </p>
 
-    <div
-      class="mt-8 flex max-w-lg mx-auto rounded-lg shadow-md overflow-hidden"
-    >
-      <input
-        type="text"
-        placeholder="Enter your location or zip code..."
-        class="w-full py-3 px-5 text-gray-800 bg-gray-100 focus:outline-none focus:ring-2 focus:ring-cyan-600"
-      />
-      <button
-        class="bg-cyan-700 text-white px-5 py-3 hover:bg-cyan-800 focus:outline-none"
-      >
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          viewBox="0 0 24 24"
-          fill="currentColor"
-          class="w-6 h-6"
-        >
-          <path
-            fill-rule="evenodd"
-            d="M10.5 3.75a6.75 6.75 0 100 13.5 6.75 6.75 0 000-13.5zM2.25 10.5a8.25 8.25 0 1114.59 5.28l4.69 4.69a.75.75 0 11-1.06 1.06l-4.69-4.69A8.25 8.25 0 012.25 10.5z"
-            clip-rule="evenodd"
-          />
-        </svg>
-      </button>
-    </div>
-  </div>
-</div>
-</div>
-
-<!-- Event -->
-<div class="w-full bg-gray-50 py-16 px-6">
-    <div class="max-w-7xl mx-auto">
-
-        <div class="text-center mb-12">
-            <h2 class="text-3xl font-bold text-gray-900">
-                Community & Events
-            </h2>
-            <p class="text-lg text-gray-600 mt-2">
-                Stay up-to-date with our latest health camps and activities.
-            </p>
+                    <div class="mt-8 flex max-w-lg mx-auto rounded-lg shadow-md overflow-hidden">
+                        <input
+                            type="text"
+                            placeholder="Enter your location or zip code..."
+                            data-i18n-key="nearbyPlaceholder"
+                            class="w-full py-3 px-5 text-gray-800 bg-gray-100 focus:outline-none focus:ring-2 focus:ring-cyan-600"
+                        />
+                        <button class="bg-cyan-700 text-white px-5 py-3 hover:bg-cyan-800 focus:outline-none">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-6 h-6">
+                                <path fill-rule="evenodd" d="M10.5 3.75a6.75 6.75 0 100 13.5 6.75 6.75 0 000-13.5zM2.25 10.5a8.25 8.25 0 1114.59 5.28l4.69 4.69a.75.75 0 11-1.06 1.06l-4.69-4.69A8.25 8.25 0 012.25 10.5z" clip-rule="evenodd" />
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+            </div>
         </div>
 
-        <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-start">
+        <div class="w-full bg-gray-50 dark:bg-gray-800 py-16 px-6 mt-8">
+            <div class="max-w-7xl mx-auto">
 
-            <div>
-                <h3 class="text-2xl font-semibold text-gray-800 mb-6">
-                    Upcoming Events
-                </h3>
+                <div class="text-center mb-12">
+                    <h2 class="text-3xl font-bold text-gray-900 dark:text-white" data-i18n-key="eventsTitle">
+                        Community & Events
+                    </h2>
+                    <p class="text-lg text-gray-600 dark:text-gray-300 mt-2" data-i18n-key="eventsSubtitle">
+                        Stay up-to-date with our latest health camps and activities.
+                    </p>
+                </div>
+
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-start">
+
+                    <div>
+                        <h3 class="text-2xl font-semibold text-gray-800 dark:text-gray-100 mb-6" data-i18n-key="eventsUpcoming">
+                            Upcoming Events
+                        </h3>
+                        
+                        <div class="space-y-4">
+                            <a href="#" class="flex items-center bg-white dark:bg-gray-900 p-4 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 hover:shadow-lg hover:-translate-y-1 transition-all duration-300">
+                                <div class="flex-shrink-0 text-center bg-cyan-50 dark:bg-cyan-900/50 text-brand-cyan dark:text-cyan-300 p-3 rounded-lg w-16">
+                                    <span class="block text-sm font-semibold" data-i18n-key="event1Month">NOV</span>
+                                    <span class="block text-2xl font-bold">15</span>
+                                </div>
+                                <div class="ml-4">
+                                    <h4 class="font-semibold text-gray-800 dark:text-gray-100" data-i18n-key="event1Title">Free Diabetes Screening Camp</h4>
+                                    <p class="text-sm text-gray-500 dark:text-gray-400" data-i18n-key="event1Location">Habu’s Village Community Center, Mymenshingh</p>
+                                </div>
+                            </a>
+                            <a href="#" class="flex items-center bg-white dark:bg-gray-900 p-4 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 hover:shadow-lg hover:-translate-y-1 transition-all duration-300">
+                                <div class="flex-shrink-0 text-center bg-cyan-50 dark:bg-cyan-900/50 text-brand-cyan dark:text-cyan-300 p-3 rounded-lg w-16">
+                                    <span class="block text-sm font-semibold" data-i18n-key="event2Month">NOV</span>
+                                    <span class="block text-2xl font-bold">18</span>
+                                </div>
+                                <div class="ml-4">
+                                    <h4 class="font-semibold text-gray-800 dark:text-gray-100" data-i18n-key="event2Title">Blood Donation Drive</h4>
+                                    <p class="text-sm text-gray-500 dark:text-gray-400" data-i18n-key="event2Location">Rajshahi Medical College</p>
+                                </div>
+                            </a>
+                            <a href="#" class="flex items-center bg-white dark:bg-gray-900 p-4 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 hover:shadow-lg hover:-translate-y-1 transition-all duration-300">
+                                <div class="flex-shrink-0 text-center bg-cyan-50 dark:bg-cyan-900/50 text-brand-cyan dark:text-cyan-300 p-3 rounded-lg w-16">
+                                    <span class="block text-sm font-semibold" data-i18n-key="event3Month">NOV</span>
+                                    <span class="block text-2xl font-bold">20</span>
+                                </div>
+                                <div class="ml-4">
+                                    <h4 class="font-semibold text-gray-800 dark:text-gray-100" data-i18n-key="event3Title">Child Vaccination Campaign</h4>
+                                    <p class="text-sm text-gray-500 dark:text-gray-400" data-i18n-key="event3Location">Multiple locations across Dhaka</p>
+                                </div>
+                            </a>
+                        </div>
+
+                        <a href="frontend/Health_event.html"  
+                           class="mt-8 inline-block text-brand-cyan hover:text-brand-cyan-hover font-medium transition-all duration-200"
+                           data-i18n-key="eventsViewAll">
+                            View All Events &rarr;
+                        </a>
+                    </div>
+
+                    <div>
+                        <div class="bg-white dark:bg-gray-900 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 p-6 aspect-square flex flex-col">
+                            
+                            <div class="flex justify-between items-center mb-4">
+                                <h3 id="month-year" class="text-lg font-semibold text-gray-800 dark:text-gray-100"></h3>
+                                <div class="space-x-2">
+                                    <button id="prev-month-btn" class="text-gray-400 dark:text-gray-500 hover:text-gray-600 dark:hover:text-gray-300 rounded-full p-1 transition-colors">&larr;</button>
+                                    <button id="next-month-btn" class="text-gray-400 dark:text-gray-500 hover:text-gray-600 dark:hover:text-gray-300 rounded-full p-1 transition-colors">&rarr;</button>
+                                </div>
+                            </div>
+                            
+                            <div class="grid grid-cols-7 gap-1 text-center mb-2">
+                                <span class="text-xs font-semibold text-gray-500 dark:text-gray-400" data-i18n-key="calSun">Su</span>
+                                <span class="text-xs font-semibold text-gray-500 dark:text-gray-400" data-i18n-key="calMon">Mo</span>
+                                <span class="text-xs font-semibold text-gray-500 dark:text-gray-400" data-i18n-key="calTue">Tu</span>
+                                <span class="text-xs font-semibold text-gray-500 dark:text-gray-400" data-i18n-key="calWed">We</span>
+                                <span class="text-xs font-semibold text-gray-500 dark:text-gray-400" data-i18n-key="calThu">Th</span>
+                                <span class="text-xs font-semibold text-gray-500 dark:text-gray-400" data-i18n-key="calFri">Fr</span>
+                                <span class="text-xs font-semibold text-gray-500 dark:text-gray-400" data-i18n-key="calSat">Sa</span>
+                            </div>
+
+                            <div id="calendar-grid" class="grid grid-cols-7 grid-rows-6 gap-1 flex-1">
+                                </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        </main>
+
+    <footer class="bg-gray-800 text-gray-300">
+        <div class="max-w-7xl mx-auto py-16 px-6 lg:px-8">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-12">
                 
-                <div class="space-y-4">
-
-                    <a href="#" class="flex items-center bg-white p-4 rounded-xl shadow-sm border border-gray-200 hover:shadow-lg hover:-translate-y-1 transition-all duration-300">
-                        <div class="flex-shrink-0 text-center bg-cyan-50 text-brand-cyan p-3 rounded-lg w-16">
-                            <span class="block text-sm font-semibold">NOV</span>
-                            <span class="block text-2xl font-bold">15</span>
+                <div class="md:col-span-1">
+                    <a href="../index.html" class="text-2xl font-bold text-white" data-i18n-key="logo">MonoBol</a>
+                    <p class="text-gray-400 text-sm mt-3" data-i18n-key="footerSlogan">
+                        Delivering safe and compassionate care for community well-being.
+                    </p>
+                    <div class="flex space-x-5 mt-6">
                         </div>
-                        <div class="ml-4">
-                            <h4 class="font-semibold text-gray-800">Free Diabetes Screening Camp</h4>
-                            <p class="text-sm text-gray-500">Habu’s Village Community Center, Mymenshingh</p>
-                        </div>
-                    </a>
-                    
-                    <a href="#" class="flex items-center bg-white p-4 rounded-xl shadow-sm border border-gray-200 hover:shadow-lg hover:-translate-y-1 transition-all duration-300">
-                        <div class="flex-shrink-0 text-center bg-cyan-50 text-brand-cyan p-3 rounded-lg w-16">
-                            <span class="block text-sm font-semibold">NOV</span>
-                            <span class="block text-2xl font-bold">18</span>
-                        </div>
-                        <div class="ml-4">
-                            <h4 class="font-semibold text-gray-800">Blood Donation Drive</h4>
-                            <p class="text-sm text-gray-500">Rajshahi Medical College</p>
-                        </div>
-                    </a>
-
-                    <a href="#" class="flex items-center bg-white p-4 rounded-xl shadow-sm border border-gray-200 hover:shadow-lg hover:-translate-y-1 transition-all duration-300">
-                        <div class="flex-shrink-0 text-center bg-cyan-50 text-brand-cyan p-3 rounded-lg w-16">
-                            <span class="block text-sm font-semibold">NOV</span>
-                            <span class="block text-2xl font-bold">20</span>
-                        </div>
-                        <div class="ml-4">
-                            <h4 class="font-semibold text-gray-800">Child Vaccination Campaign</h4>
-                            <p class="text-sm text-gray-500">Multiple locations across Dhaka</p>
-                        </div>
-                    </a>
                 </div>
 
-                <a href="frontend/Health_event.html" 
-                   class="mt-8 inline-block text-brand-cyan hover:text-brand-cyan-hover font-medium transition-all duration-200">
-                    View All Events &rarr;
-                </a>
+                <div>
+                    <h3 class="text-sm font-semibold text-gray-400 uppercase tracking-wider" data-i18n-key="footerFeatures">Features</h3>
+                    <ul class="mt-4 space-y-3">
+                        <li><a href="#" class="text-base hover:text-white transition-colors" data-i18n-key="navMood">Mood Tracker</a></li>
+                        <li><a href="#" class="text-base hover:text-white transition-colors" data-i18n-key="footerNearby">Nearby Healthcare</a></li>
+                        <li><a href="#" class="text-base hover:text-white transition-colors" data-i18n-key="navGetHelp">Get Help</a></li>
+                    </ul>
+                </div>
+
+                <div>
+                    <h3 class="text-sm font-semibold text-gray-400 uppercase tracking-wider" data-i18n-key="footerResources">Resources</h3>
+                    <ul class="mt-4 space-y-3">
+                        <li><a href="Seasonal_Health_Tips.html" class="text-base hover:text-white transition-colors" data-i18n-key="navHealthTips">Health Tips</a></li>
+                        <li><a href="Health_event.html" class="text-base hover:text-white transition-colors" data-i18n-key="navEvents">Health Events</a></li>
+                        <li><a href="#" class="text-base hover:text-white transition-colors" data-i18n-key="navSymptoms">Symptoms</a></li>
+                    </ul>
+                </div>
+
+                <div>
+                    <h3 class="text-sm font-semibold text-gray-400 uppercase tracking-wider" data-i18n-key="footerCompany">Company</h3>
+                    <ul class="mt-4 space-y-3">
+                        <li><a href="#" class="text-base hover:text-white transition-colors" data-i18n-key="footerAbout">About Us</a></li>
+                        <li><a href="#" class="text-base hover:text-white transition-colors" data-i18n-key="footerContact">Contact</a></li>
+                        <li><a href="#" class="text-base hover:text-white transition-colors" data-i18n-key="footerPrivacy">Privacy Policy</a></li>
+                        <li><a href="#" class="text-base hover:text-white transition-colors" data-i18n-key="footerTerms">Terms of Service</a></li>
+                    </ul>
+                </div>
+
             </div>
 
-            <div>
-                <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6 aspect-square flex flex-col">
-                    
-                    <div class="flex justify-between items-center mb-4">
-                        <h3 id="month-year" class="text-lg font-semibold text-gray-800"></h3>
-                        <div class="space-x-2">
-                            <button id="prev-month-btn" class="text-gray-400 hover:text-gray-600 rounded-full p-1 transition-colors">&larr;</button>
-                            <button id="next-month-btn" class="text-gray-400 hover:text-gray-600 rounded-full p-1 transition-colors">&rarr;</button>
-                        </div>
-                    </div>
-                    
-                    <div class="grid grid-cols-7 gap-1 text-center mb-2">
-                        <span class="text-xs font-semibold text-gray-500">Su</span>
-                        <span class="text-xs font-semibold text-gray-500">Mo</span>
-                        <span class="text-xs font-semibold text-gray-500">Tu</span>
-                        <span class="text-xs font-semibold text-gray-500">We</span>
-                        <span class="text-xs font-semibold text-gray-500">Th</span>
-                        <span class="text-xs font-semibold text-gray-500">Fr</span>
-                        <span class="text-xs font-semibold text-gray-500">Sa</span>
-                    </div>
-
-                    <div id="calendar-grid" class="grid grid-cols-7 grid-rows-6 gap-1 flex-1">
-                        </div>
-                </div>
+            <div class="mt-12 border-t border-gray-700 pt-8">
+                <p class="text-sm text-gray-500 text-center mb-4">
+                    <strong data-i18n-key="footerDisclaimerTitle">Medical Disclaimer:</strong> <span data-i18n-key="footerDisclaimerText">The information on this site is not a substitute for professional medical advice, diagnosis, or treatment. Always seek the advice of your physician or other qualified health provider.</span>
+                </p>
+                <p class="text-base text-gray-500 text-center" data-i18n-key="footerCopyright">
+                    &copy; 2025 MonoBol & ShunnoLogic. All rights reserved.
+                </p>
             </div>
         </div>
-    </div>
-</div>
-<script>
-    // Wait for the DOM to be fully loaded before running the script
+    </footer>
+
+
+    <script>
     document.addEventListener('DOMContentLoaded', () => {
 
-        // --- 1. STATE & DATA ---
-        
-        // This is the date the calendar will display.
-        // We set it to Nov 4, 2025, to match your event data.
-        let currentDate = new Date(2025, 10, 4); 
-        
-        // This is today's *actual* date.
-        const today = new Date(); 
+        // --- 1. TRANSLATION (i18n) LOGIC ---
 
-        // Your event data. Month is 0-indexed (10 = November)
+        const translations = {
+            'en': {
+                // General
+                'logo': 'MonoBol',
+                // Nav
+                'navMood': 'Mood Tracker',
+                'navGetHelp': 'Get Help',
+                'navHealthTips': 'Health Tips',
+                'navSymptoms': 'Symptoms',
+                'navEvents': 'Health Events',
+                'navLogin': 'Log In',
+                'navGetStarted': 'Get started',
+                'langToggle': 'বাংলা',
+                // Hero
+                'heroTitle': 'A complete platform \ndedicated to our mental health \nand community well-being.',
+                'heroSubtitle': 'we focus on improving mental health and community well-being through innovation and technology. Our platform connects people with the right support, guidance, and resources, empowering individuals to stay balanced, informed, and cared for in every aspect of life.',
+                'heroImageAlt': 'Illustration of a person thinking about mental health, with a silhouette showing a complex mind.',
+                // Mood Tracker
+                'moodTitle': 'How are you feeling today?',
+                'moodHappy': 'Happy',
+                'moodOkay': 'Okay',
+                'moodSad': 'Sad',
+                'moodInfoTitle': 'Track Your Well-being',
+                'moodInfoSubtitle': 'Logging your mood is a simple yet powerful way to understand your emotional patterns.',
+                'moodInfoP1': 'By taking a moment to check in with yourself, you can build self-awareness, identify triggers, and celebrate the good days.',
+                'moodInfoL1': 'See your mood patterns over time.',
+                'moodInfoL2': 'Understand your emotional triggers.',
+                'moodInfoL3': 'Practice daily mindfulness.',
+                'notifyHappy': "That's great to hear! Keep shining and spread the positivity.",
+                'notifyOkay': "Feeling 'okay' is a calm state. Suggestion: Take a 5-minute walk outside to refresh your mind.",
+                // Nearby Healthcare
+                'nearbyTitle': 'Nearby Health Care',
+                'nearbySubtitle': 'Find nearby hospitals and clinics in your area',
+                'nearbyPlaceholder': 'Enter your location or zip code...',
+                // Events
+                'eventsTitle': 'Community & Events',
+                'eventsSubtitle': 'Stay up-to-date with our latest health camps and activities.',
+                'eventsUpcoming': 'Upcoming Events',
+                'event1Month': 'NOV',
+                'event1Title': 'Free Diabetes Screening Camp',
+                'event1Location': "Habu’s Village Community Center, Mymenshingh",
+                'event2Month': 'NOV',
+                'event2Title': 'Blood Donation Drive',
+                'event2Location': 'Rajshahi Medical College',
+                'event3Month': 'NOV',
+                'event3Title': 'Child Vaccination Campaign',
+                'event3Location': 'Multiple locations across Dhaka',
+                'eventsViewAll': 'View All Events →',
+                // Calendar Days
+                'calSun': 'Su', 'calMon': 'Mo', 'calTue': 'Tu', 'calWed': 'We', 'calThu': 'Th', 'calFri': 'Fr', 'calSat': 'Sa',
+                // Footer
+                'footerSlogan': 'Delivering safe and compassionate care for community well-being.',
+                'footerFeatures': 'Features',
+                'footerNearby': 'Nearby Healthcare',
+                'footerResources': 'Resources',
+                'footerCompany': 'Company',
+                'footerAbout': 'About Us',
+                'footerContact': 'Contact',
+                'footerPrivacy': 'Privacy Policy',
+                'footerTerms': 'Terms of Service',
+                'footerDisclaimerTitle': 'Medical Disclaimer:',
+                'footerDisclaimerText': 'The information on this site is not a substitute for professional medical advice, diagnosis, or treatment. Always seek the advice of your physician or other qualified health provider.',
+                'footerCopyright': '© 2025 MonoBol & ShunnoLogic. All rights reserved.'
+            },
+            'বাংলা': {
+                // General
+                'logo': 'মনবল',
+                // Nav
+                'navMood': 'মুড ট্র্যাকার',
+                'navGetHelp': 'সাহায্য নিন',
+                'navHealthTips': 'স্বাস্থ্য টিপস',
+                'navSymptoms': 'লক্ষণ',
+                'navEvents': 'স্বাস্থ্য ইভেন্ট',
+                'navLogin': 'লগ ইন',
+                'navGetStarted': 'শুরু করুন',
+                'langToggle': 'EN',
+                // Hero
+                'heroTitle': 'একটি সম্পূর্ণ প্ল্যাটফর্ম \nআমাদের মানসিক স্বাস্থ্য \nএবং সাম্প্রদায়িক মঙ্গলের জন্য।',
+                'heroSubtitle': 'আমরা উদ্ভাবন এবং প্রযুক্তির মাধ্যমে মানসিক স্বাস্থ্য এবং সম্প্রদায়ের সুস্থতার উন্নতিতে মনোনিবেশ করি। আমাদের প্ল্যাটফর্ম মানুষকে সঠিক সমর্থন, নির্দেশিকা এবং সংস্থানগুলির সাথে সংযুক্ত করে, ব্যক্তিদের জীবনের প্রতিটি ক্ষেত্রে ভারসাম্যপূর্ণ, অবগত এবং যত্নশীল থাকতে সক্ষম করে।',
+                'heroImageAlt': 'একজন ব্যক্তি মানসিক স্বাস্থ্য সম্পর্কে চিন্তা করছেন, একটি জটিল মন দেখাচ্ছে এমন সিলুয়েট সহ চিত্র।',
+                // Mood Tracker
+                'moodTitle': 'আজ আপনার কেমন লাগছে?',
+                'moodHappy': 'খুশি',
+                'moodOkay': 'ঠিক আছে',
+                'moodSad': 'দুঃখিত',
+                'moodInfoTitle': 'আপনার সুস্থতা ট্র্যাক করুন',
+                'moodInfoSubtitle': 'আপনার মেজাজ লগ করা আপনার মানসিক ধরণগুলি বোঝার একটি সহজ কিন্তু শক্তিশালী উপায়।',
+                'moodInfoP1': 'নিজের সাথে চেক ইন করার জন্য কিছুক্ষণ সময় নিয়ে, আপনি আত্ম-সচেতনতা তৈরি করতে পারেন, ট্রিগারগুলি সনাক্ত করতে পারেন এবং ভাল দিনগুলি উদযাপন করতে পারেন।',
+                'moodInfoL1': 'সময়ের সাথে আপনার মেজাজের ধরণ দেখুন।',
+                'moodInfoL2': 'আপনার মানসিক ট্রিগার বুঝুন।',
+                'moodInfoL3': 'প্রতিদিন মাইন্ডফুলনেস অনুশীলন করুন।',
+                'notifyHappy': "এটা শুনে খুব ভালো লাগলো! উজ্জ্বল থাকুন এবং ইতিবাচকতা ছড়িয়ে দিন।",
+                'notifyOkay': "'ঠিক আছে' অনুভব করা একটি শান্ত অবস্থা। পরামর্শ: আপনার মনকে সতেজ করতে ৫ মিনিট বাইরে হাঁটুন।",
+                // Nearby Healthcare
+                'nearbyTitle': 'কাছাকাছি স্বাস্থ্যসেবা',
+                'nearbySubtitle': 'আপনার এলাকার কাছাকাছি হাসপাতাল এবং ক্লিনিক খুঁজুন',
+                'nearbyPlaceholder': 'আপনার অবস্থান বা জিপ কোড লিখুন...',
+                // Events
+                'eventsTitle': 'সম্প্রদায় ও ইভেন্ট',
+                'eventsSubtitle': 'আমাদের সর্বশেষ স্বাস্থ্য ক্যাম্প এবং কার্যক্রমের সাথে আপ-টু-ডেট থাকুন।',
+                'eventsUpcoming': 'আসন্ন ঘটনাবলী',
+                'event1Month': 'নভে',
+                'event1Title': 'বিনামূল্যে ডায়াবেটিস স্ক্রিনিং ক্যাম্প',
+                'event1Location': "হাবু'স ভিলেজ কমিউনিটি সেন্টার, ময়মনসিংহ",
+                'event2Month': 'নভে',
+                'event2Title': 'রক্তদান কর্মসূচি',
+                'event2Location': 'রাজশাহী মেডিকেল কলেজ',
+                'event3Month': 'নভে',
+                'event3Title': 'শিশু টিকাদান অভিযান',
+                'event3Location': 'ঢাকা জুড়ে একাধিক অবস্থান',
+                'eventsViewAll': 'সব ইভেন্ট দেখুন →',
+                // Calendar Days
+                'calSun': 'রবি', 'calMon': 'সোম', 'calTue': 'মঙ্গল', 'calWed': 'বুধ', 'calThu': 'বৃহঃ', 'calFri': 'শুক্র', 'calSat': 'শনি',
+                // Footer
+                'footerSlogan': 'সম্প্রদায়ের মঙ্গলের জন্য নিরাপদ এবং সহানুভূতিশীল যত্ন প্রদান করা।',
+                'footerFeatures': 'বৈশিষ্ট্য',
+                'footerNearby': 'কাছাকাছি স্বাস্থ্যসেবা',
+                'footerResources': 'সম্পদ',
+                'footerCompany': 'প্রতিষ্ঠান',
+                'footerAbout': 'আমাদের সম্পর্কে',
+                'footerContact': 'যোগাযোগ',
+                'footerPrivacy': 'গোপনীয়তা নীতি',
+                'footerTerms': 'পরিষেবার শর্তাবলী',
+                'footerDisclaimerTitle': 'মেডিকেল ডিসক্লেইমার:',
+                'footerDisclaimerText': 'এই সাইটের তথ্য পেশাদার চিকিৎসা পরামর্শ, রোগ নির্ণয় বা চিকিৎসার বিকল্প নয়। সর্বদা আপনার চিকিত্সক বা অন্যান্য যোগ্য স্বাস্থ্য প্রদানকারীর পরামর্শ নিন।',
+                'footerCopyright': '© ২০২৫ মনবল ও শূন্যলজিক। সর্বস্বত্ব সংরক্ষিত।'
+            }
+        };
+
+        const langToggleBtn = document.getElementById('lang-toggle-btn');
+        const langToggleBtnMobile = document.getElementById('lang-toggle-btn-mobile');
+
+        function setLanguage(lang) {
+            // Set lang attribute on <html> tag
+            document.documentElement.lang = lang;
+            
+            // Save preference to localStorage
+            localStorage.setItem('language', lang);
+
+            // Update button text
+            const toggleText = translations[lang]['langToggle'] || (lang === 'en' ? 'বাংলা' : 'EN');
+            langToggleBtn.textContent = toggleText;
+            langToggleBtnMobile.textContent = toggleText;
+
+            // Update all elements with data-i18n-key
+            document.querySelectorAll('[data-i18n-key]').forEach(element => {
+                const key = element.getAttribute('data-i18n-key');
+                const translation = translations[lang][key];
+                
+                if (translation) {
+                    if (element.hasAttribute('placeholder')) {
+                        element.placeholder = translation;
+                    } else if (element.hasAttribute('alt')) {
+                        element.alt = translation;
+                    } else {
+                        // Use innerText to respect line breaks from the translation string
+                        element.innerText = translation;
+                    }
+                }
+            });
+
+            // Re-render calendar to update day/month names
+            renderCalendar(); 
+        }
+
+        function toggleLanguage() {
+            const currentLang = localStorage.getItem('language') || 'en';
+            const newLang = currentLang === 'en' ? 'বাংলা' : 'en';
+            setLanguage(newLang);
+        }
+
+        langToggleBtn.addEventListener('click', toggleLanguage);
+        langToggleBtnMobile.addEventListener('click', toggleLanguage);
+
+        // --- 2. THEME (Dark/Light Mode) LOGIC ---
+
+        const themeToggleBtn = document.getElementById('theme-toggle-btn');
+        const themeToggleBtnMobile = document.getElementById('theme-toggle-btn-mobile');
+        const sunIcons = [document.getElementById('theme-icon-sun'), document.getElementById('theme-icon-sun-mobile')];
+        const moonIcons = [document.getElementById('theme-icon-moon'), document.getElementById('theme-icon-moon-mobile')];
+
+        function updateIcons(theme) {
+            if (theme === 'dark') {
+                sunIcons.forEach(icon => icon.classList.add('hidden'));
+                moonIcons.forEach(icon => icon.classList.remove('hidden'));
+            } else {
+                sunIcons.forEach(icon => icon.classList.remove('hidden'));
+                moonIcons.forEach(icon => icon.classList.add('hidden'));
+            }
+        }
+
+        function toggleTheme() {
+            const currentTheme = document.documentElement.classList.contains('dark') ? 'dark' : 'light';
+            const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+
+            if (newTheme === 'dark') {
+                document.documentElement.classList.add('dark');
+            } else {
+                document.documentElement.classList.remove('dark');
+            }
+            localStorage.setItem('theme', newTheme);
+            updateIcons(newTheme);
+        }
+
+        themeToggleBtn.addEventListener('click', toggleTheme);
+        themeToggleBtnMobile.addEventListener('click', toggleTheme);
+
+        // --- 3. MOBILE MENU LOGIC ---
+
+        const mobileMenuButton = document.getElementById('mobile-menu-button');
+        const mobileMenuPanel = document.getElementById('mobile-menu-panel');
+
+        mobileMenuButton.addEventListener('click', () => {
+            mobileMenuPanel.classList.toggle('hidden');
+        });
+
+        // --- 4. MOOD TRACKER NOTIFICATION LOGIC ---
+        
+        const notificationBox = document.getElementById('notification-area');
+        const notificationText = document.getElementById('notification-text');
+
+        function showNotification(mood) {
+            const currentLang = localStorage.getItem('language') || 'en';
+            let message = '';
+            let colorClasses = '';
+
+            if (mood === 'happy') {
+                message = translations[currentLang]['notifyHappy'];
+                colorClasses = 'bg-yellow-100 border-yellow-400 text-yellow-800 dark:bg-yellow-900/50 dark:border-yellow-700 dark:text-yellow-200';
+            } else if (mood === 'okay') {
+                message = translations[currentLang]['notifyOkay'];
+                colorClasses = 'bg-blue-100 border-blue-400 text-blue-800 dark:bg-blue-900/50 dark:border-blue-700 dark:text-blue-200';
+            }
+
+            notificationText.innerText = message;
+            notificationBox.className = 'p-4 rounded-lg border mb-6 ' + colorClasses;
+            notificationBox.classList.remove('hidden');
+        }
+        
+        // Attach events using JS, not inline onclick
+        document.getElementById('mood-happy').addEventListener('click', () => showNotification('happy'));
+        document.getElementById('mood-okay').addEventListener('click', () => showNotification('okay'));
+
+
+        // --- 5. CALENDAR LOGIC (User's Original Script) ---
+
+        let currentDate = new Date(2025, 10, 4); // Nov 4, 2025
+        const today = new Date(); 
         const events = [
             { year: 2025, month: 10, day: 15 },
             { year: 2025, month: 10, day: 18 },
@@ -382,44 +660,39 @@
             { year: 2025, month: 10, day: 28 },
         ];
 
-        // Get HTML elements
         const monthYearEl = document.getElementById('month-year');
         const calendarGridEl = document.getElementById('calendar-grid');
         const prevMonthBtn = document.getElementById('prev-month-btn');
         const nextMonthBtn = document.getElementById('next-month-btn');
 
-        // --- 2. CORE RENDER FUNCTION ---
         function renderCalendar() {
-            
-            // Get details for the *current* month
             const year = currentDate.getFullYear();
-            const month = currentDate.getMonth(); // 0-11
+            const month = currentDate.getMonth();
+            const currentLang = localStorage.getItem('language') || 'en';
             
             const firstDayOfMonth = new Date(year, month, 1);
             const lastDayOfMonth = new Date(year, month + 1, 0);
             
             const numDaysInMonth = lastDayOfMonth.getDate();
-            const startDayOfWeek = firstDayOfMonth.getDay(); // 0=Sunday, 1=Monday...
+            const startDayOfWeek = firstDayOfMonth.getDay(); 
 
-            // Get last day of *previous* month
             const lastDayOfPrevMonth = new Date(year, month, 0).getDate();
 
-            // Set the header text (e.g., "November 2025")
-            monthYearEl.textContent = new Intl.DateTimeFormat('en-US', {
+            // Set header text (e.g., "November 2025" or "নভেম্বর ২০২৫")
+            monthYearEl.textContent = new Intl.DateTimeFormat(currentLang === 'en' ? 'en-US' : 'বাংলা-BD', {
                 month: 'long',
                 year: 'numeric'
             }).format(currentDate);
 
-            // Clear the grid before repopulating
             calendarGridEl.innerHTML = '';
 
-            // --- A. Fill in days from previous month ---
+            // Fill days from previous month
             for (let i = startDayOfWeek; i > 0; i--) {
                 const day = lastDayOfPrevMonth - i + 1;
                 calendarGridEl.appendChild(createDayCell(day, false, false, false, true));
             }
 
-            // --- B. Fill in days for current month ---
+            // Fill days for current month
             for (let day = 1; day <= numDaysInMonth; day++) {
                 const isToday = day === today.getDate() && 
                                 month === today.getMonth() && 
@@ -433,36 +706,36 @@
                 calendarGridEl.appendChild(createDayCell(day, isToday, isEvent, false, false));
             }
 
-            // --- C. Fill in days from next month ---
-            const remainingCells = 42 - (startDayOfWeek + numDaysInMonth); // 7 cols * 6 rows = 42
+            // Fill days from next month
+            const remainingCells = 42 - (startDayOfWeek + numDaysInMonth);
             for (let day = 1; day <= remainingCells; day++) {
                 calendarGridEl.appendChild(createDayCell(day, false, false, false, true));
             }
         }
 
-        // --- 3. HELPER FUNCTION TO CREATE A DAY CELL ---
         function createDayCell(day, isToday, isEvent, isSelected, isFaded) {
             const cell = document.createElement('div');
-            cell.textContent = day;
+            const currentLang = localStorage.getItem('language') || 'en';
             
-            // Base classes for all cells
+            // Format number based on language
+            cell.textContent = day.toLocaleString(currentLang === 'en' ? 'en-US' : 'বাংলা-BD');
+            
             let classes = 'flex items-center justify-center h-full w-full rounded-full text-sm';
 
             if (isFaded) {
-                classes += ' text-gray-300';
+                classes += ' text-gray-300 dark:text-gray-600';
             } else if (isToday) {
                 classes += ' bg-brand-cyan text-white font-bold'; // Today
             } else if (isEvent) {
-                classes += ' bg-cyan-100 text-cyan-800 font-bold'; // Event
+                classes += ' bg-cyan-100 text-cyan-800 dark:bg-cyan-900/60 dark:text-cyan-200 font-bold'; // Event
             } else {
-                classes += ' text-gray-700 hover:bg-gray-100 cursor-pointer'; // Normal day
+                classes += ' text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700 cursor-pointer'; // Normal day
             }
             
             cell.className = classes;
             return cell;
         }
 
-        // --- 4. EVENT LISTENERS ---
         prevMonthBtn.addEventListener('click', () => {
             currentDate.setMonth(currentDate.getMonth() - 1);
             renderCalendar();
@@ -473,81 +746,19 @@
             renderCalendar();
         });
 
-        // --- 5. INITIAL RENDER ---
-        renderCalendar();
+        // --- 6. INITIAL PAGE LOAD ---
+
+        // Set initial theme icons
+        const initialTheme = localStorage.getItem('theme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+        updateIcons(initialTheme);
+
+        // Set initial language
+        const initialLang = localStorage.getItem('language') || 'en';
+        setLanguage(initialLang);
+        
+        // Initial Calendar render is now done inside setLanguage()
     });
-</script>
-
-    </main>
-<!-- footer  -->
-<footer class="bg-gray-800 text-gray-300">
-    <div class="max-w-7xl mx-auto py-16 px-6 lg:px-8">
-        <div class="grid grid-cols-1 md:grid-cols-4 gap-12">
-            
-            <div class="md:col-span-1">
-                <a href="../index.html" class="text-2xl font-bold text-white">MonoBol</a>
-                <p class="text-gray-400 text-sm mt-3">
-                    Delivering safe and compassionate care for community well-being.
-                </p>
-                <div class="flex space-x-5 mt-6">
-                    <a href="#" class="text-gray-400 hover:text-brand-cyan transition-colors" aria-label="Facebook">
-                        <svg class="h-6 w-6" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-                            <path fill-rule="evenodd" d="M22 12c0-5.523-4.477-10-10-10S2 6.477 2 12c0 4.991 3.657 9.128 8.438 9.878v-6.987h-2.54V12h2.54V9.797c0-2.506 1.492-3.89 3.777-3.89 1.094 0 2.238.195 2.238.195v2.46h-1.26c-1.243 0-1.63.772-1.63 1.562V12h2.773l-.443 2.89h-2.33v6.988C18.343 21.128 22 16.991 22 12z" clip-rule="evenodd" />
-                        </svg>
-                    </a>
-                    <a href="#" class="text-gray-400 hover:text-brand-cyan transition-colors" aria-label="Twitter">
-                        <svg class="h-6 w-6" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-                            <path d="M8.29 20.251c7.547 0 11.675-6.253 11.675-11.675 0-.178 0-.355-.012-.53A8.348 8.348 0 0022 5.92a8.19 8.19 0 01-2.357.646 4.118 4.118 0 001.804-2.27 8.224 8.224 0 01-2.605.996 4.107 4.107 0 00-6.993 3.743 11.65 11.65 0 01-8.457-4.287 4.106 4.106 0 001.27 5.477A4.072 4.072 0 012.8 9.713v.052a4.105 4.105 0 003.292 4.022 4.095 4.095 0 01-1.853.07 4.108 4.108 0 003.834 2.85A8.233 8.233 0 012 18.407a11.616 11.616 0 006.29 1.84" />
-                        </svg>
-                    </a>
-                    <a href="#" class="text-gray-400 hover:text-brand-cyan transition-colors" aria-label="LinkedIn">
-                        <svg class="h-6 w-6" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-                            <path fill-rule="evenodd" d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z" clip-rule="evenodd" />
-                        </svg>
-                    </a>
-                </div>
-            </div>
-
-            <div>
-                <h3 class="text-sm font-semibold text-gray-400 uppercase tracking-wider">Features</h3>
-                <ul class="mt-4 space-y-3">
-                    <li><a href="#" class="text-base hover:text-white transition-colors">Mood Tracker</a></li>
-                    <li><a href="#" class="text-base hover:text-white transition-colors">Nearby Healthcare</a></li>
-                    <li><a href="#" class="text-base hover:text-white transition-colors">Get Help</a></li>
-                </ul>
-            </div>
-
-            <div>
-                <h3 class="text-sm font-semibold text-gray-400 uppercase tracking-wider">Resources</h3>
-                <ul class="mt-4 space-y-3">
-                    <li><a href="Seasonal_Health_Tips.html" class="text-base hover:text-white transition-colors">Health Tips</a></li>
-                    <li><a href="Health_event.html" class="text-base hover:text-white transition-colors">Health Events</a></li>
-                    <li><a href="#" class="text-base hover:text-white transition-colors">Symptoms</a></li>
-                </ul>
-            </div>
-
-            <div>
-                <h3 class="text-sm font-semibold text-gray-400 uppercase tracking-wider">Company</h3>
-                <ul class="mt-4 space-y-3">
-                    <li><a href="#" class="text-base hover:text-white transition-colors">About Us</a></li>
-                    <li><a href="#" class="text-base hover:text-white transition-colors">Contact</a></li>
-                    <li><a href="#" class="text-base hover:text-white transition-colors">Privacy Policy</a></li>
-                    <li><a href="#" class="text-base hover:text-white transition-colors">Terms of Service</a></li>
-                </ul>
-            </div>
-
-        </div>
-
-        <div class="mt-12 border-t border-gray-700 pt-8">
-            <p class="text-sm text-gray-500 text-center mb-4">
-                <strong>Medical Disclaimer:</strong> The information on this site is not a substitute for professional medical advice, diagnosis, or treatment. Always seek the advice of your physician or other qualified health provider.
-            </p>
-            <p class="text-base text-gray-500 text-center">
-                &copy; 2025 MonoBol & ShunnoLogic. All rights reserved.
-            </p>
-        </div>
-    </div>
-</footer>
+    </script>
 
 </body>
 </html>

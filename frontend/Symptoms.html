@@ -6,17 +6,21 @@
     <title>MonoBol - Symptom Awareness Guide</title>
 
     <script src="https://cdn.tailwindcss.com"></script>
+    
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Hind+Siliguri:wght@400;500;600;700&display=swap" rel="stylesheet">
     
     <script>
         // Custom Tailwind configuration
         tailwind.config = {
+            // 1. ENABLE DARK MODE USING THE 'class' STRATEGY
+            darkMode: 'class', 
             theme: {
                 extend: {
+                    // 2. ADD BANGLA FONT TO THE 'sans' FONT FAMILY
                     fontFamily: {
-                        sans: ['Inter', 'sans-serif'],
+                        sans: ['Inter', 'Hind Siliguri', 'sans-serif'],
                     },
                     colors: {
                         'brand-blue': { 'light': '#00BFFF', 'DEFAULT': '#00A2E8', 'dark': '#0077B6' },
@@ -27,36 +31,97 @@
             }
         }
     </script>
-</head>
-<body class="bg-gray-50 text-gray-800">
+    
+    <style>
+        /* Styles for the AI-generated content */
+        #chat-display-area ul {
+            list-style-type: disc;
+            margin-left: 1.5rem;
+            margin-top: 0.5rem;
+            margin-bottom: 0.5rem;
+            color: #374151; /* text-gray-700 */
+        }
+        #chat-display-area p {
+            margin-bottom: 0.5rem;
+            color: #4b5563; /* text-gray-600 */
+        }
+        #chat-display-area strong {
+            font-weight: 600;
+            color: #111827; /* text-gray-900 */
+        }
+        #chat-display-area h3 {
+            font-size: 1.125rem; /* text-lg */
+            font-weight: 600;
+            margin-top: 1rem;
+            margin-bottom: 0.25rem;
+        }
 
-    <header class="w-full border-b border-gray-200 bg-white">
+        /* Dark mode styles for AI content */
+        .dark #chat-display-area ul {
+            color: #D1D5DB; /* dark:text-gray-300 */
+        }
+        .dark #chat-display-area p {
+            color: #D1D5DB; /* dark:text-gray-300 */
+        }
+        .dark #chat-display-area strong {
+            color: #F9FAFB; /* dark:text-gray-50 */
+        }
+    </style>
+
+    <script>
+        if (localStorage.getItem('theme') === 'dark' || 
+           (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+          document.documentElement.classList.add('dark');
+        } else {
+          document.documentElement.classList.remove('dark');
+        }
+    </script>
+</head>
+
+<body class="bg-gray-50 text-gray-800 dark:bg-gray-900 dark:text-gray-200">
+
+    <header class="w-full border-b border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 sticky top-0 z-50">
         <nav class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-5">
             <div class="flex justify-between items-center">
                 <div class="flex-shrink-0">
-                    <a href="../index.html" class="text-2xl font-bold text-gray-900">MonoBol</a>
+                    <a href="../index.html" class="text-2xl font-bold text-gray-900 dark:text-white" data-i18n-key="logo">MonoBol</a>
                 </div>
 
                 <div class="hidden md:flex flex-1 justify-center space-x-8">
-                    <a href="#" class="text-gray-600 hover:text-gray-900 font-medium">Mood Tracker</a>
-                    <a href="#" class="text-gray-600 hover:text-gray-900 font-medium">Nearby Healthcare</a>
-                    <a href="#" class="text-gray-600 hover:text-gray-900 font-medium">Get Help</a>
-                    <a href="Seasonal_Health_Tips.html" class="text-gray-600 hover:text-gray-900 font-medium">Health Tips</a>
-                    <a href="Symptoms.html" class="text-brand-cyan-hover font-semibold border-b-2 border-brand-cyan-hover">Symptoms</a>
-                    <a href="Health_event.html" class="text-gray-600 hover:text-gray-900 font-medium">Health Events</a>
+                    <a href="Mood_Tracker.html" class="text-gray-600 hover:text-gray-900 dark:text-gray-300 dark:hover:text-white font-medium" data-i18n-key="navMood">Mood Tracker</a>
+                    <a href="get_help.html" class="text-gray-600 hover:text-gray-900 dark:text-gray-300 dark:hover:text-white font-medium" data-i18n-key="navGetHelp">Get Help</a>
+                    <a href="Seasonal_Health_Tips.html" class="text-gray-600 hover:text-gray-900 dark:text-gray-300 dark:hover:text-white font-medium" data-i18n-key="navHealthTips">Health Tips</a>
+                    <a href="Symptoms.html" class="text-brand-cyan-hover font-semibold border-b-2 border-brand-cyan-hover" data-i18n-key="navSymptoms">Symptoms</a>
+                    <a href="Health_event.html" class="text-gray-600 hover:text-gray-900 dark:text-gray-300 dark:hover:text-white font-medium" data-i18n-key="navEvents">Health Events</a>
                 </div>
 
                 <div class="hidden md:flex items-center space-x-4">
-                    <a href="#" class="text-brand-cyan border border-brand-cyan font-medium py-2 px-5 rounded-lg hover:bg-cyan-50 transition duration-200">
+                    <button id="lang-toggle-btn" type="button" class="text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white font-medium w-10 h-10 flex items-center justify-center rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700">
+                        বাংলা
+                    </button>
+
+                    <button id="theme-toggle-btn" type="button" class="text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white w-10 h-10 flex items-center justify-center rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700">
+                        <svg id="theme-icon-sun" class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"></path></svg>
+                        <svg id="theme-icon-moon" class="h-5 w-5 hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"></path></svg>
+                    </button>
+
+                    <a href="#" class="text-brand-cyan border border-brand-cyan font-medium py-2 px-5 rounded-lg hover:bg-cyan-50 dark:hover:bg-gray-800 dark:text-cyan-400 dark:border-cyan-400" data-i18n-key="navLogin">
                         Log In
                     </a>
-                    <a href="#" class="bg-brand-cyan hover:bg-brand-cyan-hover text-white font-medium py-2 px-5 rounded-lg transition duration-200">
+                    <a href="#" class="bg-brand-cyan hover:bg-brand-cyan-hover text-white font-medium py-2 px-5 rounded-lg transition duration-200" data-i18n-key="navGetStarted">
                         Get started
                     </a>
                 </div>
 
-                <div class="md:hidden">
-                    <button type="button" id="mobile-menu-button" class="text-gray-600 hover:text-gray-900 focus:outline-none">
+                <div class="md:hidden flex items-center space-x-2">
+                    <button id="lang-toggle-btn-mobile" type="button" class="text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white font-medium w-10 h-10 flex items-center justify-center rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700">
+                        বাংলা
+                    </button>
+                    <button id="theme-toggle-btn-mobile" type="button" class="text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white w-10 h-10 flex items-center justify-center rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700">
+                        <svg id="theme-icon-sun-mobile" class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"></path></svg>
+                        <svg id="theme-icon-moon-mobile" class="h-5 w-5 hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"></path></svg>
+                    </button>
+                    <button type="button" id="mobile-menu-button" class="text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white focus:outline-none w-10 h-10 flex items-center justify-center rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700">
                         <svg class="h-6 w-6" stroke="currentColor" fill="none" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path>
                         </svg>
@@ -67,19 +132,18 @@
         
         <div id="mobile-menu-panel" class="hidden md:hidden">
             <div class="px-2 pt-2 pb-3 space-y-1 sm:px-3">
-                <a href="#" class="text-gray-600 hover:bg-gray-100 block px-3 py-2 rounded-md font-medium">Mood Tracker</a>
-                <a href="#" class="text-gray-600 hover:bg-gray-100 block px-3 py-2 rounded-md font-medium">Nearby Healthcare</a>
-                <a href="#" class="text-gray-600 hover:bg-gray-100 block px-3 py-2 rounded-md font-medium">Get Help</a>
-                <a href="Seasonal_Health_Tips.html" class="text-gray-600 hover:bg-gray-100 block px-3 py-2 rounded-md font-medium">Health Tips</a>
-                <a href="Symptoms.html" class="text-brand-cyan-hover bg-cyan-50 block px-3 py-2 rounded-md font-semibold">Symptoms</a>
-                <a href="Health_event.html" class="text-gray-600 hover:bg-gray-100 block px-3 py-2 rounded-md font-medium">Health Events</a>
+                <a href="Mood_Tracker.html" class="text-gray-600 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-700 block px-3 py-2 rounded-md font-medium" data-i18n-key="navMood">Mood Tracker</a>
+                <a href="get_help.html" class="text-gray-600 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-700 block px-3 py-2 rounded-md font-medium" data-i18n-key="navGetHelp">Get Help</a>
+                <a href="Seasonal_Health_Tips.html" class="text-gray-600 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-700 block px-3 py-2 rounded-md font-medium" data-i18n-key="navHealthTips">Health Tips</a>
+                <a href="Symptoms.html" class="text-brand-cyan-hover bg-cyan-50 dark:text-cyan-300 dark:bg-cyan-900/50 block px-3 py-2 rounded-md font-semibold" data-i18n-key="navSymptoms">Symptoms</a>
+                <a href="Health_event.html" class="text-gray-600 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-700 block px-3 py-2 rounded-md font-medium" data-i18n-key="navEvents">Health Events</a>
             </div>
-            <div class="border-t border-gray-200 pt-4 pb-3 px-2">
-                 <a href="#" class="block w-full text-left bg-brand-cyan hover:bg-brand-cyan-hover text-white font-medium py-2 px-3 rounded-lg transition duration-200">
-                    Get started
+            <div class="border-t border-gray-200 dark:border-gray-700 pt-4 pb-3 px-2">
+                 <a href="#" class="block w-full text-center bg-brand-cyan hover:bg-brand-cyan-hover text-white font-medium py-2 px-3 rounded-lg transition duration-200" data-i18n-key="navGetStarted">
+                   Get started
                 </a>
-                <a href="#" class="mt-2 block w-full text-left text-brand-cyan border border-brand-cyan font-medium py-2 px-3 rounded-lg hover:bg-cyan-50">
-                    Log In
+                <a href="#" class="mt-2 block w-full text-center text-brand-cyan border border-brand-cyan font-medium py-2 px-3 rounded-lg hover:bg-cyan-50 dark:hover:bg-gray-800 dark:text-cyan-400 dark:border-cyan-400" data-i18n-key="navLogin">
+                   Log In
                 </a>
             </div>
         </div>
@@ -89,11 +153,11 @@
     <div class="max-w-7xl mx-auto mt-8">
         <div class="bg-gradient-to-r from-cyan-700 to-cyan-500 py-12 text-white rounded-xl overflow-hidden">
             <div class="max-w-7xl mx-auto px-6 text-center">
-                <h2 class="text-3xl font-bold mb-2">Symptom Awareness Guide</h2>
-                <p class="text-lg text-white/90">
+                <h2 class="text-3xl font-bold mb-2" data-i18n-key="headerTitle">Symptom Awareness Guide</h2>
+                <p class="text-lg text-white/90" data-i18n-key="headerSubtitle">
                     Educational guidance to help you recognize concerning symptoms.
                 </p>
-                <p class="text-sm text-white/80 mt-2">
+                <p class="text-sm text-white/80 mt-2" data-i18n-key="headerDisclaimer">
                     This is NOT a diagnosis tool. Always consult a healthcare professional.
                 </p>
             </div>
@@ -103,28 +167,27 @@
 
     <main class="max-w-7xl mx-auto py-16 px-6 grid md:grid-cols-3 gap-8">
         <div class="md:col-span-2">
-            <div class="bg-white rounded-2xl border border-gray-200 p-6 shadow-sm">
-                <h3 class="text-lg font-semibold text-gray-900 flex items-center mb-1">
+            <div class="bg-white dark:bg-gray-800 rounded-2xl border border-gray-200 dark:border-gray-700 p-6 shadow-sm">
+                <h3 class="text-lg font-semibold text-gray-900 dark:text-white flex items-center mb-1" data-i18n-key="chatTitle">
                     Talk About Your Symptoms
                 </h3>
-                <p class="text-gray-600 text-sm mb-4">
+                <p class="text-gray-600 dark:text-gray-300 text-sm mb-4" data-i18n-key="chatSubtitle">
                     Share what you’re experiencing, and I’ll help you understand when to seek care.
                 </p>
 
-                <div class="border border-gray-200 rounded-xl bg-gray-50 p-6 text-center min-h-[260px] flex flex-col justify-center items-center">
-                    <h4 class="font-medium text-gray-700">Welcome! I’m here to help.</h4>
-                    <p class="text-gray-500 text-sm mt-1 max-w-md">
-                        Tell me about any symptoms you’re concerned about, and I’ll provide educational guidance.
-                    </p>
-                </div>
+                <div id="chat-display-area" class="border border-gray-200 dark:border-gray-600 rounded-xl bg-gray-50 dark:bg-gray-900 p-6 text-left min-h-[260px]">
+                    </div>
 
-                <div class="mt-4 flex border border-gray-200 rounded-lg overflow-hidden focus-within:ring-2 focus-within:ring-brand-cyan">
+                <div class="mt-4 flex border border-gray-200 dark:border-gray-600 rounded-lg overflow-hidden focus-within:ring-2 focus-within:ring-brand-cyan">
                     <input
+                        id="symptom-input"
                         type="text"
                         placeholder="Describe your symptoms..."
-                        class="flex-grow px-4 py-2.5 focus:outline-none text-gray-700 text-sm"
+                        data-i18n-key="chatPlaceholder"
+                        class="flex-grow px-4 py-2.5 focus:outline-none text-gray-700 dark:text-gray-200 bg-white dark:bg-gray-800 text-sm"
                     />
                     <button
+                        id="symptom-submit-btn"
                         class="bg-brand-cyan text-white px-5 py-2 hover:bg-brand-cyan-hover flex items-center justify-center transition-colors"
                     >
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -137,45 +200,45 @@
 
         <div class="flex flex-col space-y-6">
             
-            <div class="bg-red-50 border border-red-200 rounded-2xl p-5 hover:shadow-lg hover:-translate-y-1 transition-all duration-300">
-                <h4 class="text-red-700 font-semibold mb-2">
+            <div class="bg-red-50 dark:bg-red-900/40 border border-red-200 dark:border-red-800/60 rounded-2xl p-5 hover:shadow-lg hover:-translate-y-1 transition-all duration-300">
+                <h4 class="text-red-700 dark:text-red-300 font-semibold mb-2" data-i18n-key="helpTitle">
                     ⚠️ Seek Immediate Help If:
                 </h4>
-                <ul class="list-disc pl-5 text-sm text-gray-700 space-y-1">
-                    <li>High fever lasting 3+ days</li>
-                    <li>Blood in stool or vomit</li>
-                    <li>Severe dehydration (dry mouth, dizziness)</li>
-                    <li>Difficulty breathing or chest pain</li>
-                    <li>Severe pain that persists</li>
-                    <li>Confusion or altered consciousness</li>
+                <ul class="list-disc pl-5 text-sm text-gray-700 dark:text-gray-300 space-y-1">
+                    <li data-i18n-key="help1">High fever lasting 3+ days</li>
+                    <li data-i18n-key="help2">Blood in stool or vomit</li>
+                    <li data-i18n-key="help3">Severe dehydration (dry mouth, dizziness)</li>
+                    <li data-i18n-key="help4">Difficulty breathing or chest pain</li>
+                    <li data-i18n-key="help5">Severe pain that persists</li>
+                    <li data-i18n-key="help6">Confusion or altered consciousness</li>
                 </ul>
             </div>
 
-            <div class="bg-cyan-50 border border-cyan-200 rounded-2xl p-5 hover:shadow-lg hover:-translate-y-1 transition-all duration-300">
-                <h4 class="text-brand-cyan-hover font-semibold mb-2">
+            <div class="bg-cyan-50 dark:bg-cyan-900/40 border border-cyan-200 dark:border-cyan-800/60 rounded-2xl p-5 hover:shadow-lg hover:-translate-y-1 transition-all duration-300">
+                <h4 class="text-brand-cyan-hover dark:text-cyan-300 font-semibold mb-2" data-i18n-key="reminderTitle">
                     💡 Important Reminders
                 </h4>
-                <p class="text-sm text-gray-700 mb-2">
+                <p class="text-sm text-gray-700 dark:text-gray-300 mb-2" data-i18n-key="reminder1">
                     This is <strong>NOT</strong> a diagnosis tool. Always consult a healthcare professional for proper examination.
                 </p>
-                <p class="text-sm text-gray-700 mb-1">
+                <p class="text-sm text-gray-700 dark:text-gray-300 mb-1" data-i18n-key="reminder2">
                     When in doubt: It's always better to visit a healthcare centre and be safe.
                 </p>
-                <p class="text-sm text-gray-700">
+                <p class="text-sm text-gray-700 dark:text-gray-300" data-i18n-key="reminder3">
                     Your health matters — seeking medical care is not a weakness.
                 </p>
             </div>
             
-            <div class="bg-white border border-gray-200 rounded-2xl p-5 hover:shadow-lg hover:-translate-y-1 transition-all duration-300">
-                <h4 class="font-semibold text-gray-800 mb-3"> Common Questions</h4>
+            <div class="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-2xl p-5 hover:shadow-lg hover:-translate-y-1 transition-all duration-300">
+                <h4 class="font-semibold text-gray-800 dark:text-white mb-3" data-i18n-key="qTitle"> Common Questions</h4>
                 <div class="flex flex-col space-y-2 text-sm">
-                    <button class="text-left px-3 py-2 bg-gray-50 hover:bg-gray-100 rounded-lg text-gray-700 transition-colors">
+                    <button class="text-left px-3 py-2 bg-gray-50 hover:bg-gray-100 dark:bg-gray-700 dark:hover:bg-gray-600 rounded-lg text-gray-700 dark:text-gray-200 transition-colors" data-i18n-key="qBtn1">
                         I have a fever for 3 days
                     </button>
-                    <button class="text-left px-3 py-2 bg-gray-50 hover:bg-gray-100 rounded-lg text-gray-700 transition-colors">
+                    <button class="text-left px-3 py-2 bg-gray-50 hover:bg-gray-100 dark:bg-gray-700 dark:hover:bg-gray-600 rounded-lg text-gray-700 dark:text-gray-200 transition-colors" data-i18n-key="qBtn2">
                         My child has diarrhea and vomiting
                     </button>
-                    <button class="text-left px-3 py-2 bg-gray-50 hover:bg-gray-100 rounded-lg text-gray-700 transition-colors">
+                    <button class="text-left px-3 py-2 bg-gray-50 hover:bg-gray-100 dark:bg-gray-700 dark:hover:bg-gray-600 rounded-lg text-gray-700 dark:text-gray-200 transition-colors" data-i18n-key="qBtn3">
                         I feel chest pain
                     </button>
                 </div>
@@ -188,8 +251,8 @@
             <div class="grid grid-cols-1 md:grid-cols-4 gap-12">
                 
                 <div class="md:col-span-1">
-                    <a href="../index.html" class="text-2xl font-bold text-white">MonoBol</a>
-                    <p class="text-gray-400 text-sm mt-3">
+                    <a href="../index.html" class="text-2xl font-bold text-white" data-i18n-key="logo">MonoBol</a>
+                    <p class="text-gray-400 text-sm mt-3" data-i18n-key="footerSlogan">
                         Delivering safe and compassionate care for community well-being.
                     </p>
                     <div class="flex space-x-5 mt-6">
@@ -204,39 +267,392 @@
                         </a>
                     </div>
                 </div>
+
                 <div>
-                    <h3 class="text-sm font-semibold text-gray-400 uppercase tracking-wider">Features</h3>
+                    <h3 class="text-sm font-semibold text-gray-400 uppercase tracking-wider" data-i18n-key="footerFeatures">Features</h3>
                     <ul class="mt-4 space-y-3">
-                        <li><a href="#" class="text-base hover:text-white transition-colors">Mood Tracker</a></li>
-                        <li><a href="#" class="text-base hover:text-white transition-colors">Nearby Healthcare</a></li>
-                        <li><a href="#" class="text-base hover:text-white transition-colors">Get Help</a></li>
+                        <li><a href="#" class="text-base hover:text-white transition-colors" data-i18n-key="navMood">Mood Tracker</a></li>
+                        <li><a href="#" class="text-base hover:text-white transition-colors" data-i18n-key="footerNearby">Nearby Healthcare</a></li>
+                        <li><a href="#" class="text-base hover:text-white transition-colors" data-i18n-key="navGetHelp">Get Help</a></li>
                     </ul>
                 </div>
+
                 <div>
-                    <h3 class="text-sm font-semibold text-gray-400 uppercase tracking-wider">Resources</h3>
+                    <h3 class="text-sm font-semibold text-gray-400 uppercase tracking-wider" data-i18n-key="footerResources">Resources</h3>
                     <ul class="mt-4 space-y-3">
-                        <li><a href="Seasonal_Health_Tips.html" class="text-base hover:text-white transition-colors">Health Tips</a></li>
-                        <li><a href="Health_event.html" class="text-base hover:text-white transition-colors">Health Events</a></li>
-                        <li><a href="#" class="text-base hover:text-white transition-colors">Symptoms</a></li>
+                        <li><a href="Seasonal_Health_Tips.html" class="text-base hover:text-white transition-colors" data-i18n-key="navHealthTips">Health Tips</a></li>
+                        <li><a href="Health_event.html" class="text-base hover:text-white transition-colors" data-i18n-key="navEvents">Health Events</a></li>
+                        <li><a href="#" class="text-base hover:text-white transition-colors" data-i18n-key="navSymptoms">Symptoms</a></li>
                     </ul>
                 </div>
+
                 <div>
-                    <h3 class="text-sm font-semibold text-gray-400 uppercase tracking-wider">Company</h3>
+                    <h3 class="text-sm font-semibold text-gray-400 uppercase tracking-wider" data-i18n-key="footerCompany">Company</h3>
                     <ul class="mt-4 space-y-3">
-                        <li><a href="#" class="text-base hover:text-white transition-colors">About Us</a></li>
-                        <li><a href="#" class="text-base hover:text-white transition-colors">Contact</a></li>
-                        <li><a href="#" class="text-base hover:text-white transition-colors">Privacy Policy</a></li>
-                        <li><a href="#" class="text-base hover:text-white transition-colors">Terms of Service</a></li>
+                        <li><a href="#" class="text-base hover:text-white transition-colors" data-i18n-key="footerAbout">About Us</a></li>
+                        <li><a href="#" class="text-base hover:text-white transition-colors" data-i18n-key="footerContact">Contact</a></li>
+                        <li><a href="#" class="text-base hover:text-white transition-colors" data-i18n-key="footerPrivacy">Privacy Policy</a></li>
+                        <li><a href="#" class="text-base hover:text-white transition-colors" data-i18n-key="footerTerms">Terms of Service</a></li>
                     </ul>
                 </div>
+
             </div>
+
             <div class="mt-12 border-t border-gray-700 pt-8">
                 <p class="text-sm text-gray-500 text-center mb-4">
-                    <strong>Medical Disclaimer:</strong> The information on this site is not a substitute for professional medical advice, diagnosis, or treatment. Always seek the advice of your physician or other qualified health provider.
-                </Your health matters — seeking medical care is not a weakness.
-            </p>
+                    <strong data-i18n-key="footerDisclaimerTitle">Medical Disclaimer:</strong> <span data-i18n-key="footerDisclaimerText">The information on this site is not a substitute for professional medical advice, diagnosis, or treatment. Always seek the advice of your physician or other qualified health provider.</span>
+                </p>
+                <p class="text-base text-gray-500 text-center" data-i18n-key="footerCopyright">
+                    &copy; 2025 MonoBol & ShunnoLogic. All rights reserved.
+                </p>
             </div>
         </div>
-    </main>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+
+    <script>
+    document.addEventListener('DOMContentLoaded', () => {
+
+        // --- 1. TRANSLATION (i18n) LOGIC & DICTIONARY ---
+
+        const translations = {
+            'en': {
+                // General
+                'logo': 'MonoBol',
+                'langToggle': 'বাংলা',
+                // Nav
+                'navMood': 'Mood Tracker',
+                'navGetHelp': 'Get Help',
+                'navHealthTips': 'Health Tips',
+                'navSymptoms': 'Symptoms',
+                'navEvents': 'Health Events',
+                'navLogin': 'Log In',
+                'navGetStarted': 'Get started',
+                // Page Header
+                'headerTitle': 'Symptom Awareness Guide',
+                'headerSubtitle': 'Educational guidance to help you recognize concerning symptoms.',
+                'headerDisclaimer': 'This is NOT a diagnosis tool. Always consult a healthcare professional.',
+                // Chat Area
+                'chatTitle': 'Talk About Your Symptoms',
+                'chatSubtitle': 'Share what you’re experiencing, and I’ll help you understand when to seek care.',
+                'chatPlaceholder': 'Describe your symptoms...',
+                'welcomeTitle': 'Welcome! I’m here to help.',
+                'welcomeText': 'Tell me about any symptoms you’re concerned about, and I’ll provide educational guidance.',
+                'loadingText': 'Generating guidance...',
+                'errorText': "Sorry, I couldn't get a response. Please check your internet connection and API key.",
+                // Side Panel: Help
+                'helpTitle': '⚠️ Seek Immediate Help If:',
+                'help1': 'High fever lasting 3+ days',
+                'help2': 'Blood in stool or vomit',
+                'help3': 'Severe dehydration (dry mouth, dizziness)',
+                'help4': 'Difficulty breathing or chest pain',
+                'help5': 'Severe pain that persists',
+                'help6': 'Confusion or altered consciousness',
+                // Side Panel: Reminders
+                'reminderTitle': '💡 Important Reminders',
+                'reminder1': 'This is <strong>NOT</strong> a diagnosis tool. Always consult a healthcare professional for proper examination.',
+                'reminder2': "When in doubt: It's always better to visit a healthcare centre and be safe.",
+                'reminder3': 'Your health matters — seeking medical care is not a weakness.',
+                // Side Panel: Common Questions
+                'qTitle': 'Common Questions',
+                'qBtn1': 'I have a fever for 3 days',
+                'qBtn2': 'My child has diarrhea and vomiting',
+                'qBtn3': 'I feel chest pain',
+                // Footer
+                'footerSlogan': 'Delivering safe and compassionate care for community well-being.',
+                'footerFeatures': 'Features',
+                'footerNearby': 'Nearby Healthcare',
+                'footerResources': 'Resources',
+                'footerCompany': 'Company',
+                'footerAbout': 'About Us',
+                'footerContact': 'Contact',
+                'footerPrivacy': 'Privacy Policy',
+                'footerTerms': 'Terms of Service',
+                'footerDisclaimerTitle': 'Medical Disclaimer:',
+                'footerDisclaimerText': 'The information on this site is not a substitute for professional medical advice, diagnosis, or treatment. Always seek the advice of your physician or other qualified health provider.',
+                'footerCopyright': '© 2025 MonoBol & ShunnoLogic. All rights reserved.',
+                // System Prompt for AI (English)
+                'systemInstruction': `
+                    You are 'MonoBol', a helpful and compassionate AI guide for symptom awareness. 
+                    You are NOT a doctor and must NEVER provide a diagnosis or medical advice.
+                    Your primary goal is to provide educational guidance about symptoms in simple terms 
+                    and clearly state when it is critical to see a healthcare professional.
+                    
+                    When responding:
+                    1.  Acknowledge the user's concern.
+                    2.  Provide general, educational information about the symptoms.
+                    3.  Use lists or bullet points to make it easy to read.
+                    4.  Based on the severity, provide a clear recommendation (e.g., "It's always best to see a doctor for this," "This sounds very serious, and you should seek immediate medical help," or "This is often manageable at home, but see a doctor if it gets worse.").
+                    5.  **CRITICAL:** Always end with a clear disclaimer: "Remember, I am an AI guide, not a medical professional. Please consult a doctor for a proper diagnosis."
+                    6.  Since the user is in Bangladesh, any emergency numbers should be for Bangladesh (e.g., 999).
+                `
+            },
+            'বাংলা': {
+                // General
+                'logo': 'মনবল',
+                'langToggle': 'EN',
+                // Nav
+                'navMood': 'মুড ট্র্যাকার',
+                'navGetHelp': 'সাহায্য নিন',
+                'navHealthTips': 'স্বাস্থ্য টিপস',
+                'navSymptoms': 'লক্ষণ',
+                'navEvents': 'স্বাস্থ্য ইভেন্ট',
+                'navLogin': 'লগ ইন',
+                'navGetStarted': 'শুরু করুন',
+                // Page Header
+                'headerTitle': 'লক্ষণ সচেতনতা গাইড',
+                'headerSubtitle': 'আপনাকে সম্পর্কিত লক্ষণগুলি চিনতে সাহায্য করার জন্য শিক্ষামূলক নির্দেশিকা।',
+                'headerDisclaimer': 'এটি কোনো রোগ নির্ণয়ের টুল নয়। সর্বদা একজন স্বাস্থ্যসেবা পেশাদারের সাথে পরামর্শ করুন।',
+                // Chat Area
+                'chatTitle': 'আপনার লক্ষণ সম্পর্কে কথা বলুন',
+                'chatSubtitle': 'আপনি কী অনুভব করছেন তা শেয়ার করুন, এবং আমি আপনাকে বুঝতে সাহায্য করব কখন যত্ন নেওয়া উচিত।',
+                'chatPlaceholder': 'আপনার লক্ষণ বর্ণনা করুন...',
+                'welcomeTitle': 'স্বাগতম! আমি সাহায্য করতে এখানে আছি।',
+                'welcomeText': 'আপনি যে কোনো লক্ষণ নিয়ে উদ্বিগ্ন তা আমাকে বলুন, এবং আমি শিক্ষামূলক নির্দেশিকা প্রদান করব।',
+                'loadingText': 'নির্দেশিকা তৈরি করা হচ্ছে...',
+                'errorText': 'দুঃখিত, আমি একটি প্রতিক্রিয়া পেতে পারিনি। অনুগ্রহ করে আপনার ইন্টারনেট সংযোগ এবং API কী পরীক্ষা করুন।',
+                // Side Panel: Help
+                'helpTitle': '⚠️ অবিলম্বে সাহায্য নিন যদি:',
+                'help1': '৩+ দিন ধরে উচ্চ জ্বর',
+                'help2': 'মল বা বমিতে রক্ত',
+                'help3': 'ডিহাইড্রেশন (মুখ শুকিয়ে যাওয়া, মাথা ঘোরা)',
+                'help4': 'শ্বাস নিতে অসুবিধা বা বুকে ব্যথা',
+                'help5': 'তীব্র ব্যথা যা দীর্ঘস্থায়ী হয়',
+                'help6': 'বিভ্রান্তি বা চেতনা হ্রাস',
+                // Side Panel: Reminders
+                'reminderTitle': '💡 গুরুত্বপূর্ণ অনুস্মারক',
+                'reminder1': 'এটি কোনো রোগ নির্ণয়ের টুল <strong>নয়</strong>। সঠিক পরীক্ষার জন্য সর্বদা একজন স্বাস্থ্যসেবা পেশাদারের সাথে পরামর্শ করুন।',
+                'reminder2': 'সন্দেহ হলে: একটি স্বাস্থ্য কেন্দ্রে যাওয়া এবং নিরাপদ থাকা সর্বদা ভাল।',
+                'reminder3': 'আপনার স্বাস্থ্য গুরুত্বপূর্ণ — চিকিৎসা সেবা নেওয়া দুর্বলতা নয়।',
+                // Side Panel: Common Questions
+                'qTitle': 'সাধারণ প্রশ্ন',
+                'qBtn1': 'আমার ৩ দিন ধরে জ্বর',
+                'qBtn2': 'আমার বাচ্চার ডায়রিয়া এবং বমি হচ্ছে',
+                'qBtn3': 'আমার বুকে ব্যথা হচ্ছে',
+                // Footer
+                'footerSlogan': 'সম্প্রদায়ের মঙ্গলের জন্য নিরাপদ এবং সহানুভূতিশীল যত্ন প্রদান করা।',
+                'footerFeatures': 'বৈশিষ্ট্য',
+                'footerNearby': 'কাছাকাছি স্বাস্থ্যসেবা',
+                'footerResources': 'সম্পদ',
+                'footerCompany': 'প্রতিষ্ঠান',
+                'footerAbout': 'আমাদের সম্পর্কে',
+                'footerContact': 'যোগাযোগ',
+                'footerPrivacy': 'গোপনীয়তা নীতি',
+                'footerTerms': 'পরিষেবার শর্তাবলী',
+                'footerDisclaimerTitle': 'মেডিকেল ডিসক্লেইমার:',
+                'footerDisclaimerText': 'এই সাইটের তথ্য পেশাদার চিকিৎসা পরামর্শ, রোগ নির্ণয় বা চিকিৎসার বিকল্প নয়। সর্বদা আপনার চিকিত্সক বা অন্যান্য যোগ্য স্বাস্থ্য প্রদানকারীর পরামর্শ নিন।',
+                'footerCopyright': '© ২০২৫ মনবল ও শূন্যলজিক। সর্বস্বত্ব সংরক্ষিত।',
+                // System Prompt for AI (Bangla)
+                'systemInstruction': `
+                    আপনি 'মনবল', লক্ষণ সচেতনতার জন্য একজন সহায়ক এবং সহানুভূতিশীল এআই গাইড।
+                    আপনি কোনো ডাক্তার নন এবং অবশ্যই কোনো রোগ নির্ণয় বা চিকিৎসা পরামর্শ দেবেন না।
+                    আপনার প্রাথমিক লক্ষ্য হলো লক্ষণগুলি সম্পর্কে সহজ ভাষায় শিক্ষামূলক নির্দেশিকা প্রদান করা এবং 
+                    কখন স্বাস্থ্যসেবা পেশাদারের সাথে দেখা করা জরুরি তা স্পষ্টভাবে উল্লেখ করা।
+                    
+                    প্রতিক্রিয়া দেওয়ার সময়:
+                    1.  ব্যবহারকারীর উদ্বেগকে স্বীকার করুন।
+                    2.  লক্ষণগুলি সম্পর্কে সাধারণ, শিক্ষামূলক তথ্য প্রদান করুন।
+                    3.  সহজে পড়ার জন্য তালিকা বা বুলেট পয়েন্ট ব্যবহার করুন।
+                    4.  তীব্রতার উপর ভিত্তি করে একটি স্পষ্ট সুপারিশ প্রদান করুন (যেমন, "এর জন্য সর্বদা একজন ডাক্তারের সাথে দেখা করা ভাল," "এটি খুব গুরুতর শোনাচ্ছে, এবং আপনার অবিলম্বে চিকিৎসা সহায়তা নেওয়া উচিত," বা "এটি প্রায়শই বাড়িতে পরিচালনাযোগ্য, তবে অবস্থা আরও খারাপ হলে ডাক্তার দেখান।")।
+                    5.  **গুরুত্বপূর্ণ:** সর্বদা একটি স্পষ্ট দাবিত্যাগ দিয়ে শেষ করুন: "মনে রাখবেন, আমি একজন এআই গাইড, কোনো চিকিৎসা পেশাদার নই। সঠিক রোগ নির্ণয়ের জন্য অনুগ্রহ করে একজন ডাক্তারের সাথে পরামর্শ করুন।"
+                    6.  যেহেতু ব্যবহারকারী বাংলাদেশে আছেন, তাই যেকোনো জরুরি নম্বর বাংলাদেশের জন্য হওয়া উচিত (যেমন, ৯৯৯)।
+                `
+            }
+        };
+
+        const langToggleBtn = document.getElementById('lang-toggle-btn');
+        const langToggleBtnMobile = document.getElementById('lang-toggle-btn-mobile');
+        const displayArea = document.getElementById("chat-display-area");
+
+        function setLanguage(lang) {
+            document.documentElement.lang = lang;
+            localStorage.setItem('language', lang);
+
+            const toggleText = translations[lang]['langToggle'] || (lang === 'en' ? 'বাংলা' : 'EN');
+            langToggleBtn.textContent = toggleText;
+            langToggleBtnMobile.textContent = toggleText;
+
+            document.querySelectorAll('[data-i18n-key]').forEach(element => {
+                const key = element.getAttribute('data-i18n-key');
+                const translation = translations[lang][key];
+                
+                if (translation) {
+                    if (key === 'chatPlaceholder') {
+                        element.placeholder = translation;
+                    } else if (key === 'reminder1') {
+                        // Use innerHTML for tags like <strong>
+                        element.innerHTML = translation;
+                    } else if (element.hasAttribute('alt')) {
+                        element.alt = translation;
+                    } else {
+                        element.innerText = translation;
+                    }
+                }
+            });
+
+            // Set the initial welcome text in the chat box
+            // Only if it hasn't been replaced by an AI response yet
+            if (displayArea.querySelector('h4')) {
+                displayArea.innerHTML = `
+                    <h4 class="font-medium text-gray-700 dark:text-gray-200" data-i18n-key="welcomeTitle">${translations[lang]['welcomeTitle']}</h4>
+                    <p class="text-gray-500 dark:text-gray-400 text-sm mt-1 max-w-md" data-i18n-key="welcomeText">
+                        ${translations[lang]['welcomeText']}
+                    </p>
+                `;
+            }
+        }
+
+        function toggleLanguage() {
+            const currentLang = localStorage.getItem('language') || 'en';
+            const newLang = currentLang === 'en' ? 'বাংলা' : 'en';
+            setLanguage(newLang);
+        }
+
+        langToggleBtn.addEventListener('click', toggleLanguage);
+        langToggleBtnMobile.addEventListener('click', toggleLanguage);
+
+        // --- 2. THEME (Dark/Light Mode) LOGIC ---
+
+        const themeToggleBtn = document.getElementById('theme-toggle-btn');
+        const themeToggleBtnMobile = document.getElementById('theme-toggle-btn-mobile');
+        const sunIcons = [document.getElementById('theme-icon-sun'), document.getElementById('theme-icon-sun-mobile')];
+        const moonIcons = [document.getElementById('theme-icon-moon'), document.getElementById('theme-icon-moon-mobile')];
+
+        function updateIcons(theme) {
+            if (theme === 'dark') {
+                sunIcons.forEach(icon => icon.classList.add('hidden'));
+                moonIcons.forEach(icon => icon.classList.remove('hidden'));
+            } else {
+                sunIcons.forEach(icon => icon.classList.remove('hidden'));
+                moonIcons.forEach(icon => icon.classList.add('hidden'));
+            }
+        }
+
+        function toggleTheme() {
+            const currentTheme = document.documentElement.classList.contains('dark') ? 'dark' : 'light';
+            const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+
+            if (newTheme === 'dark') {
+                document.documentElement.classList.add('dark');
+            } else {
+                document.documentElement.classList.remove('dark');
+            }
+            localStorage.setItem('theme', newTheme);
+            updateIcons(newTheme);
+        }
+
+        themeToggleBtn.addEventListener('click', toggleTheme);
+        themeToggleBtnMobile.addEventListener('click', toggleTheme);
+
+        // --- 3. MOBILE MENU LOGIC ---
+
+        const mobileMenuButton = document.getElementById('mobile-menu-button');
+        const mobileMenuPanel = document.getElementById('mobile-menu-panel');
+
+        if (mobileMenuButton) {
+            mobileMenuButton.addEventListener('click', () => {
+                mobileMenuPanel.classList.toggle('hidden');
+            });
+        }
+
+        // --- 4. GEMINI API & CHAT LOGIC ---
+
+        // Get HTML Elements for chat
+        const input = document.getElementById("symptom-input");
+        const submitBtn = document.getElementById("symptom-submit-btn");
+
+        // Dynamically import the GoogleGenerativeAI module
+        import('https://esm.run/@google/generative-ai')
+            .then((module) => {
+                // This code runs *after* the module is loaded
+                
+                const { GoogleGenerativeAI } = module;
+
+                // ⛔️ WARNING: Safe for local offline file. NEVER put this on a public website.
+                const API_KEY = "AIzaSyA4etc1KLuM-YlsfTm5Os693Lq8KRsMOFU"; 
+
+                // Initialize the Gemini Model (using 'gemini-pro' for stability)
+                const genAI = new GoogleGenerativeAI(API_KEY);
+                const model = genAI.getGenerativeModel({ model: "gemini-2.5-flash" });
+
+                // Main Function to Call the API
+                async function getGuidance() {
+                    const userPrompt = input.value;
+                    if (!userPrompt) return; // Don't run if input is empty
+
+                    const currentLang = localStorage.getItem('language') || 'en';
+                    
+                    // Show loading message (translated)
+                    displayArea.innerHTML = `<p class="text-gray-600 dark:text-gray-300" data-i18n-key="loadingText">${translations[currentLang]['loadingText']}</p>`;
+                    submitBtn.disabled = true;
+                    submitBtn.classList.add('opacity-50');
+
+                    try {
+                        // Get the system instruction in the correct language
+                        const systemInstruction = translations[currentLang]['systemInstruction'];
+                        const fullPrompt = systemInstruction + "\n\nSymptom described: " + userPrompt;
+
+                        // Call the API
+                        const result = await model.generateContent(fullPrompt);
+                        const response = result.response;
+                        const text = response.text();
+
+                        // Convert the AI's Markdown response to styled HTML
+                        displayArea.innerHTML = marked.parse(text);
+                        
+                        // Clear the input field
+                        input.value = "";
+
+                    } catch (error) {
+                        console.error("Error fetching data:", error);
+                        // Show error message (translated)
+                        displayArea.innerHTML = `<p class="text-red-500" data-i18n-key="errorText">${translations[currentLang]['errorText']}</p>`;
+                    }
+
+                    // Re-enable the button
+                    submitBtn.disabled = false;
+                    submitBtn.classList.remove('opacity-50');
+                }
+
+                // Attach Event Listeners for chat
+                submitBtn.addEventListener("click", getGuidance);
+                
+                input.addEventListener("keypress", (event) => {
+                    if (event.key === "Enter") {
+                        getGuidance();
+                    }
+                });
+
+                // Make "Common Questions" buttons work
+                const quickPromptButtons = document.querySelectorAll("[data-i18n-key^='qBtn']");
+                quickPromptButtons.forEach(button => {
+                    button.addEventListener("click", () => {
+                        // Get the *translated* text from the button itself
+                        input.value = button.textContent.trim();
+                        input.focus(); // Put the cursor in the input box
+                    });
+                });
+
+            })
+            .catch(err => {
+                console.error("Failed to load Gemini module:", err);
+                displayArea.innerHTML = `<p class="text-red-500">Error loading AI components. Please refresh the page.</p>`;
+            });
+
+
+        // --- 5. INITIAL PAGE LOAD ---
+
+        // Set initial theme icons
+        const initialTheme = localStorage.getItem('theme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+        updateIcons(initialTheme);
+
+        // Set initial language (this will also set the welcome text)
+        const initialLang = localStorage.getItem('language') || 'en';
+        setLanguage(initialLang);
+        
+    });
+    </script>
+
 </body>
 </html>

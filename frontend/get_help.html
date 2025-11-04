@@ -1,0 +1,513 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MonoBol - Seasonal Health Tips</title>
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Hind+Siliguri:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        /* Apply font stack (Inter for English, Hind Siliguri for Bangla) */
+        body {
+            font-family: 'Inter', 'Hind Siliguri', sans-serif;
+        }
+    </style>
+    
+    <script>
+        // Custom Tailwind configuration
+        tailwind.config = {
+            // 1. ENABLE DARK MODE USING THE 'class' STRATEGY
+            darkMode: 'class', 
+            theme: {
+                extend: {
+                    // 2. ADD BANGLA FONT TO THE 'sans' FONT FAMILY
+                    fontFamily: {
+                        sans: ['Inter', 'Hind Siliguri', 'sans-serif'],
+                    },
+                    colors: {
+                        'brand-blue': {
+                            'light': '#00BFFF',
+                            'DEFAULT': '#00A2E8',
+                            'dark': '#0077B6'
+                        },
+                        'brand-cyan': '#06b6d4',
+                        'brand-cyan-hover': '#0891b2'
+                    }
+                }
+            }
+        }
+    </script>
+
+    <script>
+        if (localStorage.getItem('theme') === 'dark' || 
+           (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+          document.documentElement.classList.add('dark');
+        } else {
+          document.documentElement.classList.remove('dark');
+        }
+    </script>
+</head>
+
+<body class="bg-gray-50 text-gray-800 dark:bg-gray-900 dark:text-gray-200">
+
+    <header class="w-full border-b border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 sticky top-0 z-50">
+        <nav class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-5">
+            <div class="flex justify-between items-center">
+                <div class="flex-shrink-0">
+                    <a href="../index.html" class="text-2xl font-bold text-gray-900 dark:text-white" data-i18n-key="logo">MonoBol</a>
+                </div>
+
+                <div class="hidden md:flex flex-1 justify-center space-x-8">
+                    <a href="Mood_Tracker.html" class="text-gray-600 hover:text-gray-900 dark:text-gray-300 dark:hover:text-white font-medium" data-i18n-key="navMood">Mood Tracker</a>
+                    <a href="get_help.html" class="text-brand-cyan-hover font-semibold border-b-2 border-brand-cyan-hover" data-i18n-key="navGetHelp">Get Help</a>
+                    <a href="Seasonal_Health_Tips.html" class="text-gray-600 hover:text-gray-900 dark:text-gray-300 dark:hover:text-white font-medium">Health Tips</a>
+                    <a href="Symptoms.html" class="text-gray-600 hover:text-gray-900 dark:text-gray-300 dark:hover:text-white font-medium" data-i18n-key="navSymptoms">Symptoms</a>
+                    <a href="Health_event.html" class="text-gray-600 hover:text-gray-900 dark:text-gray-300 dark:hover:text-white font-medium" data-i18n-key="navEvents">Health Events</a>
+                </div>
+
+                <div class="hidden md:flex items-center space-x-4">
+                    <button id="lang-toggle-btn" type="button" class="text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white font-medium w-10 h-10 flex items-center justify-center rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700">
+                        বাংলা
+                    </button>
+
+                    <button id="theme-toggle-btn" type="button" class="text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white w-10 h-10 flex items-center justify-center rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700">
+                        <svg id="theme-icon-sun" class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"></path></svg>
+                        <svg id="theme-icon-moon" class="h-5 w-5 hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"></path></svg>
+                    </button>
+
+                    <a href="#" class="text-gray-600 hover:text-gray-900 dark:text-gray-300 dark:hover:text-white font-medium" data-i18n-key="navLogin">Log In</a>
+                    <a href="#" class="bg-brand-cyan hover:bg-brand-cyan-hover text-white font-medium py-2 px-5 rounded-lg transition duration-200" data-i18n-key="navGetStarted">
+                        Get started
+                    </a>
+                </div>
+                
+                <div class="md:hidden flex items-center space-x-2">
+                    <button id="lang-toggle-btn-mobile" type="button" class="text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white font-medium w-10 h-10 flex items-center justify-center rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700">
+                        বাংলা
+                    </button>
+                    <button id="theme-toggle-btn-mobile" type="button" class="text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white w-10 h-10 flex items-center justify-center rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700">
+                        <svg id="theme-icon-sun-mobile" class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"></path></svg>
+                        <svg id="theme-icon-moon-mobile" class="h-5 w-5 hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"></path></svg>
+                    </button>
+                    <button type="button" id="mobile-menu-button" class="text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white focus:outline-none w-10 h-10 flex items-center justify-center rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700">
+                        <svg class="h-6 w-6" stroke="currentColor" fill="none" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </nav>
+        
+        <div id="mobile-menu-panel" class="hidden md:hidden">
+            <div class="px-2 pt-2 pb-3 space-y-1 sm:px-3">
+                <a href="Mood_Tracker.html" class="text-gray-600 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-700 block px-3 py-2 rounded-md font-medium" data-i18n-key="navMood">Mood Tracker</a>
+                <a href="get_help.html"class="text-brand-cyan-hover font-semibold border-b-2 border-brand-cyan-hover" data-i18n-key="navGetHelp">Get Help</a>
+                <a href="Seasonal_Health_Tips.html" class="text-gray-600 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-700 block px-3 py-2 rounded-md font-medium"  data-i18n-key="navHealthTips">Health Tips</a>
+                <a href="Symptoms.html" class="text-gray-600 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-700 block px-3 py-2 rounded-md font-medium" data-i18n-key="navSymptoms">Symptoms</a>
+                <a href="Health_event.html" class="text-gray-600 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-700 block px-3 py-2 rounded-md font-medium" data-i18n-key="navEvents">Health Events</a>
+            </div>
+            <div class="border-t border-gray-200 dark:border-gray-700 pt-4 pb-3 px-2">
+                 <a href="#" class="block w-full text-center bg-brand-cyan hover:bg-brand-cyan-hover text-white font-medium py-2 px-3 rounded-lg transition duration-200" data-i18n-key="navGetStarted">
+                   Get started
+                </a>
+                <a href="#" class="mt-2 block w-full text-center text-gray-600 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-700 font-medium py-2 px-3 rounded-lg" data-i18n-key="navLogin">
+                   Log In
+                </a>
+            </div>
+        </div>
+    </header>
+
+            <!-- Header -->
+        <header class="p-4 border-b border-gray-200 bg-blue-600 rounded-t-xl text-white">
+            <h1 class="text-2xl font-bold text-center">স্বাস্থ্য পরামর্শক এআই (Voice Chat)</h1>
+        </header>
+
+        <!-- Disclaimer -->
+        <div class="p-3 bg-yellow-100 text-yellow-800 text-xs text-center border-b">
+            <p><strong>গুরুত্বপূর্ণ:</strong> এটি শুধুমাত্র প্রাথমিক পরামর্শের জন্য। রোগ নির্ণয় বা চিকিৎসার জন্য অবশ্যই একজন প্রকৃত ডাক্তারের সাথে পরামর্শ নিন।</p>
+        </div>
+
+        <!-- Chat History -->
+        <div id="chat-history" class="chat-container flex-grow p-4 space-y-4">
+            <!-- Initial AI message -->
+            <div class="flex justify-start">
+                <div class="ai-bubble p-3 max-w-xs md:max-w-md">
+                    আমি আপনার স্বাস্থ্য পরামর্শক এআই। আপনি কেমন বোধ করছেন বা আপনার কী সমস্যা হচ্ছে, বাংলায় বলুন। আমি আপনাকে সাধারণ স্বাস্থ্য জ্ঞান দিয়ে সাহায্য করতে পারি।
+                </div>
+            </div>
+        </div>
+
+        <!-- Controls -->
+        <footer class="p-4 border-t border-gray-200 flex flex-col items-center space-y-3">
+            
+            <!-- Status/Loading Indicator -->
+            <div id="status-message" class="text-sm font-medium text-gray-600 h-5">
+                রেকর্ডিং শুরু করতে মাইক বোতামটি চাপুন
+            </div>
+
+            <!-- Voice Control Button -->
+            <button id="voice-button" 
+                    class="voice-btn w-20 h-20 rounded-full flex items-center justify-center text-white text-3xl transition-colors duration-200 bg-blue-500 hover:bg-blue-600 disabled:bg-gray-400"
+                    onclick="handleStartRecording()"
+                    disabled>
+                <svg id="mic-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-8 h-8">
+                    <path d="M8.583 3.96a2.25 2.25 0 0 1 3.834 0L12 4.416V17.25c0 .414.336.75.75.75H18a.75.75 0 0 0 0-1.5h-5.25v-8.498a.75.75 0 0 0-.416-.677L12 6.649l-.334-.176a.75.75 0 0 0-.416.677V17.25H6a.75.75 0 0 0 0 1.5h5.25c.414 0 .75-.336.75-.75V4.416l-.417-.456Z" />
+                    <path fill-rule="evenodd" d="M12 21a.75.75 0 0 1-.75-.75V19a.75.75 0 0 1 1.5 0v1.25a.75.75 0 0 1-.75.75Z" clip-rule="evenodd" />
+                    <path d="M12 21a.75.75 0 0 1-.75-.75V19a.75.75 0 0 1 1.5 0v1.25a.75.75 0 0 1-.75.75Z" />
+                    <path fill-rule="evenodd" d="M12 21a.75.75 0 0 1-.75-.75V19a.75.75 0 0 1 1.5 0v1.25a.75.75 0 0 1-.75.75Z" clip-rule="evenodd" />
+                    <path d="M12 21a.75.75 0 0 1-.75-.75V19a.75.75 0 0 1 1.5 0v1.25a.75.75 0 0 1-.75.75Z" />
+                </svg>
+            </button>
+            <p id="error-message" class="text-red-500 text-sm h-4"></p>
+        </footer>
+
+    </div>
+
+    <script>
+        // --- API Key Setup for Local Environment ---
+        // WARNING: This application requires network access for the Gemini API and Web Speech API.
+        // For local use, you MUST replace the placeholder below with your actual Gemini API key.
+        
+        // --- API Configuration ---
+        const apiKey = "AIzaSyA4etc1KLuM-YlsfTm5Os693Lq8KRsMOFU"; // *** REPLACE WITH YOUR OWN GEMINI API KEY ***
+        // NOTE: The canvas runtime environment provides the key automatically, but for local use, you must provide it.
+        const chatApiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${apiKey}`;
+        const ttsApiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-tts:generateContent?key=${apiKey}`;
+        
+        // --- DOM Elements ---
+        const chatHistory = document.getElementById('chat-history');
+        const voiceButton = document.getElementById('voice-button');
+        const micIcon = document.getElementById('mic-icon');
+        const statusMessage = document.getElementById('status-message');
+        const errorMessage = document.getElementById('error-message');
+
+        // --- State ---
+        let isListening = false;
+        let isSpeaking = false;
+        let recognition = null;
+        let audioContext = null;
+        
+        // The system instruction in Bengali
+        const systemPromptBengali = "আপনি একজন সহানুভূতিশীল এবং তথ্যবহুল স্বাস্থ্য পরামর্শদাতা এআই। আপনি কোনোভাবেই ডাক্তারের বিকল্প নন, এবং আপনি রোগ নির্ণয় বা নির্দিষ্ট চিকিৎসার প্রেসক্রিপশন দিতে পারবেন না। আপনার কাজ হলো ব্যবহারকারীর স্বাস্থ্য সংক্রান্ত জিজ্ঞাসাগুলি শোনা এবং সাধারণ স্বাস্থ্য জ্ঞান, প্রাথমিক পরিচর্যার পরামর্শ, এবং কখন একজন প্রকৃত ডাক্তারের সাথে পরামর্শ করা উচিত সেই বিষয়ে দিকনির্দেশনা প্রদান করা। সমস্ত উত্তর অবশ্যই শুধুমাত্র বাংলায় দিতে হবে।";
+
+        // --- Utility Functions for Audio Processing ---
+
+        /** Converts a base64 string to an ArrayBuffer. */
+        const base64ToArrayBuffer = (base64) => {
+            const binaryString = atob(base64);
+            const len = binaryString.length;
+            const bytes = new Uint8Array(len);
+            for (let i = 0; i < len; i++) {
+                bytes[i] = binaryString.charCodeAt(i);
+            }
+            return bytes.buffer;
+        };
+
+        /** Converts PCM (Int16Array) audio data to a WAV Blob. */
+        const pcmToWav = (pcmData, sampleRate) => {
+            const numChannels = 1;
+            const bitsPerSample = 16;
+            const buffer = new ArrayBuffer(44 + pcmData.length * 2);
+            const view = new DataView(buffer);
+            let offset = 0;
+
+            const writeString = (str) => {
+                for (let i = 0; i < str.length; i++) {
+                    view.setUint8(offset + i, str.charCodeAt(i));
+                }
+                offset += str.length;
+            };
+
+            // RIFF chunk
+            writeString('RIFF');
+            view.setUint32(offset, 36 + pcmData.length * 2, true); offset += 4;
+            writeString('WAVE');
+
+            // FMT chunk
+            writeString('fmt ');
+            view.setUint32(offset, 16, true); offset += 4; // Subchunk1Size
+            view.setUint16(offset, 1, true); offset += 2;  // AudioFormat (1 for PCM)
+            view.setUint16(offset, numChannels, true); offset += 2;
+            view.setUint32(offset, sampleRate, true); offset += 4;
+            view.setUint32(offset, sampleRate * numChannels * (bitsPerSample / 8), true); offset += 4; // ByteRate
+            view.setUint16(offset, numChannels * (bitsPerSample / 8), true); offset += 2; // BlockAlign
+            view.setUint16(offset, bitsPerSample, true); offset += 2;
+
+            // DATA chunk
+            writeString('data');
+            view.setUint32(offset, pcmData.length * 2, true); offset += 4;
+            
+            // Write PCM data
+            for (let i = 0; i < pcmData.length; i++) {
+                view.setInt16(offset, pcmData[i], true);
+                offset += 2;
+            }
+
+            return new Blob([buffer], { type: 'audio/wav' });
+        };
+        
+        /** General fetch wrapper with exponential backoff for API robustness. */
+        const exponentialBackoffFetch = async (url, options, retries = 3, delay = 1000) => {
+            for (let i = 0; i < retries; i++) {
+                try {
+                    const response = await fetch(url, options);
+                    if (response.status === 429 && i < retries - 1) {
+                        await new Promise(resolve => setTimeout(resolve, delay * Math.pow(2, i)));
+                        continue;
+                    }
+                    if (!response.ok) {
+                        const errorBody = await response.text();
+                        throw new Error(`API call failed: ${response.status} ${response.statusText}. Body: ${errorBody}`);
+                    }
+                    return response;
+                } catch (error) {
+                    if (i === retries - 1) {
+                        throw error;
+                    }
+                    await new Promise(resolve => setTimeout(resolve, delay * Math.pow(2, i)));
+                }
+            }
+        };
+
+        // --- UI Update Functions ---
+
+        /** Appends a message to the chat history. */
+        const appendMessage = (role, text) => {
+            const isUser = role === 'user';
+            const messageDiv = document.createElement('div');
+            messageDiv.className = `flex ${isUser ? 'justify-end' : 'justify-start'}`;
+            messageDiv.innerHTML = `
+                <div class="${isUser ? 'user-bubble' : 'ai-bubble'} p-3 max-w-xs md:max-w-md shadow-md">
+                    ${text.replace(/\n/g, '<br>')}
+                </div>
+            `;
+            chatHistory.appendChild(messageDiv);
+            chatHistory.scrollTop = chatHistory.scrollHeight; // Scroll to bottom
+        };
+
+        /** Updates the main button state and appearance. */
+        const updateButtonState = (listening, speaking, status) => {
+            isListening = listening;
+            isSpeaking = speaking;
+
+            voiceButton.disabled = listening || speaking;
+            voiceButton.classList.toggle('pulse', listening || speaking);
+            voiceButton.classList.toggle('bg-red-500', listening);
+            voiceButton.classList.toggle('bg-blue-500', !listening);
+            
+            statusMessage.textContent = status;
+            
+            // Update icon appearance (mic/speaker)
+            if (isSpeaking) {
+                // Speaker icon
+                micIcon.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-8 h-8">
+                    <path d="M13.5 14.25v4.5a.75.75 0 0 1-1.5 0V6.167L8.85 7.618A1.05 1.05 0 0 0 8.25 7.5H6a2.25 2.25 0 0 1-2.25-2.25V3.75A2.25 2.25 0 0 1 6 1.5h2.25c.205 0 .408.01.609.027l2.128 10.42a.75.75 0 0 0 .546.511l.711.178Z" />
+                    <path fill-rule="evenodd" d="M12 21.75a.75.75 0 0 0 1.079.687l7.5-4.25a.75.75 0 0 0 0-1.294l-7.5-4.25a.75.75 0 0 0-1.079.687v7.5Z" clip-rule="evenodd" />
+                </svg>`;
+            } else {
+                // Mic icon
+                micIcon.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-8 h-8">
+                    <path d="M8.583 3.96a2.25 2.25 0 0 1 3.834 0L12 4.416V17.25c0 .414.336.75.75.75H18a.75.75 0 0 0 0-1.5h-5.25v-8.498a.75.75 0 0 0-.416-.677L12 6.649l-.334-.176a.75.75 0 0 0-.416.677V17.25H6a.75.75 0 0 0 0 1.5h5.25c.414 0 .75-.336.75-.75V4.416l-.417-.456Z" />
+                    <path fill-rule="evenodd" d="M12 21a.75.75 0 0 1-.75-.75V19a.75.75 0 0 1 1.5 0v1.25a.75.75 0 0 1-.75.75Z" clip-rule="evenodd" />
+                </svg>`;
+            }
+        };
+        
+        /** Displays an error message temporarily. */
+        const displayError = (message) => {
+            errorMessage.textContent = message;
+            setTimeout(() => errorMessage.textContent = '', 5000);
+        };
+
+        // --- Core Logic ---
+
+        /** Initializes the Web Speech Recognition API. */
+        const setupVoiceRecognition = () => {
+            if (!('webkitSpeechRecognition' in window)) {
+                displayError("দুঃখিত, আপনার ব্রাউজার স্পিচ রিকগনিশন সমর্থন করে না।");
+                return;
+            }
+
+            // Use the Webkit prefix for broad compatibility
+            recognition = new webkitSpeechRecognition();
+            
+            // Crucial: Set language to Bengali (Bangladesh)
+            recognition.lang = 'bn-BD'; 
+            
+            recognition.continuous = false; 
+            recognition.interimResults = false;
+            
+            recognition.onstart = () => {
+                updateButtonState(true, false, "রেকর্ডিং হচ্ছে... কথা বলুন");
+            };
+
+            recognition.onresult = (event) => {
+                let transcript = event.results[0][0].transcript;
+                recognition.stop();
+                updateButtonState(false, false, "বিশ্লেষণ করা হচ্ছে...");
+                sendMessage(transcript);
+            };
+
+            recognition.onerror = (event) => {
+                recognition.stop();
+                updateButtonState(false, false, "রেকর্ডিং শুরু করতে মাইক বোতামটি চাপুন");
+                // Ignore "no-speech" error which is common when user pauses
+                if (event.error !== 'no-speech') {
+                    displayError(`ভয়েস ইনপুট ত্রুটি: ${event.error === 'network' ? 'নেটওয়ার্ক সমস্যা' : 'অন্যান্য ত্রুটি'}`);
+                }
+            };
+
+            recognition.onend = () => {
+                if(isListening) { // Only change state if listening was actively stopped by system
+                    updateButtonState(false, false, "রেকর্ডিং শেষ। উত্তর তৈরি হচ্ছে...");
+                }
+                isListening = false;
+            };
+
+            voiceButton.disabled = false;
+            updateButtonState(false, false, "রেকর্ডিং শুরু করতে মাইক বোতামটি চাপুন");
+        };
+
+        /** Handles the Gemini LLM call. */
+        const sendMessage = async (userQuery) => {
+            if (!userQuery.trim()) {
+                updateButtonState(false, false, "রেকর্ডিং শুরু করতে মাইক বোতামটি চাপুন");
+                return;
+            }
+
+            appendMessage('user', userQuery);
+            updateButtonState(false, true, "এআই উত্তর তৈরি করছে..."); 
+
+            const payload = {
+                contents: [{ parts: [{ text: userQuery }] }],
+                systemInstruction: { parts: [{ text: systemPromptBengali }] },
+            };
+
+            try {
+                // Ensure API Key is set before fetching
+                if (apiKey === "YOUR_GEMINI_API_KEY_HERE" || apiKey === "") {
+                    throw new Error('API Key নেই। অনুগ্রহ করে আপনার Gemini API Key যোগ করুন।');
+                }
+
+                const response = await exponentialBackoffFetch(chatApiUrl, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+                
+                const result = await response.json();
+                const aiResponseText = result.candidates?.[0]?.content?.parts?.[0]?.text;
+
+                if (aiResponseText) {
+                    appendMessage('model', aiResponseText);
+                    textToSpeech(aiResponseText);
+                } else {
+                    throw new Error('এআই-এর উত্তর পাওয়া যায়নি।');
+                }
+
+            } catch (error) {
+                console.error("LLM Error:", error);
+                displayError(`বার্তা পাঠাতে ব্যর্থ: ${error.message}. অনুগ্রহ করে আবার চেষ্টা করুন।`);
+                updateButtonState(false, false, "রেকর্ডিং শুরু করতে মাইক বোতামটি চাপুন");
+            }
+        };
+        
+        /** Handles the Gemini TTS call and audio playback. */
+        const textToSpeech = async (text) => {
+            updateButtonState(false, true, "এআই কথা বলছে..."); 
+            
+            // TTS payload, ensuring the language is handled. Using a general voice (Puck)
+            // and relying on the model's auto-detection for Bengali.
+            const payload = {
+                contents: [{ parts: [{ text: text }] }],
+                generationConfig: {
+                    responseModalities: ["AUDIO"],
+                    speechConfig: {
+                        voiceConfig: {
+                            prebuiltVoiceConfig: { voiceName: "Puck" } // A lively, general voice
+                        }
+                    }
+                },
+                model: "gemini-2.5-flash-preview-tts"
+            };
+
+            try {
+                // Ensure API Key is set before fetching
+                if (apiKey === "YOUR_GEMINI_API_KEY_HERE" || apiKey === "") {
+                    throw new Error('API Key নেই। অনুগ্রহ করে আপনার Gemini API Key যোগ করুন।');
+                }
+
+                const response = await exponentialBackoffFetch(ttsApiUrl, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+                
+                const result = await response.json();
+                const part = result?.candidates?.[0]?.content?.parts?.[0];
+                const audioData = part?.inlineData?.data;
+                const mimeType = part?.inlineData?.mimeType;
+
+                if (audioData && mimeType && mimeType.startsWith("audio/L16")) {
+                    const sampleRateMatch = mimeType.match(/rate=(\d+)/);
+                    const sampleRate = sampleRateMatch ? parseInt(sampleRateMatch[1], 10) : 16000;
+                    
+                    const pcmData = base64ToArrayBuffer(audioData);
+                    const pcm16 = new Int16Array(pcmData);
+                    const wavBlob = pcmToWav(pcm16, sampleRate);
+                    const audioUrl = URL.createObjectURL(wavBlob);
+
+                    const audio = new Audio(audioUrl);
+                    audio.play();
+
+                    audio.onended = () => {
+                        updateButtonState(false, false, "রেকর্ডিং শুরু করতে মাইক বোতামটি চাপুন");
+                        URL.revokeObjectURL(audioUrl);
+                    };
+                    
+                    audio.onerror = (e) => {
+                        console.error("Audio playback error:", e);
+                        displayError("অডিও চালাতে সমস্যা হয়েছে।");
+                        updateButtonState(false, false, "রেকর্ডিং শুরু করতে মাইক বোতামটি চাপুন");
+                        URL.revokeObjectURL(audioUrl);
+                    };
+
+                } else {
+                    throw new Error('অডিও ফাইল পাওয়া যায়নি বা ফাইলের ফরম্যাট ভুল।');
+                }
+            } catch (error) {
+                console.error("TTS Error:", error);
+                displayError(`কথা বলতে সমস্যা: ${error.message}`);
+                updateButtonState(false, false, "রেকর্ডিং শুরু করতে মাইক বোতামটি চাপুন");
+            }
+        };
+
+        /** Toggles the voice recording process. */
+        const handleStartRecording = () => {
+            if (isListening) {
+                recognition.stop();
+                updateButtonState(false, false, "রেকর্ডিং বন্ধ করা হয়েছে।");
+            } else if (!isSpeaking) {
+                try {
+                    recognition.start();
+                } catch (e) {
+                    // Catch "recognition already started" error
+                    if (e.name !== 'InvalidStateError') {
+                        console.error("Recognition start error:", e);
+                        displayError("রেকর্ডিং শুরু করতে সমস্যা হয়েছে।");
+                    }
+                }
+            }
+        };
+
+        // --- Initialization ---
+        window.onload = setupVoiceRecognition;
+        
+    </script>
+</body>
+</html>
