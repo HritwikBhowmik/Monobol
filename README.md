@@ -1,4 +1,4 @@
-# মনোবল (Monobol)
+# মনোবল (Monobol) https://hritwikbhowmik.github.io/Monobol/
 
 **Monobol** is a complete platform dedicated to our **mental health** and **community well-being**. It brings together **mood tracking**, **community support**, and **mental health services** in one place that helps us stay balanced, connected, and cared for.
 
