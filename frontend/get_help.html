@@ -55,7 +55,7 @@
     <script>
         // Theme initialization script
         if (localStorage.getItem('theme') === 'dark' || 
-           (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+            (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
           document.documentElement.classList.add('dark');
         } else {
           document.documentElement.classList.remove('dark');
@@ -204,7 +204,7 @@
                 <div>
                     <h3 class="text-sm font-semibold text-gray-400 uppercase tracking-wider" data-i18n-key="footerFeatures">Features</h3>
                     <ul class="mt-4 space-y-3">
-                        <li><a href="Mood_Tracker.html" class="text-base hover:text-white transition-colors" data-i18n-key="navMood">Mood Tracker</a></li>
+                        <li><a href="Mood_Tracker.html" class="text-base hover:text-white transition-colors" data-i1a8n-key="navMood">Mood Tracker</a></li>
                         <li><a href="#" class="text-base hover:text-white transition-colors" data-i18n-key="footerNearby">Nearby Healthcare</a></li>
                         <li><a href="get_help.html" class="text-base hover:text-white transition-colors" data-i18n-key="navGetHelp">Get Help</a></li>
                     </ul>
@@ -232,7 +232,7 @@
             </div>
 
             <div class="mt-12 border-t border-gray-700 pt-8">
-              <p class="text-sm text-gray-500 text-center mb-4">
+                <p class="text-sm text-gray-500 text-center mb-4">
                     <strong data-i18n-key="footerDisclaimerTitle">Medical Disclaimer:</strong> <span data-i18n-key="footerDisclaimerText">The information on this site is not a substitute for professional medical advice, diagnosis, or treatment. Always seek the advice of your physician or other qualified health provider.</span>
                 </p>
                 <p class="text-base text-gray-500 text-center" data-i18n-key="footerCopyright">
@@ -348,7 +348,7 @@
                     'chatTitle': 'স্বাস্থ্য পরামর্শদাতা এআই', // "পরামর্শক" -> "পরামর্শদাতা"
                     'chatDisclaimerTitle': 'গুরুত্বপূর্ণ:',
                     'chatDisclaimerText': 'এটি শুধুমাত্র প্রাথমিক পরামর্শের জন্য। রোগ নির্ণয় বা চিকিৎসার জন্য অবশ্যই একজন প্রকৃত ডাক্তারের পরামর্শ নিন।', // Tweaked
-                    'chatInitialBotMsg': 'আমি আপনার স্বাস্থ্য পরামর্শদাতা এআই। আপনি কেমন বোধ করছেন বা আপনার কী সমস্যা হচ্ছে, বাংলায় বলুন। আমি আপনাকে সাধারণ স্বাস্থ্য জ্ঞান দিয়ে সাহায্য করতে পারি।', // "পরামর্শদাতা", "দিয়ে"
+                    'chatInitialBotMsg': 'আমি আপনার স্বাস্থ্য পরামর্শদাতা এআই। আপনি কেমন বোধ করছেন বা আপনার কী সমস্যা হচ্ছে, বাংলায় বলুন। আমি আপনাকে সাধারণ স্বাস্থ্য জ্ঞান দিয়ে সাহায্য করতে পারি।', // "প পরামর্শদাতা", "দিয়ে"
 
                     // Chat App Dynamic Text
                     'chatStatusReady': 'রেকর্ডিং শুরু করতে মাইক বোতামটি টিপুন', // "চাপুন" -> "টিপুন"
@@ -357,17 +357,17 @@
                     'chatStatusGenerating': 'এআই উত্তর তৈরি করছে...',
                     'chatStatusSpeaking': 'এআই কথা বলছে...',
                     'chatStatusDone': 'রেকর্ডিং শেষ। উত্তর তৈরি হচ্ছে...',
-                    'chatStatusStopped': 'রেকর্ডিং বন্ধ করা হয়েছে।', // Spelling
+                    'chatStatusStopped': 'রেকর্ডিং বন্ধ করা হয়েছে।', // Spelling
                     'chatErrorNoBrowserSupport': 'দুঃখিত, আপনার ব্রাউজার স্পিচ রিকগনিশন সাপোর্ট করে না।', // "সমর্থন করে না" -> "সাপোর্ট করে না"
                     'chatErrorVoiceInput': 'ভয়েস ইনপুট ত্রুটি: ',
                     'chatErrorNetwork': 'নেটওয়ার্ক সমস্যা',
                     'chatErrorOther': 'অন্যান্য ত্রুটি',
                     'chatErrorNoApiKey': 'API Key নেই। অনুগ্রহ করে আপনার Gemini API Key যোগ করুন।',
-                    'chatErrorNoResponse': 'এআই-এর থেকে কোনো উত্তর পাওয়া যায়নি।', // Phrasing
+                    'chatErrorNoResponse': 'এআই-এর থেকে কোনো উত্তর পাওয়া যায়নি।', // Phrasing
                     'chatErrorSendFailed': 'বার্তা পাঠাতে ব্যর্থ: ',
                     'chatErrorAudioPlayback': 'অডিও চালাতে সমস্যা হচ্ছে।', // "হয়েছে" -> "হচ্ছে"
                     'chatErrorTtsFailed': 'কথা বলতে সমস্যা: ',
-                    'chatErrorTtsFormat': 'অডিও ফাইল পাওয়া যায়নি বা ফাইলের ফরম্যাট ভুল।', // Spelling
+                    'chatErrorTtsFormat': 'অডিও ফাইল পাওয়া যায়নি বা ফাইলের ফরম্যাট ভুল।', // Spelling
                     'chatErrorRecognitionStart': 'রেকর্ডিং শুরু করতে সমস্যা হচ্ছে।' // "হয়েছে" -> "হচ্ছে"
                 }
                 // *** END BN-IN FIX ***
@@ -406,7 +406,10 @@
 
         function toggleLanguage() {
             const currentLang = localStorage.getItem('language') || 'en';
-            const newLang = currentLang === 'en' ? 'বাংলা' : 'en';
+            // --- THIS IS THE FIX ---
+            // Changed 'বাংলা' to 'bn' to use the correct language code
+            const newLang = currentLang === 'en' ? 'bn' : 'en';
+            // --- END OF FIX ---
             setLanguage(newLang);
         }
 
