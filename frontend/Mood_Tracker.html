@@ -124,10 +124,10 @@
             </div>
             <div class="border-t border-gray-200 dark:border-gray-700 pt-4 pb-3 px-2">
                    <a href="#" class="block w-full text-center bg-brand-cyan hover:bg-brand-cyan-hover text-white font-medium py-2 px-3 rounded-lg transition duration-200" data-i18n-key="navGetStarted">
-                      Get started
-                </a>
+                       Get started
+                   </a>
                 <a href="#" class="mt-2 block w-full text-center text-gray-600 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-700 font-medium py-2 px-3 rounded-lg" data-i18n-key="navLogin">
-                      Log In
+                    Log In
                 </a>
             </div>
         </div>
@@ -214,9 +214,9 @@
                 <div>
                     <h3 class="text-sm font-semibold text-gray-400 uppercase tracking-wider" data-i18n-key="footerFeatures">Features</h3>
                     <ul class="mt-4 space-y-3">
-                        <li><a href="#" class="text-base hover:text-white transition-colors" data-i18n-key="navMood">Mood Tracker</a></li>
+                        <li><a href="Mood_Tracker.html" class="text-base hover:text-white transition-colors" data-i18n-key="navMood">Mood Tracker</a></li>
                         <li><a href="#" class="text-base hover:text-white transition-colors" data-i18n-key="footerNearby">Nearby Healthcare</a></li>
-                        <li><a href="#" class="text-base hover:text-white transition-colors" data-i18n-key="navGetHelp">Get Help</a></li>
+                        <li><a href="get_help.html" class="text-base hover:text-white transition-colors" data-i18n-key="navGetHelp">Get Help</a></li>
                     </ul>
                 </div>
 
@@ -265,6 +265,7 @@
             const mobileMenuButton = document.getElementById('mobile-menu-button');
             const mobileMenuPanel = document.getElementById('mobile-menu-panel');
 
+            // Selections specific to this quiz page
             const quizSection = document.getElementById('quiz-section');
             const resultsSection = document.getElementById('results-section');
             const progressText = document.getElementById('progress-text');
@@ -384,6 +385,7 @@
 
             function setLanguage(lang) {
                 document.documentElement.lang = lang;
+                // This function ALSO saves to localStorage
                 localStorage.setItem('language', lang);
 
                 const toggleText = translations[lang]['langToggle'];
@@ -395,9 +397,9 @@
                     const translation = translations[lang][key];
                     
                     if (translation) {
-                        if (key === 'progressText') {
-                           // Skip, handled by renderQuestion
-                        } else if (element.hasAttribute('placeholder')) {
+                        // This function is "dumb" - it just translates all keys.
+                        // We will call the quiz-specific render functions AFTER this runs.
+                        if (element.hasAttribute('placeholder')) {
                             element.placeholder = translation;
                         } else if (element.hasAttribute('alt')) {
                             element.alt = translation;
@@ -406,7 +408,10 @@
                         }
                     }
                 });
+            }
 
+            // This new function will re-render the quiz part ONLY
+            function updatePageContent() {
                 if (quizSection && !quizSection.classList.contains('hidden')) {
                     renderQuestion();
                 } else if (resultsSection && !resultsSection.classList.contains('hidden')) {
@@ -417,7 +422,8 @@
             function toggleLanguage() {
                 const currentLang = localStorage.getItem('language') || 'en';
                 const newLang = currentLang === 'en' ? 'bn' : 'en';
-                setLanguage(newLang);
+                setLanguage(newLang); // This saves the language AND translates static text
+                updatePageContent(); // This re-renders the dynamic quiz text
             }
 
             // --- 3. THEME (Dark/Light Mode) LOGIC ---
@@ -466,6 +472,7 @@
             let userAnswers = [0, 0, 0, 0, 0]; 
 
             function renderQuestion() {
+                // This function is now just for the quiz content
                 if (!quizSection) return; 
                 
                 const currentLang = localStorage.getItem('language') || 'en';
@@ -476,12 +483,14 @@
                 
                 const locale = currentLang === 'bn' ? 'bn-BD' : 'en-US';
 
+                // Update only quiz-specific elements
                 progressText.textContent = (translations[currentLang]['progressText'] || "Question {current} of {total}")
-                                         .replace('{current}', questionNumber.toLocaleString(locale))
-                                         .replace('{total}', totalQuestions.toLocaleString(locale));
+                                              .replace('{current}', questionNumber.toLocaleString(locale))
+                                              .replace('{total}', totalQuestions.toLocaleString(locale));
                 progressPercent.textContent = `${percent.toLocaleString(locale)}%`;
                 progressBar.style.width = `${percent}%`;
                 questionText.textContent = translations[currentLang][`q${currentQuestionIndex}_question`];
+                errorMessage.textContent = translations[currentLang]['errorMsg']; // Also update error message text
 
                 answersContainer.innerHTML = '';
                 question.answers.forEach((answer, index) => {
@@ -504,8 +513,8 @@
                 backBtn.style.visibility = currentQuestionIndex === 0 ? 'hidden' : 'visible';
                 backBtn.textContent = translations[currentLang]['backBtn'];
                 nextBtn.textContent = currentQuestionIndex === totalQuestions - 1 
-                                            ? translations[currentLang]['resultsBtn'] 
-                                            : translations[currentLang]['nextBtn'];
+                                        ? translations[currentLang]['resultsBtn'] 
+                                        : translations[currentLang]['nextBtn'];
             }
 
             function showResults() {
@@ -535,6 +544,7 @@
                     color = 'bg-red-500';
                 }
 
+                // Update only results-specific elements
                 resultsTitle.textContent = translations[currentLang][titleKey];
                 resultsText.textContent = translations[currentLang][textKey];
                 
@@ -586,13 +596,14 @@
 
             // --- 6. INITIALIZATION & EVENT LISTENERS ---
             
-            // Attach listeners with null guards
+            // Attach shared listeners
             if (langToggleBtn) langToggleBtn.addEventListener('click', toggleLanguage);
             if (langToggleBtnMobile) langToggleBtnMobile.addEventListener('click', toggleLanguage);
             
             if (themeToggleBtn) themeToggleBtn.addEventListener('click', toggleTheme);
             if (themeToggleBtnMobile) themeToggleBtnMobile.addEventListener('click', toggleTheme);
 
+            // Attach quiz-specific listeners
             if (nextBtn) nextBtn.addEventListener('click', handleNextClick);
             if (backBtn) backBtn.addEventListener('click', handleBackClick);
             if (retakeBtn) retakeBtn.addEventListener('click', resetQuiz);
@@ -601,9 +612,12 @@
             const initialTheme = localStorage.getItem('theme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
             updateIcons(initialTheme);
 
-            // Set initial language (triggers first renderQuestion if quiz is visible)
+            // Set initial language (This is the code that READS from localStorage)
             const initialLang = localStorage.getItem('language') || 'en';
-            setLanguage(initialLang);
+            setLanguage(initialLang); // This translates all the static text
+
+            // Manually render the dynamic quiz content on load
+            updatePageContent(); // This renders the quiz/results in the correct language
 
         });
     </script>
