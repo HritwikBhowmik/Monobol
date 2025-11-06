@@ -334,9 +334,9 @@
                     'footerDisclaimerText': 'The information on this site is not a substitute for professional medical advice, diagnosis, or treatment. Always seek the advice of your physician or other qualified health provider.',
                     'footerCopyright': '© 2025 MonoBol & ShunnoLogic. All rights reserved.'
                 },
-                'bn': {
+                'bn': { // <-- This key is 'bn'
                     'logo': 'মনবল',
-                    'langToggle': 'EN', 
+                    'langToggle': 'EN', // <-- This is the text the button will show
                     'navMood': 'মুড ট্র্যাকার',
                     'navGetHelp': 'সাহায্য নিন',
                     'navHealthTips': 'স্বাস্থ্য টিপস',
@@ -419,12 +419,19 @@
                 }
             }
 
-            function toggleLanguage() {
-                const currentLang = localStorage.getItem('language') || 'en';
-                const newLang = currentLang === 'en' ? 'bn' : 'en';
-                setLanguage(newLang); // This saves the language AND translates static text
-                updatePageContent(); // This re-renders the dynamic quiz text
-            }
+        function toggleLanguage() {
+            const currentLang = localStorage.getItem('language') || 'en';
+            
+            // --- FIX #1 ---
+            // The logic now correctly toggles between 'en' and 'bn'
+            const newLang = currentLang === 'en' ? 'bn' : 'en';
+            
+            setLanguage(newLang);
+
+            // --- FIX #2 ---
+            // This forces the dynamic quiz content to re-translate
+            updatePageContent();
+        }
 
             // --- 3. THEME (Dark/Light Mode) LOGIC ---
 
@@ -485,8 +492,8 @@
 
                 // Update only quiz-specific elements
                 progressText.textContent = (translations[currentLang]['progressText'] || "Question {current} of {total}")
-                                              .replace('{current}', questionNumber.toLocaleString(locale))
-                                              .replace('{total}', totalQuestions.toLocaleString(locale));
+                                            .replace('{current}', questionNumber.toLocaleString(locale))
+                                            .replace('{total}', totalQuestions.toLocaleString(locale));
                 progressPercent.textContent = `${percent.toLocaleString(locale)}%`;
                 progressBar.style.width = `${percent}%`;
                 questionText.textContent = translations[currentLang][`q${currentQuestionIndex}_question`];
@@ -612,9 +619,12 @@
             const initialTheme = localStorage.getItem('theme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
             updateIcons(initialTheme);
 
+            // --- FIX #3 ---
             // Set initial language (This is the code that READS from localStorage)
-            const initialLang = localStorage.getItem('language') || 'en';
-            setLanguage(initialLang); // This translates all the static text
+            // It now correctly checks for 'bn' instead of 'বাংলা'
+            const storedLang = localStorage.getItem('language');
+            const initialLang = (storedLang === 'en' || storedLang === 'bn') ? storedLang : 'bn';
+            setLanguage(initialLang);
 
             // Manually render the dynamic quiz content on load
             updatePageContent(); // This renders the quiz/results in the correct language

@@ -404,11 +404,11 @@
                 systemPrompt = lang === 'bn' ? systemPromptBengali : systemPromptEnglish;
             }
 
-            function toggleLanguage() {
-                const currentLang = localStorage.getItem('language') || 'en';
-                const newLang = currentLang === 'en' ? 'bn' : 'en';
-                setLanguage(newLang);
-            }
+        function toggleLanguage() {
+            const currentLang = localStorage.getItem('language') || 'en';
+            const newLang = currentLang === 'en' ? 'বাংলা' : 'en';
+            setLanguage(newLang);
+        }
 
             // --- 3. THEME (Dark/Light Mode) LOGIC ---
 
